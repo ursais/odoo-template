@@ -2,6 +2,11 @@ FROM ubuntu:16.04
 
 MAINTAINER "Ursa"
 
+# Set Odoo variables
+ENV OPENERP_SERVER /etc/odoo/odoo.conf
+ENV ODOO_VERSION 10.0
+ENV ODOO_RELEASE 20161012
+
 #  Fix http://stackoverflow.com/questions/22466255/is-it-possibe-to-answer-dialog-questions-when-installing-under-docker
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -15,7 +20,7 @@ RUN echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf \
 #  Update and upgrade
 RUN apt-get update -q && apt-get upgrade -q
 
-#  Installing basic OS package
+#  Installing packages
 RUN apt-get install --allow-unauthenticated -q \
     build-essential \
     nginx \
@@ -23,10 +28,7 @@ RUN apt-get install --allow-unauthenticated -q \
     python \
     python-dev \
     python-pip \
-    python-setuptools
-
-#  Installing basic dev packages
-RUN apt-get install --allow-unauthenticated -q \
+    python-setuptools \
     libffi-dev \
     libfreetype6-dev \
     libgeoip-dev \
@@ -59,8 +61,6 @@ RUN set -x; \
         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
 # Install Odoo
-ENV ODOO_VERSION 10.0
-ENV ODOO_RELEASE 20161012
 RUN set -x; \
         export PIP_FIND_LINKS="https://wheelhouse.odoo-community.org/oca" \
         && pip install --upgrade pip \
@@ -81,9 +81,6 @@ VOLUME ["/var/lib/odoo"]
 
 # Expose Odoo services
 EXPOSE 8069 8071
-
-# Set the default config file
-ENV OPENERP_SERVER /etc/odoo/odoo.conf
 
 # Set default user when running the container
 USER odoo

@@ -1,0 +1,17 @@
+db:
+  image: postgres:9.5
+  environment:
+    POSTGRES_USER: odoo
+    POSTGRES_PASSWORD: odoo
+  volumes:
+    - data:/var/lib/postgresql/data/
+
+odoo:
+  image: odoo
+  links:
+    - db:db
+  ports:
+    - "127.0.0.1:8069:8069"
+  volumes:
+    - extra-addons:/opt/odoo/custom-addons
+  command: --
