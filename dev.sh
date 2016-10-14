@@ -6,10 +6,10 @@
 
 # Activate the env and get the requirements
 . env/bin/activate
-# pip install -r requirements.txt
+pip install -r odoo/requirements.txt
 
 # Get Odoo version
-BRANCH=`grep odoo.com requirements.txt | cut -d "/" -f 4`
+BRANCH=`grep ursa/odoo odoo/Dockerfile | cut -d : -f 2 | cut -d - -f 1`
 
 ADDONS_PATH=$PWD/custom-addons
 cd src
