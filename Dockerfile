@@ -14,7 +14,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONIOENCODING utf-8
 
 #  Use Digital Ocean's mirrors of Ubuntu
-RUN sed -i "s/archive\.ubuntu/mirrors.digitalocean/g" /etc/apt/sources.list
+RUN sed -i "s/archive\.ubuntu/mirrors.digitalocean/g" /etc/apt/sources.list \
+        && sed -i "d/^deb-src/g" /etc/apt/sources.list
 
 #  Basic configuration for a CI image
 RUN echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf \
