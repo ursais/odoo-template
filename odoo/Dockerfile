@@ -9,7 +9,7 @@ ENV OPENERP_SERVER /etc/odoo/odoo.conf
 COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/
 COPY ./requirements.txt /tmp/
-COPY ../custom-addons /opt/odoo/
+COPY ./custom-addons /opt/odoo/
 
 RUN chown -R odoo /etc/odoo/odoo.conf /opt/odoo
 
