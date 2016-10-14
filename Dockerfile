@@ -13,6 +13,9 @@ ENV DEBIAN_FRONTEND noninteractive
 #  Setting utf-8 to python encoding
 ENV PYTHONIOENCODING utf-8
 
+#  Disable Sources
+RUN sed -i "s/^deb-src/# deb-src/g" /etc/apt/sources.list
+
 #  Basic configuration for a CI image
 RUN echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf \
     && echo 'APT::Get::force-yes "true";' >> /etc/apt/apt.conf
