@@ -1,1 +1,1 @@
-odoo-autodiscover==1.0.3
+# odoo-autodiscover==1.0.3
