@@ -11,7 +11,7 @@ pip install -r odoo/requirements.txt
 # Get Odoo version
 BRANCH=`grep ursa/odoo odoo/Dockerfile | cut -d : -f 2 | cut -d - -f 1`
 
-ADDONS_PATH=$PWD/custom-addons
+ADDONS_PATH=$PWD/odoo/custom-addons
 cd src
 
 # Clone repositories
