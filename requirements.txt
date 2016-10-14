@@ -1,0 +1,2 @@
+http://nightly.odoo.com/10.0/nightly/src/odoo_10.0.20161012.zip
+odoo-autodiscover==1.0.3

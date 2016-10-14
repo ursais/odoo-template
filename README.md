@@ -10,7 +10,11 @@ On Ubuntu 16.04
 
 # Build your development environment
 
-`$ `
+`$ ./dev.sh`
+
+and Start Odoo
+
+`$ ./env/bin/odoo -c dev.conf`
 
 # Build your production environment
 
@@ -18,7 +22,16 @@ On Ubuntu 16.04
 
 # Push your production environment to the production server
 
-`$ `
+On the building system:
+
+```
+$ docker save odoo | gzip > odoo.tar.gz
+$ scp odoo.tar.gz root@$SERVER:/tmp/.
+```
+
+On the production system:
+
+`$ gzcat /tmp/odoo.tar.gz | docker load`
 
 # Start PostgreSQL and Odoo
 

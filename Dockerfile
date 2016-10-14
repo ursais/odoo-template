@@ -4,8 +4,6 @@ MAINTAINER "Ursa"
 
 # Set Odoo variables
 ENV OPENERP_SERVER /etc/odoo/odoo.conf
-ENV ODOO_VERSION 10.0
-ENV ODOO_RELEASE 20161012
 
 #  Fix http://stackoverflow.com/questions/22466255/is-it-possibe-to-answer-dialog-questions-when-installing-under-docker
 ENV DEBIAN_FRONTEND noninteractive
@@ -66,10 +64,7 @@ RUN set -x; \
 RUN set -x; \
         export PIP_FIND_LINKS="https://wheelhouse.odoo-community.org/oca" \
         && pip install --upgrade pip \
-        && pip install \ 
-            http://nightly.odoo.com/${ODOO_VERSION}/nightly/src/odoo_${ODOO_VERSION}.${ODOO_RELEASE}.zip \
-            odoo-autodiscover==1.0.3
-#            odoo10-addon-base-export-manager==10.0.1.0.0
+        && pip install -r requirements.txt
 
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
