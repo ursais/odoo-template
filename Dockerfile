@@ -17,11 +17,10 @@ ENV PYTHONIOENCODING utf-8
 RUN sed -i "s/^deb-src/# deb-src/g" /etc/apt/sources.list
 
 #  Basic configuration for a CI image
-RUN echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf \
-    && echo 'APT::Get::force-yes "true";' >> /etc/apt/apt.conf
+RUN echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf
 
 #  Update and upgrade
-RUN apt-get update -q ; apt-get upgrade -q
+RUN apt-get update -q && apt-get upgrade -q
 
 #  Installing packages
 RUN apt-get install --allow-unauthenticated -q \
