@@ -22,7 +22,7 @@ RUN echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf \
     && echo 'APT::Get::force-yes "true";' >> /etc/apt/apt.conf
 
 #  Update and upgrade
-RUN apt-get update -q && apt-get upgrade -q
+RUN apt-get upgrade apt && apt-get update -q && apt-get upgrade -q
 
 #  Installing packages
 RUN apt-get install --allow-unauthenticated -q \
