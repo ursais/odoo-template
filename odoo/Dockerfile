@@ -2,11 +2,7 @@ FROM ursa/odoo:10.0-20161012
 
 MAINTAINER "Ursa"
 
-# Set Odoo variables
-ENV OPENERP_SERVER /etc/odoo/odoo.conf
-
 # Copy entrypoint script and Odoo configuration file
-COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/
 COPY ./requirements.txt /tmp/
 COPY ./custom-addons /opt/odoo/
@@ -22,5 +18,4 @@ RUN set -x; \
 # Set default user when running the container
 USER odoo
 
-ENTRYPOINT ["/entrypoint.sh"]
 CMD ["odoo"]
