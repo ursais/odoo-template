@@ -22,6 +22,4 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
       -out /etc/nginx/ssl/odoo.crt \
      && chmod 600 /etc/nginx/ssl/odoo.key
 
-RUN nginx -t
-
 CMD ["nginx"]
