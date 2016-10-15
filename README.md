@@ -36,10 +36,10 @@ $ scp odoo.tgz nginx.tgz root@$SERVER:/tmp/.
 On the production system:
 
 ```
-$ gzcat /tmp/odoo.tgz | docker load
-$ gzcat /tmp/nginx.tgz | docker load
+$ zcat /tmp/odoo.tgz | docker load
+$ zcat /tmp/nginx.tgz | docker load
 ```
 
 # Start the production environment
 
-`$ docker-compose up`
+`$ docker-compose up -d`
