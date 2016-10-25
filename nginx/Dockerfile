@@ -1,6 +1,6 @@
 FROM ursa/nginx:20161012
 
-MAINTAINER "Ursa"
+MAINTAINER "Ursa Information Systems"
 
 ENV FQDN localhost
 

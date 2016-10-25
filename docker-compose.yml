@@ -11,8 +11,8 @@ odoo:
   links:
     - db:db
   ports:
-    - "127.0.0.1:8069:8069"
-    - "127.0.0.1:8072:8072"
+    - "8069:8069"
+    - "8072:8072"
   volumes:
     - extra-addons:/opt/odoo/custom-addons
   command: --

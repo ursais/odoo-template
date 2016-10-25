@@ -1,8 +1,8 @@
 FROM ursa/odoo:10.0-20161012
 
-MAINTAINER "Ursa"
+MAINTAINER "Ursa Information Systems"
 
-# Copy entrypoint script and Odoo configuration file
+# Copy files
 COPY ./odoo.conf /etc/odoo/
 COPY ./requirements.txt /tmp/
 COPY ./custom-addons /opt/odoo/
@@ -15,7 +15,3 @@ RUN set -x; \
         && pip install --upgrade pip \
         && pip install -r /tmp/requirements.txt
 
-# Set default user when running the container
-USER odoo
-
-CMD ["odoo"]

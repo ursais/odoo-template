@@ -19,8 +19,10 @@ and start Odoo
 # Build your production environment
 
 ```
-$ docker build -t odoo odoo
-$ docker build -t nginx nginx
+$ cd odoo
+$ docker build -t odoo .
+$ cd ../nginx
+$ docker build -t nginx .
 ```
 
 # Push your production environment to the production server
