@@ -1,1 +1,0 @@
-# odoo-autodiscover==1.0.3

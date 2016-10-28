@@ -1,0 +1,11 @@
+# Replace latest by a specific date
+#
+# Version 9
+# http://nightly.odoo.com/9.0/nightly/src/odoo_9.0.latest.zip
+# odoo-autodiscover==1.0.3
+#
+# Version 10
+# http://nightly.odoo.com/10.0/nightly/src/odoo_10.0.latest.zip
+#
+# To use OCA packages
+-f https://wheelhouse.odoo-community.org/oca

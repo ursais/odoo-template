@@ -4,9 +4,7 @@ Template for an Odoo project
 
 # Prerequisites
 
-On Ubuntu 16.04
-
-* Install docker-engine and docker-compose: https://docs.docker.com/engine/installation/linux/ubuntulinux/
+Run the `Install` Job on Jenkins
 
 # Build your development environment
 
@@ -16,32 +14,6 @@ and start Odoo
 
 `$ ./env/bin/odoo -c dev.conf`
 
-# Build your production environment
+# Deploy to an environment
 
-```
-$ cd odoo
-$ docker build -t odoo .
-$ cd ../nginx
-$ docker build -t nginx .
-```
-
-# Push your production environment to the production server
-
-On the building system:
-
-```
-$ docker save odoo | gzip > odoo.tgz
-$ docker save nginx | gzip > nginx.tgz
-$ scp odoo.tgz nginx.tgz root@$SERVER:/tmp/.
-```
-
-On the production system:
-
-```
-$ zcat /tmp/odoo.tgz | docker load
-$ zcat /tmp/nginx.tgz | docker load
-```
-
-# Start the production environment
-
-`$ docker-compose up -d`
+Run the `<Project>_Deploy` Job on Jenkins
