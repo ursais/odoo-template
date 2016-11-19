@@ -4,7 +4,7 @@ Template for an Odoo project
 
 # Prerequisites
 
-Run the `Install` Job on Jenkins
+For Ursa employees, run the `Install` Job on Jenkins. Otherwise look at the INSTALL file.
 
 # Build your development environment
 
@@ -16,4 +16,16 @@ and start Odoo
 
 # Deploy to an environment
 
-Run the `<Project>_Deploy` Job on Jenkins
+For Ursa employees, run the `<Project>_Deploy` Job on Jenkins. Otherwise:
+
+* Pull the repo
+
+`$ git pull`
+
+* Update the environment
+
+`$ . env/bin/activate && pip install -r requirements.txt`
+
+* Restart Odoo
+
+`# service odoo restart`
