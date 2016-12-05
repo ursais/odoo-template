@@ -19,6 +19,8 @@ do
     [ ! -d $REPO ] && git clone $REPO -b $BRANCH
     ADDONS_PATH=$ADDONS_PATH,$PWD/`echo $REPO | cut -d "/" -f 2`
 done
+cd ..
+[ -d enterprise ] && ADDONS_PATH=$PWD/enterprise,$ADDONS_PATH
 
 # Create the Odoo configuration file for the dev environment
 cd ..
