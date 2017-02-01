@@ -37,9 +37,7 @@ setuptools.setup(
 )
 $ vi module_name/odoo/__init__.py
 __import__('pkg_resources').declare_namespace(__name__)
-$ vi module_name/odoo/addons/__init__.py
-__import__('pkg_resources').declare_namespace(__name__)
-
+$ cp module_name/odoo/__init__.py module_name/odoo/addons/__init__.py
 ```
 
 * Commit your changes and push your module to Github
