@@ -11,9 +11,8 @@
     'maintainer': 'Ursa Information Systems',
     'website': 'http://www.ursainfosystems.com',
     'depends': [
-        'auditlog',
-        'auto_backup',
     ],
-    'data': [],
+    'data': [
+    ],
     'application': True,
 }
