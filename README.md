@@ -18,6 +18,7 @@ and start Odoo
 
 * Create a new branch and add your module in custom-addons
 * Add your module as a dependency of the customer module
+* Push your branch and create a pull request against develop
 
 ## For contributed module
 
@@ -44,6 +45,7 @@ $ cp module_name/odoo/__init__.py module_name/odoo/addons/__init__.py
 * In Github (http://github.com/ursais/repo), create a pull request against the corresponding OCA repository
 * Add your module in the requirements.txt
 * Add your module as a dependency of the customer module
+* Push your branch and create a pull request against develop
 
 # Deploy to an environment
 
