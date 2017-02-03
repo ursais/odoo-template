@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create the virtuale env if it doesn not exist
+# Create the virtual environment if it does not exist
 [ ! -d env ] && virtualenv env
 [ ! -d src ] && mkdir src
 
@@ -16,14 +16,14 @@ ADDONS_PATH=$PWD/custom-addons
 cd src
 for REPO in `grep -v "^#" ../repo.list`
 do
-    [ ! -d $REPO ] && git clone $REPO -b $BRANCH
-    ADDONS_PATH=$ADDONS_PATH,$PWD/`echo $REPO | cut -d "/" -f 2`
+    REPO_DIR=`echo $REPO | cut -d "/" -f 2 | sed -e 's/\.git//g'`
+    [ ! -d $REPO_DIR ] && git clone $REPO -b $BRANCH
+    ADDONS_PATH=$ADDONS_PATH,$PWD/`echo $REPO_DIR`
 done
 cd ..
 [ -d enterprise ] && ADDONS_PATH=$PWD/enterprise,$ADDONS_PATH
 
 # Create the Odoo configuration file for the dev environment
-cd ..
 cat > dev.conf << EOF
 [options]
 addons_path=$ADDONS_PATH
