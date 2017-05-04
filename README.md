@@ -6,6 +6,11 @@ Template for an Odoo project
 
 For Ursa employees, run the `Install` Job on Jenkins. Otherwise look at the INSTALL file.
 
+# Configuration
+
+* Add the extra repositories in `repo.list`
+* Add your version of Odoo, modules and Python dependencies in `requirements.txt`
+
 # Build your development environment
 
 `$ ./dev.sh`
