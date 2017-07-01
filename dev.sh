@@ -27,8 +27,6 @@ cd ..
 cat > dev.conf << EOF
 [options]
 addons_path=$ADDONS_PATH
-db_host=localhost
-db_port=5432
 db_user=odoo10
 EOF
 
