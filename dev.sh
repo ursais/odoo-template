@@ -6,10 +6,11 @@
 
 # Activate the env and get the requirements
 . env/bin/activate
-pip install -r requirements.txt
+[ ! `pip freeze | grep 'odoo=='` ] && pip install -r requirements.txt
 
 # Get Odoo version
-BRANCH=`grep -v "^#" requirements.txt | grep "nightly\.odoo\.com" | cut -d / -f 4`
+BRANCH=`grep "nightly\.odoo\.com" requirements.txt | cut -d / -f 4`
+VERSION=`echo $BRANCH | cut -d . -f 1`
 
 # Clone repositories and build ADDONS_PATH
 ADDONS_PATH=$PWD/custom-addons
@@ -27,7 +28,7 @@ cd ..
 cat > dev.conf << EOF
 [options]
 addons_path=$ADDONS_PATH
-db_user=odoo10
+db_user=odoo$VERSION
 EOF
 
 exit 0
