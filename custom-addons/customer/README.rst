@@ -31,4 +31,4 @@ Credits
 Contributors
 ------------
 
-* Ursa Information Systems <contact@ursainfosystems.com>
+* Open Source Integrators <contact@opensourceintegrators.com>
