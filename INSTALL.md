@@ -20,7 +20,7 @@
 
 # Webkit
 
-* Download Webkit from http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb
+* Download Webkit from https://github.com/wkhtmltopdf/wkhtmltopdf/releases/tag/0.12.1
 * Install Webkit and create a symlink:
 
 `# ln -s /usr/local/bin/wkhtmltopdf /usr/bin/wkhtmltopdf`

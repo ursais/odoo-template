@@ -1,6 +1,6 @@
 # Template Project
 
-Template for an Odoo project
+Template for an Odoo project.
 
 # Prerequisites
 
@@ -8,20 +8,19 @@ For Ursa employees, run the `Install` Job on Jenkins. Otherwise look at the INST
 
 # Configuration
 
-* Add the extra repositories in `repo.list`
 * Add your version of Odoo, modules and Python dependencies in `requirements.txt`
 
 # Build your development environment
 
-`$ ./dev.sh`
+`$ ./build.sh`
 
 and start Odoo
 
-`$ ./env/bin/odoo -c dev.conf`
+`$ ./env/bin/odoo -c odoo.conf`
 
 ## For custom module
 
-* Create a new branch and add your module in custom-addons
+* Create a new branch and add your module in src/custom-addons
 * Add your module as a dependency of the customer module
 * Push your branch and create a pull request against develop
 
@@ -48,7 +47,6 @@ $ cp module_name/odoo/__init__.py module_name/odoo/addons/__init__.py
 
 * Commit your changes and push your module to Github
 * In Github (http://github.com/ursais/repo), create a pull request against the corresponding OCA repository
-* Add your module in the requirements.txt
 * Add your module as a dependency of the customer module
 * Push your branch and create a pull request against develop
 
