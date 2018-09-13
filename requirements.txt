@@ -1,8 +1,54 @@
-# Replace latest by a specific date
-http://nightly.odoo.com/11.0/nightly/src/odoo_11.0.latest.zip
 # For merged modules
 #odoo11-addon-module-name==11.0.1.0.0
 #odoo11-addon-partner-contact-nutrition==11.0.1.0.0
 # For unmerged modules
 # git+https://github.com/ursais/repo_name@branch_name#egg=odoo11-addon-module-name&subdirectory=setup/module_name
 # git+https://github.com/ursais/account-payment@11.0-partner-aging#egg=odoo11-addon-partner-aging&subdirectory=setup/partner_aging
+Babel==2.6.0
+beautifulsoup4==4.6.3
+certifi==2018.8.24
+chardet==3.0.4
+decorator==4.3.0
+docutils==0.14
+feedparser==5.2.1
+gevent==1.3.6
+greenlet==0.4.15
+html2text==2018.1.9
+idna==2.7
+Jinja2==2.10
+lxml==4.2.5
+Mako==1.0.7
+MarkupSafe==1.0
+mock==2.0.0
+num2words==0.5.7
+ofxparse==0.19
+passlib==1.7.1
+pbr==4.2.0
+Pillow==5.2.0
+psutil==5.4.7
+psycopg2==2.7.5
+psycopg2-binary==2.7.5
+pyasn1==0.4.4
+pyasn1-modules==0.2.2
+pydot==1.2.4
+pyldap==3.0.0.post1
+pyparsing==2.2.0
+PyPDF2==1.26.0
+pyserial==3.4
+python-dateutil==2.7.3
+python-ldap==3.1.0
+python-stdnum==1.9
+pytz==2018.5
+pyusb==1.0.2
+PyYAML==4.2b4
+qrcode==6.0
+reportlab==3.5.6
+requests==2.19.1
+six==1.11.0
+suds-jurko==0.6
+urllib3==1.23
+vatnumber==1.2
+vobject==0.9.6.1
+Werkzeug==0.14.1
+XlsxWriter==1.1.0
+xlwt==1.3.0

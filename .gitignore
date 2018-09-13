@@ -1,6 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
-.gitignore
 .idea/
 /env/
-/src/
-/dev.conf
+/*.conf
