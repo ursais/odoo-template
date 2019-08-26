@@ -1,0 +1,18 @@
+migration:
+  options:
+    install_command: odoo --without-demo=${WITHOUT_DEMO:-True}
+  versions:
+    - version: setup
+      operations:
+        pre:
+          - "sh -c 'psql -c \"CREATE EXTENSION pg_trgm;\"'"
+        post:
+          - anthem songs.install.base::main
+      addons:
+        upgrade:
+          - sale
+      modes:
+        demo:
+          operations:
+            post:
+              - anthem songs.install.demo::main

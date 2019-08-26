@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+spec:
+  ports:
+    - port: 8069
+  selector:
+    app: odoo
+    tier: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: longpolling
+  labels:
+    app: odoo
+spec:
+  ports:
+    - port: 8072
+  selector:
+    app: odoo
+    tier: frontend
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: odoo
+        tier: frontend
+    spec:
+      containers:
+      - image: max3903/odoo-template:latest
+        name: odoo
+        ports:
+        - containerPort: 8069
+          name: odoo
+        - containerPort: 8072
+          name: longpolling
+        volumeMounts:
+        - name: odoo-persistent-storage
+          mountPath: /data/odoo
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: odoo-persistent-storage
+        persistentVolumeClaim:
+          claimName: odoo

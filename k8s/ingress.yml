@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+name: ingress
+spec:
+ tls:
+ - hosts:
+   - odoo.example.com
+   secretName: odoo-secret
+ rules:
+  - host: odoo.example.com
+    http:
+      paths:
+      - path: /longpolling
+        backend:
+          serviceName: odoo
+          servicePort: 8072
+      - path: /
+        backend:
+          serviceName: odoo
+          servicePort: 8069

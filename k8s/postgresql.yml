@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    app: odoo
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: odoo
+    tier: db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db
+  labels:
+    app: odoo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    app: odoo
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: odoo
+        tier: db
+    spec:
+      containers:
+      - image: postgres:11
+        name: db
+        ports:
+        - containerPort: 5432
+          name: db
+        volumeMounts:
+        - name: db-persistent-storage
+          mountPath: /var/lib/postgresql
+      volumes:
+      - name: db-persistent-storage
+        persistentVolumeClaim:
+          claimName: db
