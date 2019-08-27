@@ -55,6 +55,23 @@ spec:
       containers:
       - image: max3903/odoo-template:latest
         name: odoo
+        env:
+          - name: DB_HOST
+            value: db
+          - name: DB_USER
+            value: odoo
+          - name: DB_PASS
+            value: odoo
+          - name: DB_NAME
+            value: odoo
+          - name: ADMIN_PASSWD
+            value: admin
+          - name: RUNNING_ENV
+            value: prod
+          - name: LOG_HANDLER
+            value: :WARN
+          - name: MARABUNTA_MODE
+            value: full
         ports:
         - containerPort: 8069
           name: odoo

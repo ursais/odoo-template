@@ -10,9 +10,9 @@ setup(
     version=version,
     description="Odoo Implementation Project for Customer",
     license='GNU Affero General Public License v3 or later (AGPLv3+)',
-    author="Author...",
-    author_email="email...",
-    url="url...",
+    author="Open Source Integrators",
+    author_email="contact@opensourceintegrators.com",
+    url="https://www.opensourceintegrators.com",
     packages=['songs'] + ['songs.%s' % p for p in find_packages('./songs')],
     include_package_data=True,
     classifiers=[
@@ -21,8 +21,7 @@ setup(
         'License :: OSI Approved :: '
         'GNU Affero General Public License v3 or later (AGPLv3+)',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
     ],
 )

@@ -13,7 +13,7 @@ spec:
       paths:
       - path: /longpolling
         backend:
-          serviceName: odoo
+          serviceName: longpolling
           servicePort: 8072
       - path: /
         backend:

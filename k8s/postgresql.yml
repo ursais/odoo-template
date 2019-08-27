@@ -42,6 +42,11 @@ spec:
       containers:
       - image: postgres:11
         name: db
+        env:
+          - name: POSTGRES_USER
+            value: odoo
+          - name: POSTGRES_PASSWORD
+            value: odoo
         ports:
         - containerPort: 5432
           name: db
