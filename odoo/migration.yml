@@ -10,7 +10,7 @@ migration:
           - anthem songs.install.base::main
       addons:
         upgrade:
-          - sale
+          - customer
       modes:
         demo:
           operations:

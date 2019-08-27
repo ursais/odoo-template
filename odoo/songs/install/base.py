@@ -43,4 +43,4 @@ def main(ctx):
     """ Create demo data """
     req = Requirement.parse('odoo-customer')
     setup_company(ctx, req)
-    setup_language(ctx)
+#    setup_language(ctx)
