@@ -58,6 +58,8 @@ spec:
         env:
           - name: DB_HOST
             value: db
+          - name: DB_PORT
+            value: "5432"
           - name: DB_USER
             value: odoo
           - name: DB_PASS
