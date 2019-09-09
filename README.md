@@ -1,67 +1,37 @@
-# Template Project
+# Odoo Project Example
 
-Template for an Odoo project.
+The base images does nothing alone, it only contains the dependencies and a few
+tools, but you need to create an inheriting image with the odoo and addons
+code.
 
-# Prerequisites
+Follow the steps:
 
-For Ursa employees, run the `Install` Job on Jenkins. Otherwise look at the INSTALL file.
+1. Create directories. This is mandatory, they will be copied in the image
 
-# Configuration
+        mkdir -p odoo/external-src odoo/local-src odoo/data odoo/songs
 
-* Add your version of Odoo, modules and Python dependencies in `requirements.txt`
+2. Add a submodule for Odoo (official or OCA/OCB)
 
-# Build your development environment
+        git submodule init
+        git submodule add git@github.com:odoo/odoo.git odoo/src
 
-`$ ./build.sh`
+3. Optionally add submodules for external addons in `odoo/external-src`
+ 
+        git submodule add git@github.com:OCA/server-tools.git odoo/external-src/server-tools
 
-and start Odoo
+4. Optionally add custom addons in `odoo/local-src`
 
-`$ ./env/bin/odoo -c odoo.conf`
+6. Create the Dockerfile, the bare minimum being (see also [the example
+   file](odoo/Dockerfile) that installs additional dependencies):
 
-## For custom module
+        FROM camptocamp/odoo-project:11.0
+        MAINTAINER <name>
 
-* Create a new branch and add your module in src/custom-addons
-* Add your module as a dependency of the customer module
-* Push your branch and create a pull request against develop
+        ENV ADDONS_PATH=/odoo/local-src,/odoo/external-src/server-tools,/odoo/src/addons
 
-## For contributed module
+7. Build your image
 
-* Create a new branch in src/<repo> and add your module
-* Create the setup directory
+        docker build -t youruser/odoo-project-example .
 
-```
-$ cd src/<repo>/setup
-$ mkdir -p module_name/odoo/addons
-$ ln -s ../module_name module_name/odoo/addons/.
-$ vi module_name/setup.py
-import setuptools
-
-setuptools.setup(
-    setup_requires=['setuptools-odoo'],
-    odoo_addon=True,
-)
-$ vi module_name/odoo/__init__.py
-__import__('pkg_resources').declare_namespace(__name__)
-$ cp module_name/odoo/__init__.py module_name/odoo/addons/__init__.py
-```
-
-* Commit your changes and push your module to Github
-* In Github (http://github.com/ursais/repo), create a pull request against the corresponding OCA repository
-* Add your module as a dependency of the customer module
-* Push your branch and create a pull request against develop
-
-# Deploy to an environment
-
-For Ursa employees, run the `<Project>_Deploy` Job on Jenkins. Otherwise:
-
-* Pull the repo
-
-`$ git pull`
-
-* Update the environment
-
-`$ . env/bin/activate && pip install -r requirements.txt`
-
-* Restart Odoo
-
-`# service odoo restart`
+8. Optionally create a [docker-compose.yml](docker-compose.yml) file. This
+   example is a development composition.
