@@ -5,7 +5,8 @@ It contains:
 
 * Dockerfile: The Docker file to build the Odoo image
 * docker-compose.yml: The composition to run Odoo and PostgreSQL
-* odoo-chart: The structure to generate the Helm package
+* helm: The structure to generate the Helm package
+* openshift: The structure with the OpenShift templates
 
 ## Process
 
