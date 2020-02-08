@@ -12,11 +12,11 @@ It contains:
 
 ### New Project
 
-* Create a new repository `myproject` on Github or Gitlab
-* Clone this repository and push it to `myproject`
+* Create a new repository `odoo-project` on Github or Gitlab
+* Clone this repository and push it to `odoo-project`
 * Create the project in your cluster
 ```shell script
-helm install myproject odoo-chart
+helm install odoo-project ./helm
 ```
 
 ###  New version
@@ -34,7 +34,7 @@ docker-compose up
 ```
 
 * Commit your changes
-* Push them to `myproject`
+* Push them to the repository
 * Create a pull/merge request to the master branch
 
 ## Roadmap
