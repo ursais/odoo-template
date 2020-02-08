@@ -224,3 +224,22 @@ readinessProbe:
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
+
+# Name: The name assigned to all of the frontend objects defined in this template.
+name: odoo
+# Namespace: The OpenShift Namespace where the ImageStream resides.
+namespace: openshift
+# Memory Limit: Maximum amount of memory the container can use.
+memory_limit: 512Mi
+# Git Repository URL: The URL of the repository with your application source code.
+source_repository_url: https://github.com/ursais/odoo-template.git
+# Git Reference: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
+source_repository_ref: 13.0
+# Context Directory: Set this to the relative path to your project if it is not in the root of your repository.
+context_dir:
+# Application Hostname: The exposed hostname that will route to the Node.js service, if left blank a value will be defaulted.
+application_domain:
+# GitHub Webhook Secret: Github trigger secret.  A difficult to guess string encoded as part of the webhook URL.  Not encrypted.
+github_webhook_secret:
+# Generic Webhook Secret: A secret string used to configure the Generic webhook.
+generic_webhook_secret:

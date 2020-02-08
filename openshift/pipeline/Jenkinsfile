@@ -1,0 +1,6 @@
+node('odoo') {
+  stage 'build'
+  openshiftBuild(buildConfig: 'odoo', showBuildLogs: 'true')
+  stage 'deploy'
+  openshiftDeploy(deploymentConfig: 'odoo')
+}
