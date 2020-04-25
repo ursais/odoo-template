@@ -1,0 +1,8 @@
+#./src/field-service:
+#    remotes:
+#        oca: https://github.com/OCA/field-service.git
+#        ursais: git+ssh://git@github.com/ursais/field-service.git
+#    merges:
+#        - oca 12.0
+#        - oca refs/pull/552/head
+#    target: ursais XXX/12.0-RC1    # Replace XXX with the customer code
