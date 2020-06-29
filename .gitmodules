@@ -1,8 +1,4 @@
-[submodule "enterprise"]
-	path = src/enterprise
-	url = https://github.com/ursais/enterprise.git
-	branch = 13.0
 [submodule "web"]
-	path = src/web
+	path = odoo/src/web
 	url = https://github.com/OCA/web.git
 	branch = 13.0

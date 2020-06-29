@@ -1,22 +1,28 @@
 version: '2'
 services:
-  postgresql:
-    image: 'bitnami/postgresql:11'
+  db:
+    image: postgres:12
+    restart: always
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - 'postgresql_data:/bitnami/postgresql'
+      - 'postgres-data:/var/lib/postgresql/data/pgdata'
   odoo:
-    image: 'bitnami/odoo:13'
+    build: ./odoo
     ports:
-      - '80:8069'
-      - '443:8071'
+      - '8069:8069'
+      - '8072:8072'
     volumes:
-      - 'odoo_data:/bitnami'
+      - 'odoo-data:/var/lib/odoo'
     depends_on:
-      - postgresql
+      - db
+    environment:
+        - HOST=db
+        - USER=odoo
+        - PASSWORD=odoo
 volumes:
-  postgresql_data:
-    driver: local
-  odoo_data:
-    driver: local
+  postgres-data:
+  odoo-data:

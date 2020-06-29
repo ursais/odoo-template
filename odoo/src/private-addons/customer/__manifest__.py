@@ -1,4 +1,4 @@
-# Copyright (C) 2018 Open Source Integrators
+# Copyright (C) 2020 Open Source Integrators
 # License LGPL-3 or later (http://www.gnu.org/licenses/lgpl).
 {
     "name": "Customer",
@@ -9,15 +9,12 @@
     "maintainer": "Open Source Integrators",
     "website": "https://www.opensourceintegrators.com",
     "depends": [
-        # Odoo Addons
-        "board",
-        "calendar",
-        "contacts",
-        # OCA Addons
-        "web_responsive",
+        # Odoo/Enterprise Addons
+        # Public Addons
         # Private Addons
     ],
     "data": [],
     "application": True,
     "sequence": 0,
+    "maintainers": ["max3903"],
 }

@@ -1,43 +1,106 @@
-# Odoo Template Project
+# OSI - PM System
 
-This repository is a template repository meant to be copied for your Odoo project.
-It contains:
+## Table of Contents
+* [Installation](#Installation)
+* [Setup your development environment](#Setup-your-development-environment)
+* [How to make changes](#How-to-make-changes)
+	* [Add a submodule](#Add-a-submodule)
+	* [Add an open pull request](#Add-an-open-pull-request)
+* [How to build](#How-to-build)
+* [How to test](#How-to-test)
+* [How to publish](#How-to-publish)
+* [How to release](#How-to-release)
+* [Issues](#Issues)
+* [Roadmap](#Roadmap)
 
-* Dockerfile: The Docker file to build the Odoo image
-* docker-compose.yml: The composition to run Odoo and PostgreSQL
-* helm: The structure to generate the Helm package
-* openshift: The structure with the OpenShift templates
+## Installation
 
-## Process
+See [INSTALL](./INSTALL.md).
 
-### New Project
+## Setup your development environment
 
-* Create a new repository `odoo-project` on Github or Gitlab
-* Clone this repository and push it to `odoo-project`
-* Create the project in your cluster
+Run
 ```shell script
-helm install odoo-project ./helm
+sudo apt install python3-venv
+python3 -m venv env
+. env/bin/activate
+pip install -r requirements.txt
+pre-commit install
+git submodule sync
+git submodule update --init
 ```
 
-###  New version
+## How to make changes
 
-* Add new repositories
+### Add a submodule
 
+Add a new repository
 ```shell script
-git submodule add --name web -b 13.0 https://github.com/OCA/web.git src/web
+git submodule add --name web -b 12.0 https://github.com/OCA/web.git odoo/src/web
 ```
-* Make changes to the modules in `/src`
-* Test locally with:
+Add your module in `Dockerfile`
 
+Add the modules in the `__manifest__.py` of one of the modules in `odoo/src/private-addons`
+
+### Add an open pull request
+
+Update the URL of the submodule `.gitmodules` to point to the `ursais` repository
+
+Add your open pull requests in the file `repos.yml`
+
+Update the target branch for each submodule
+
+Run the following command to build a consolidated branch:
+```shell script
+gitaggregate -c repos.yml -p -j 5
+```
+
+## How to build
+
+Build locally with:
+```shell script
+docker-compose build
+```
+
+## How to test
+
+Test locally with:
 ```shell script
 docker-compose up
 ```
+and go to http://localhost:8069
 
-* Commit your changes
-* Push them to the repository
-* Create a pull/merge request to the master branch
+## How to publish
+
+Commit your changes
+
+Push them to the repository
+
+Create a pull/merge request to the master branch
+
+## How to release
+
+Tag an image in the stream:
+```shell script
+oc project osi-pm-dev
+oc tag odoo:lastest odoo:20200701-WalkThru
+```
+
+Update the DeploymentConfig to change the tag:
+```shell script
+oc project osi-pm-test
+oc edit dc odoo
+        [...]
+        kind: ImageStreamTag
+        name: odoo:20200701-WalkThru
+```
+
+## Issues
+
+Report any issue to this [Github project](https://github.com/ursais/template-project/issues).
 
 ## Roadmap
 
-* Add a BuildConfig, ImageStream, etc. to monitor the repository, run tests and build a test instance in the cluster
-* Add an Operator to upgrade the production instance
+* Create the database and load the data
+* Upgrade an instance
+* Push the production database to the other environments

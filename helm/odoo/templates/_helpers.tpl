@@ -91,7 +91,7 @@ imagePullSecrets:
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class
+Return the proper Storage Class
 */}}
 {{- define "odoo.storageClass" -}}
 {{/*

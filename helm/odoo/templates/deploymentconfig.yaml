@@ -13,7 +13,7 @@ spec:
     imageChangeParams:
       automatic: true
       containerNames:
-      - odoo
+      - {{ .Values.name | quote }}
       from:
         kind: ImageStreamTag
         name: {{ print .Values.name ":latest" | quote }}
@@ -21,29 +21,78 @@ spec:
   replicas: 1
   selector:
     name: {{ .Values.name | quote }}
+    app: {{ .Values.name | quote }}
+    release: {{ .Values.name | quote }}
   template:
     metadata:
       name: {{ .Values.name | quote }}
       labels:
         name: {{ .Values.name | quote }}
+        app: {{ .Values.name | quote }}
+        release: {{ .Values.name | quote }}
     spec:
+      volumes:
+        - name: odoo-data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "odoo.fullname" .) }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
       containers:
-      - name: odoo
+      - name: {{ .Values.name | quote }}
         image: " "
+        env:
+          - name: HOST
+            value: odoo-postgresql
+          - name: USER
+            value: odoo
+          - name: PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ ternary (include "odoo.postgresql.fullname" .) (printf "%s-%s" .Release.Name "externaldb") .Values.postgresql.enabled | quote }}
+                key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
         ports:
-        - containerPort: 8069
-        readinessProbe:
-          timeoutSeconds: 3
-          initialDelaySeconds: 3
-          httpGet:
-            path: "/"
-            port: 8069
+        - name: tcp-odoo-http
+          containerPort: 8069
+        - name: tcp-odoo-im
+          containerPort: 8072
+        {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
-          timeoutSeconds: 3
-          initialDelaySeconds: 30
           httpGet:
-            path: "/"
-            port: 8069
+            path: /
+            port: tcp-odoo-http
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: tcp-odoo-http
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
         resources:
-          limits:
-            memory: {{ .Values.memory_limit | quote }}
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: odoo-data
+          mountPath: /var/lib/odoo
+      volumes:
+      - name: odoo-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default (include "odoo.fullname" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}

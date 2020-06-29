@@ -1,3 +1,4 @@
+{{- if .Values.build.enabled }}
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
@@ -8,31 +9,20 @@ spec:
   source:
     type: Git
     git:
-      uri: {{ .Values.source_repository_url | quote }}
-      ref: {{ .Values.source_repository_ref | quote }}
-    contextDir: {{ .Values.context_dir | quote }}
+      uri: {{ .Values.build.source_repository_url | quote }}
+      ref: {{ .Values.build.source_repository_ref | quote }}
+    contextDir: {{ .Values.build.context_dir | quote }}
   strategy:
-    type: Source
-    sourceStrategy:
-      from:
-        kind: ImageStreamTag
-        namespace: {{ .Values.namespace | quote }}
-        name: odoo:13
-      env:
-      - name: NPM_MIRROR
-        value: {{ .Values.npm_mirror | quote }}
+    type: Docker
+    dockerStrategy: {}
   output:
     to:
       kind: ImageStreamTag
       name: {{ print .Values.name ":latest" | quote }}
   triggers:
-  - type: ImageChange
-  - type: ConfigChange
-  - type: GitHub
-    github:
-      secret: {{ .Values.github_webhook_secret | default (randAlphaNum 40) | quote }}
-  - type: Generic
-    generic:
-      secret: {{ .Values.generic_webhook_secret | default (randAlphaNum 40) | quote }}
-  postCommit:
-    script: npm test
+    - type: GitHub
+      github:
+        secretReference:
+          name: {{ print .Values.name "-github-webhook" | quote }}
+    - type: ConfigChange
+{{- end }}
