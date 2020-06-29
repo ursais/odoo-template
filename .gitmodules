@@ -1,16 +1,4 @@
-[submodule "odoo/src"]
-	path = odoo/src
-	url = git@github.com:ursais/odoo.git
-	branch = 12.0
-[submodule "odoo/external-src/enterprise"]
-	path = odoo/external-src/enterprise
-	url = git@github.com:ursais/enterprise.git
-	branch = 12.0
-[submodule "odoo/external-src/odoo-dj"]
-	path = odoo/external-src/odoo-dj
-	url = git@github.com:camptocamp/odoo-dj.git
-	branch = 12.0
-[submodule "odoo/external-src/odoo-cloud-platform"]
-	path = odoo/external-src/odoo-cloud-platform
-	url = git@github.com:camptocamp/odoo-cloud-platform.git
+[submodule "web"]
+	path = odoo/src/web
+	url = https://github.com/OCA/web.git
 	branch = 12.0

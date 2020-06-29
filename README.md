@@ -1,37 +1,106 @@
-# Odoo Project Example
+# OSI - PM System
 
-The base images does nothing alone, it only contains the dependencies and a few
-tools, but you need to create an inheriting image with the odoo and addons
-code.
+## Table of Contents
+* [Installation](#Installation)
+* [Setup your development environment](#Setup-your-development-environment)
+* [How to make changes](#How-to-make-changes)
+	* [Add a submodule](#Add-a-submodule)
+	* [Add an open pull request](#Add-an-open-pull-request)
+* [How to build](#How-to-build)
+* [How to test](#How-to-test)
+* [How to publish](#How-to-publish)
+* [How to release](#How-to-release)
+* [Issues](#Issues)
+* [Roadmap](#Roadmap)
 
-Follow the steps:
+## Installation
 
-1. Create directories. This is mandatory, they will be copied in the image
+See [INSTALL](./INSTALL.md).
 
-        mkdir -p odoo/external-src odoo/local-src odoo/data odoo/songs
+## Setup your development environment
 
-2. Add a submodule for Odoo (official or OCA/OCB)
+Run
+```shell script
+sudo apt install python3-venv
+python3 -m venv env
+. env/bin/activate
+pip install -r requirements.txt
+pre-commit install
+git submodule sync
+git submodule update --init
+```
 
-        git submodule init
-        git submodule add git@github.com:odoo/odoo.git odoo/src
+## How to make changes
 
-3. Optionally add submodules for external addons in `odoo/external-src`
- 
-        git submodule add git@github.com:OCA/server-tools.git odoo/external-src/server-tools
+### Add a submodule
 
-4. Optionally add custom addons in `odoo/local-src`
+Add a new repository
+```shell script
+git submodule add --name web -b 12.0 https://github.com/OCA/web.git odoo/src/web
+```
+Add your module in `Dockerfile`
 
-6. Create the Dockerfile, the bare minimum being (see also [the example
-   file](odoo/Dockerfile) that installs additional dependencies):
+Add the modules in the `__manifest__.py` of one of the modules in `odoo/src/private-addons`
 
-        FROM camptocamp/odoo-project:11.0
-        MAINTAINER <name>
+### Add an open pull request
 
-        ENV ADDONS_PATH=/odoo/local-src,/odoo/external-src/server-tools,/odoo/src/addons
+Update the URL of the submodule `.gitmodules` to point to the `ursais` repository
 
-7. Build your image
+Add your open pull requests in the file `repos.yml`
 
-        docker build -t youruser/odoo-project-example .
+Update the target branch for each submodule
 
-8. Optionally create a [docker-compose.yml](docker-compose.yml) file. This
-   example is a development composition.
+Run the following command to build a consolidated branch:
+```shell script
+gitaggregate -c repos.yml -p -j 5
+```
+
+## How to build
+
+Build locally with:
+```shell script
+docker-compose build
+```
+
+## How to test
+
+Test locally with:
+```shell script
+docker-compose up
+```
+and go to http://localhost:8069
+
+## How to publish
+
+Commit your changes
+
+Push them to the repository
+
+Create a pull/merge request to the master branch
+
+## How to release
+
+Tag an image in the stream:
+```shell script
+oc project odoo-project-dev
+oc tag odoo:lastest odoo:20200701
+```
+
+Update the DeploymentConfig to change the tag:
+```shell script
+oc project odoo-project-test
+oc edit dc odoo
+        [...]
+        kind: ImageStreamTag
+        name: odoo:20200701
+```
+
+## Issues
+
+Report any issue to this [Github project](https://github.com/ursais/template-project/issues).
+
+## Roadmap
+
+* Create the database and load the data
+* Upgrade an instance
+* Push the production database to the other environments

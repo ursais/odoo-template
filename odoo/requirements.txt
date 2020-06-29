@@ -1,2 +1,2 @@
-# project's packages, customize for your needs:
-unidecode==0.4.14
+# Add your library with its version below in alphabetic order
+# bokeh==1.1.0
