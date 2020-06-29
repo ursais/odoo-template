@@ -28,10 +28,7 @@ service:
   externalTrafficPolicy: Cluster
 
 build:
-  enabled: true
-  source_repository_url: https://github.com/ursais/odoo-template.git
-  source_repository_ref: master
-  context_dir: odoo
+  enabled: false
 
 persistence:
   enabled: true
@@ -63,7 +60,7 @@ readinessProbe:
 affinity: {}
 
 name: odoo
-fullname: "Odoo Project Dev"
-namespace: odoo-project-dev
+fullname: "Odoo Project Production"
+namespace: odoo-project
 memory_limit: 2Gi
-application_domain: odoo-project-dev.apps.example.com
+application_domain: odoo-template.apps.example.com
