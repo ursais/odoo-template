@@ -82,17 +82,17 @@ Create a pull/merge request to the master branch
 
 Tag an image in the stream:
 ```shell script
-oc project osi-pm-dev
-oc tag odoo:lastest odoo:20200701-WalkThru
+oc project odoo-project-dev
+oc tag odoo:lastest odoo:20200701
 ```
 
 Update the DeploymentConfig to change the tag:
 ```shell script
-oc project osi-pm-test
+oc project odoo-project-test
 oc edit dc odoo
         [...]
         kind: ImageStreamTag
-        name: odoo:20200701-WalkThru
+        name: odoo:20200701
 ```
 
 ## Issues

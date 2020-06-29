@@ -17,7 +17,7 @@ Clone this repository and push it to `odoo-project`
 
 Create SSH keys for the project to clone and pull the repository
 ```shell script
-ssh-keygen -C "openshift-source-builder/osi-erp@github" -f github-osi-erp -N ''
+ssh-keygen -C "openshift-source-builder/odoo-project@github" -f github-odoo-project -N ''
 ```
 Add the public key in the [Deploy Keys of the repository](https://github.com).
 
@@ -25,7 +25,7 @@ Add the public key in the [Deploy Keys of the repository](https://github.com).
 
 Create the project:
 ```shell script
-oc new-project osi-pm-dev --display-name="OSI PM Dev"
+oc new-project odoo-project-dev --display-name="Odoo Project Dev"
 ```
 Add the private key
 ```shell script
@@ -66,15 +66,15 @@ Click `Add webhook`.
 
 Create the project:
 ```shell script
-oc new-project osi-pm-test --display-name="OSI PM Test"
+oc new-project odoo-project-test --display-name="Odoo Project Test"
 ```
 Add permissions to the default Service Account of the project:
 ```shell script
 oc adm policy add-scc-to-user anyuid -z default
 oc adm policy add-scc-to-user privileged -z default
 oc policy add-role-to-user \
-    system:image-puller system:serviceaccount:osi-pm-test:default \
-    --namespace=osi-pm-dev
+    system:image-puller system:serviceaccount:odoo-project-test:default \
+    --namespace=odoo-project-dev
 ```
 Edit the variables in helm/odoo/values.test.yaml
 
@@ -87,15 +87,15 @@ helm install odoo -f values.test.yaml helm/odoo
 
 Create the project:
 ```shell script
-oc new-project osi-pm-qa --display-name="OSI PM QA"
+oc new-project odoo-project-qa --display-name="Odoo Project QA"
 ```
 Add permissions to the default Service Account of the project:
 ```shell script
 oc adm policy add-scc-to-user anyuid -z default
 oc adm policy add-scc-to-user privileged -z default
 oc policy add-role-to-user \
-    system:image-puller system:serviceaccount:osi-pm-qa:default \
-    --namespace=osi-pm-dev
+    system:image-puller system:serviceaccount:odoo-project-qa:default \
+    --namespace=odoo-project-dev
 ```
 Edit the variables in helm/odoo/values.qa.yaml
 
@@ -108,15 +108,15 @@ helm install odoo -f values.qa.yaml helm/odoo
 
 Create the project:
 ```shell script
-oc new-project osi-pm --display-name="OSI PM Production"
+oc new-project odoo-project --display-name="Odoo Project Production"
 ```
 Add permissions to the default Service Account of the project:
 ```shell script
 oc adm policy add-scc-to-user anyuid -z default
 oc adm policy add-scc-to-user privileged -z default
 oc policy add-role-to-user \
-    system:image-puller system:serviceaccount:osi-pm:default \
-    --namespace=osi-pm-dev
+    system:image-puller system:serviceaccount:odoo-project:default \
+    --namespace=odoo-project-dev
 ```
 Edit the variables in helm/odoo/values.production.yaml
 
