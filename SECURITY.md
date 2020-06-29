@@ -13,4 +13,4 @@
 
 ## Reporting a Vulnerability
 
-To report a vulnerability, create an issue.
+To report a vulnerability, create an [issue on Github](https://github.com/ursais/odoo-template/issues).
