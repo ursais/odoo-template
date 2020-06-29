@@ -1,0 +1,8 @@
+#./odoo/src/contract:
+#    remotes:
+#        oca: https://github.com/OCA/contract.git
+#        ursais: git+ssh://git@github.com/ursais/contract.git
+#    merges:
+#        - oca 12.0
+#        - oca refs/pull/437/head
+#    target: ursais osi-pm/12.0-RC1

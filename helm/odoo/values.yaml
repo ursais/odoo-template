@@ -1,0 +1,69 @@
+image:
+  registry: docker.io
+  repository: odoo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+odooUsername: admin
+odooEmail: odoo@example.com
+
+## Database external to the cluster
+# externalDatabase:
+#   host: localhost
+#   user: postgres
+#   password: ""
+#   port: 5432
+
+## Database in the cluster
+postgresql:
+  enabled: true
+  postgresqlUsername: odoo
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 2Gi
+
+service:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+
+build:
+  enabled: true
+  source_repository_url: https://github.com/ursais/odoo-template.git
+  source_repository_ref: master
+  context_dir: odoo
+
+persistence:
+  enabled: true
+  storageClass: nfs
+  accessMode: ReadWriteMany
+  size: 2Gi
+
+resources:
+  requests:
+    memory: 2Gi
+    cpu: 300m
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 600
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+affinity: {}
+
+name: odoo
+fullname: "Odoo Template Development"
+namespace: odoo-template-dev
+memory_limit: 2Gi
+application_domain: odoo-template-dev.apps.example.com
