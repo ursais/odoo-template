@@ -5,4 +5,4 @@
 #    merges:
 #        - oca 12.0
 #        - oca refs/pull/437/head
-#    target: ursais osi-pm/12.0-RC1
+#    target: ursais odoo-project/12.0-RC1
