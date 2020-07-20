@@ -1,23 +1,25 @@
 #!/bin/bash
 
+# Clone submodules
+git submodule sync
+git submodule update --init
+
 # Create the virtual environment if it does not exist
-[ ! -d env ] && virtualenv env
+[ ! -d env ] && python3 -m venv env
 
 # Activate the env and get the requirements
 . env/bin/activate
-[ ! `pip freeze | grep 'odoo=='` ] && pip install -r requirements.txt
+pip install --upgrade pip
+pip install -r requirements.txt
+cd odoo && python3 setup.py install && cd ..
 
 # Get Odoo version
 BRANCH=`grep branch .gitmodules | cut  -d '=' -f 2 | sed -e 's/ //'`
 VERSION=`echo $BRANCH | cut -d . -f 1`
 
-# Clone submodules
-git submodule sync
-git submodule update --init
-
 # Build ADDONS_PATH
 ADDONS_PATH=$PWD/src/custom-addons,$PWD/odoo/addons
-if [ -d src ] ; then
+if [ -d src ]; then
 	cd src
 	for i in `ls -d */ | cut -f1 -d'/'`; do
 		if [ $i == "enterprise" ] ; then

@@ -5,4 +5,13 @@
 #    merges:
 #        - oca 13.0
 #        - oca refs/pull/552/head
-#    target: ursais XXX/13.0-RC1    # Replace XXX with the customer code
+#    target: &default_target ursais XXX/13.0-RC1    # Replace XXX with the customer code
+#
+#./src/web:
+#    remotes:
+#        oca: https://github.com/OCA/web.git
+#        ursais: git+ssh://git@github.com/ursais/web.git
+#    merges:
+#        - oca 13.0
+#        - oca refs/pull/552/head
+#    target: *default_target

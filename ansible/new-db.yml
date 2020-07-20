@@ -1,0 +1,89 @@
+- name: Load new database backup
+  hosts: localhost
+  gather_facts: no
+  vars:
+    - archives_dir: '{{ archives | default("~/archives") }}'
+    - conf: '{{ config | default("debug.conf") }}'
+    - data_dir: '{{ datadir | default("/home/odoo/.local/share/Odoo") }}'
+    - db_host: '{{ dbhost | default("localhost") }}'
+    - db_name: '{{ dbname | default("MASTER") }}'
+    - db_user: '{{ dbuser | default("odoo") }}'
+    - svc: '{{ service | default("odoo") }}'
+    - tar_top_dir: '{{ tartopdir | default("home") }}'
+    - tar_path: '{{ tarpath | default("home/odoo/.local/share/Odoo/filestore") }}'
+  tasks:
+  - name: Stop Odoo
+    service: name={{ svc }} state=stopped
+
+  - name: Delete Filestore
+    file:
+      path: "{{ data_dir }}/filestore/BACKUP"
+      state: absent
+
+  - name: Get PostgreSQL password for Odoo
+    shell: grep "db_password" /etc/odoo/{{ conf }} | sed -e 's/db_password = //g'
+    register: pgpassword
+
+  - name: Drop DB
+    postgresql_db:
+      name: BACKUP
+      login_host: "{{ db_host }}"
+      login_user: "{{ db_user }}"
+      login_password: "{{ pgpassword.stdout }}"
+      state: absent
+
+  - name: Create DB
+    postgresql_db:
+      name: BACKUP
+      login_host: "{{ db_host }}"
+      login_user: "{{ db_user }}"
+      login_password: "{{ pgpassword.stdout }}"
+
+  - name: Get dumps
+    find:
+      paths: "{{ archives_dir }}"
+      patterns: '*.sql.gz'
+      recurse: yes
+    register: found_files
+
+  - name: Get latest dump
+    set_fact:
+      latest_file: "{{ found_files.files | sort(attribute='mtime') | last }}"
+
+  - name: Load DB
+    shell: zcat {{ latest_file.path }} | psql -h {{ db_host }} -U {{ db_user }} BACKUP
+    environment:
+      PGPASSWORD: '{{ pgpassword.stdout }}'
+
+  - name: Get tarballs
+    find:
+      paths: "{{ archives_dir }}"
+      patterns: '*.tar.gz'
+      recurse: yes
+    register: found_files
+
+  - name: Get latest tarball
+    set_fact:
+      latest_file: "{{ found_files.files | sort(attribute='mtime') | last }}"
+
+  - name: Decompress Filestore
+    unarchive:
+      src: "{{ latest_file.path }}"
+      dest: "{{ data_dir }}/filestore"
+      remote_src: yes
+    become: yes
+    become_user: odoo
+
+  - name: Move Filestore
+    command: mv {{ tar_path }}/{{ db_name }} BACKUP
+      chdir={{ data_dir }}/filestore
+    become: yes
+    become_user: odoo
+
+  - name: Cleanup
+    file:
+      path: "{{ data_dir }}/filestore/{{ tar_top_dir }}"
+      state: absent
+
+  - name: Start Odoo
+    service: name={{ svc }} state=started
