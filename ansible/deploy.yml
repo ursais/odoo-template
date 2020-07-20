@@ -3,7 +3,7 @@
   gather_facts: no
   vars:
   - odoo_dir: '{{ odoodir | default("/opt/odoo") }}'
-  - db: '{{ database | default("BACKUP") }}'
+  - db: '{{ database | default("MASTER") }}'
   - tag: '{{ git_tag | default("none") }}'
   - version: '{{ db_version | default("none") }}'
   - conf: '{{ config | default("debug.conf") }}'
@@ -78,6 +78,12 @@
     become: yes
     become_user: odoo
 
+  - name: Update Odoo
+    command: ./env/bin/python setup.py install
+      chdir={{ odoo_dir }}
+    become: yes
+    become_user: odoo
+
   - name: Check if filestore exists
     stat:
       path: "{{ data_dir }}/filestore/{{ db }}"
@@ -88,7 +94,7 @@
     register: pgpassword
 
   - name: Copy the database
-    shell: psql -h localhost -p 6432 -U odoo template1 -c "CREATE DATABASE \"{{ db }}\" WITH TEMPLATE \"BACKUP\";"
+    shell: psql -h localhost -U odoo template1 -c "CREATE DATABASE \"{{ db }}\" WITH TEMPLATE \"BACKUP\";"
     environment:
       PGPASSWORD: '{{ pgpassword.stdout }}'
     when: not filestore.stat.exists
@@ -111,7 +117,7 @@
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
-    when: not db == "BACKUP" and not update.stdout == "none" and tag == "none"
+    when: not db == "MASTER" and not update.stdout == "none" and tag == "none"
 
   - name: Get the list of modules to install
     shell: echo `grep "INSTALL" {{ version }} || echo "none"` | sed -e 's/INSTALL=//g'
@@ -124,12 +130,14 @@
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
-    when: not db == "BACKUP" and not install.stdout == "none" and tag == "none"
+    when: not db == "MASTER" and not install.stdout == "none" and tag == "none"
 
   - name: Cleanup sessions
     file:
       path: "{{ data_dir }}/sessions"
       state: absent
+    become: yes
+    become_user: odoo
 
   - name: Start Odoo
     service: name={{ svc }} state=started

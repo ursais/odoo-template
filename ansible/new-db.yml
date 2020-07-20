@@ -43,6 +43,7 @@
     find:
       paths: "{{ archives_dir }}"
       patterns: '*.sql.gz'
+      recurse: yes
     register: found_files
 
   - name: Get latest dump
@@ -58,6 +59,7 @@
     find:
       paths: "{{ archives_dir }}"
       patterns: '*.tar.gz'
+      recurse: yes
     register: found_files
 
   - name: Get latest tarball

@@ -22,7 +22,6 @@ ROLLBACK=$3
 if [ "$ROLLBACK" == 'false' ]; then
   echo "Upgrade to $VERSION..."
   ansible-playbook deploy.yml \
-    --limit $CUSTOMER-$ENVIRONMENT \
     --extra-vars "database=$DATABASE db_version=$VERSION"
 else
   echo "Rollback to $VERSION..."
