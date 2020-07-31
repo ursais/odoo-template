@@ -17,7 +17,7 @@
 
 See [INSTALL](./INSTALL.md).
 
-## Setup your development environment
+## Setup your environment
 
 Run
 ```shell script
@@ -94,6 +94,11 @@ oc edit dc odoo
         kind: ImageStreamTag
         name: odoo:20200701
 ```
+
+## Tests
+
+* For functional tests using Selenium, please go to [tests/selenium](./tests/selenium/README.md).
+* For performance tests using Locust, please go to [tests/locust](./tests/locust/README.md).
 
 ## Issues
 

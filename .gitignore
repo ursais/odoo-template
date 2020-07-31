@@ -1,1 +1,10 @@
 /.idea/
+__pycache__
+*.pyc
+
+# Locust
+/tests/locust/env
+/tests/locust/locust.log
+
+# Selenium
+/tests/selenium/env
