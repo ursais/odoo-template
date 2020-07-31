@@ -1,2 +1,3 @@
-# Add your library below in alphabetic order
-# bokeh==1.1.0
+-e . # install the songs
+anthem==0.13.0
+marabunta==0.10.4
