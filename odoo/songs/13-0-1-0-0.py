@@ -49,7 +49,7 @@ def setup_stock(ctx):
 def set_version(ctx):
     """ Set the VERSION of the database """
     version = ctx.env("ir.config.parameter").search([("key", "=", "VERSION")])
-    version.write({"value": "12.0.1.0.0"})
+    version.write({"value": "13.0.1.0.0"})
 
 
 @anthem.log

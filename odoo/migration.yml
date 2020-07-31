@@ -15,7 +15,7 @@ migration:
         pre:
           - echo 'pre-operation executed'
         post:
-          - anthem songs.12-0-0-0-1::main
+          - anthem songs.13-0-0-0-1::main
 #    - version: 12.0.1.0.0
 #      backup: true
 #      addons:

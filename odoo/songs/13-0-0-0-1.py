@@ -81,7 +81,7 @@ def set_version(ctx):
     config = ctx.env["ir.config_parameter"]
     version = config.search([("key", "=", "VERSION")])
     if not version:
-        config.create({"key": "VERSION", "value": "12.0.0.0.1"})
+        config.create({"key": "VERSION", "value": "13.0.0.0.1"})
 
 
 @anthem.log
