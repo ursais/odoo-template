@@ -1,4 +1,4 @@
-# OSI - PM System
+# Odoo Template
 
 ## Table of Contents
 * [Installation](#Installation)

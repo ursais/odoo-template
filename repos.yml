@@ -5,7 +5,7 @@
 #    merges:
 #        - oca 13.0
 #        - oca refs/pull/437/head
-#    target: &default_target ursais osi-pm/13.0-RC1
+#    target: &default_target ursais odoo-template/13.0-RC1
 #
 #./odoo/src/web:
 #    remotes:
