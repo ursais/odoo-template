@@ -6,8 +6,6 @@
   - db: '{{ database | default("MASTER") }}'
   - tag: '{{ git_tag | default("none") }}'
   - version: '{{ db_version | default("none") }}'
-  - conf: '{{ config | default("debug.conf") }}'
-  - data_dir: '{{ datadir | default("/home/odoo/.local/share/Odoo") }}'
   - svc: '{{ service | default("odoo") }}'
   tasks:
   - name: Stop Odoo
@@ -79,29 +77,45 @@
     become_user: odoo
 
   - name: Update Odoo
-    command: ./env/bin/python setup.py install
-      chdir={{ odoo_dir }}
+    command: ../env/bin/python setup.py install
+      chdir={{ odoo_dir }}/odoo
     become: yes
     become_user: odoo
 
-  - name: Check if filestore exists
-    stat:
-      path: "{{ data_dir }}/filestore/{{ db }}"
-    register: filestore
+  - name: Get filestore path
+    shell: echo $(grep "data_dir" /etc/odoo/{{ svc }}.conf || echo "/home/odoo/.local/share/Odoo") | sed -e 's/data_dir *= *//g'
+    register: data_dir
 
-  - name: Get PostgreSQL password for Odoo
-    shell: grep "db_password" /etc/odoo/{{ conf }} | sed -e 's/db_password = //g'
+  - name: Get PostgreSQL host
+    shell: grep "db_host" /etc/odoo/{{ svc }}.conf | sed -e 's/db_host = //g'
+    register: pghost
+
+  - name: Get PostgreSQL port
+    shell: grep "db_port" /etc/odoo/{{ svc }}.conf | sed -e 's/db_port = //g'
+    register: pgport
+
+  - name: Get PostgreSQL user
+    shell: grep "db_user" /etc/odoo/{{ svc }}.conf | sed -e 's/db_user = //g'
+    register: pguser
+
+  - name: Get PostgreSQL password
+    shell: grep "db_password" /etc/odoo/{{ svc }}.conf | sed -e 's/db_password = //g'
     register: pgpassword
 
+  - name: Check if filestore exists
+    stat:
+      path: "{{ data_dir.stdout }}/filestore/{{ db }}"
+    register: filestore
+
   - name: Copy the database
-    shell: psql -h localhost -U odoo template1 -c "CREATE DATABASE \"{{ db }}\" WITH TEMPLATE \"BACKUP\";"
+    shell: psql -h {{ pghost.stdout }} -p {{ pgport.stdout }} -U {{ pguser.stdout }} template1 -c "CREATE DATABASE \"{{ db }}\" WITH TEMPLATE \"BACKUP\";"
     environment:
       PGPASSWORD: '{{ pgpassword.stdout }}'
     when: not filestore.stat.exists
 
   - name: Copy filestore
-    command: cp -r BACKUP {{ db }}
-      chdir={{ data_dir }}/filestore
+    command: cp -r BACKUP/ {{ db }}
+      chdir={{ data_dir.stdout }}/filestore
     become: yes
     become_user: odoo
     when: not filestore.stat.exists
@@ -113,11 +127,11 @@
     register: update
 
   - name: Update {{ db }}
-    shell: ./env/bin/odoo -c /etc/odoo/{{ conf }} -u {{ update.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-update-{{ version }}.log
+    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -u {{ update.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-update-{{ version }}.log
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
-    when: not db == "MASTER" and not update.stdout == "none" and tag == "none"
+    when: not db == "BACKUP" and not update.stdout == "none" and tag == "none"
 
   - name: Get the list of modules to install
     shell: echo `grep "INSTALL" {{ version }} || echo "none"` | sed -e 's/INSTALL=//g'
@@ -126,18 +140,29 @@
     register: install
 
   - name: Install new modules in {{ db }}
-    shell: ./env/bin/odoo -c /etc/odoo/{{ conf }} -i {{ install.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-install-{{ version }}.log
+    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -i {{ install.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-install-{{ version }}.log
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
-    when: not db == "MASTER" and not install.stdout == "none" and tag == "none"
+    when: not db == "BACKUP" and not install.stdout == "none" and tag == "none"
 
   - name: Cleanup sessions
     file:
-      path: "{{ data_dir }}/sessions"
+      path: "{{ data_dir.stdout }}/sessions"
       state: absent
-    become: yes
-    become_user: odoo
+
+  - name: Change db_name
+    replace:
+      path: /etc/odoo/{{ svc }}.conf
+      regexp: '^db_name = .*$'
+      replace: 'db_name = {{ db }}'
 
   - name: Start Odoo
     service: name={{ svc }} state=started
+
+  - name: Get errors
+    shell: grep -i "CRITICAL\|ERROR\|WARNING" /var/log/odoo/{{ db }}*{{ version }}*
+    register: errors
+
+  - debug:
+      var: errors.stdout_lines
