@@ -1,16 +1,27 @@
 # Template Project
 
-Template for an Odoo project.
+## Table of Contents
+* [Prerequisites](#Prerequisites)
+* [Configuration](#Configuration)
+* [Build your development environment](#Build-your-development-environment)
+	* [For custom module](#For-custom-module)
+	* [For contributed module](#For-contributed-module)
+* [Deploy to an environment](#Deploy-to-an-environment)
+* [Tests](#Tests)
+* [Issues](#Issues)
+* [Roadmap](#Roadmap)
 
-# Prerequisites
 
-For Ursa employees, run the `Install` Job on Jenkins. Otherwise look at the INSTALL file.
+## Prerequisites
 
-# Configuration
+For Ursa employees, run the `Install` Job on Jenkins.
+Otherwise look at the [INSTALL](./INSTALL.md) file.
+
+## Configuration
 
 * Add your version of Odoo, modules and Python dependencies in `requirements.txt`
 
-# Build your development environment
+## Build your development environment
 
 `$ ./build.sh`
 
@@ -18,13 +29,13 @@ and start Odoo
 
 `$ ./env/bin/odoo -c odoo.conf`
 
-## For custom module
+### For custom module
 
 * Create a new branch and add your module in src/custom-addons
 * Add your module as a dependency of the customer module
 * Push your branch and create a pull request against develop
 
-## For contributed module
+### For contributed module
 
 * Create a new branch in src/<repo> and add your module
 * Create the setup directory
@@ -50,7 +61,7 @@ $ cp module_name/odoo/__init__.py module_name/odoo/addons/__init__.py
 * Add your module as a dependency of the customer module
 * Push your branch and create a pull request against develop
 
-# Deploy to an environment
+## Deploy to an environment
 
 For Ursa employees, run the `<Project>_Deploy` Job on Jenkins. Otherwise:
 
@@ -65,3 +76,17 @@ For Ursa employees, run the `<Project>_Deploy` Job on Jenkins. Otherwise:
 * Restart Odoo
 
 `# service odoo restart`
+
+## Tests
+
+* For functional tests using Selenium, please go to [tests/selenium](./tests/selenium).
+* For performance tests using Locust, please go to [tests/locust](./tests/locust).
+
+## Issues
+
+Report any issue to this
+[Github project](https://github.com/ursais/odoo-template/issues).
+
+## Roadmap
+
+* Push the production database to the other environments
