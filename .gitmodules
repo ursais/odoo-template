@@ -1,12 +1,12 @@
 [submodule "odoo"]
 	path = odoo
 	url = https://github.com/ursais/odoo.git
-	branch = 13.0
+	branch = 14.0
 [submodule "enterprise"]
 	path = src/enterprise
 	url = https://github.com/ursais/enterprise.git
-	branch = 13.0
+	branch = 14.0
 [submodule "osi-addons"]
 	path = src/osi-addons
 	url = https://github.com/ursais/osi-addons.git
-	branch = 13.0
+	branch = 14.0

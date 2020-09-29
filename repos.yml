@@ -3,15 +3,15 @@
 #        oca: https://github.com/OCA/field-service.git
 #        ursais: git+ssh://git@github.com/ursais/field-service.git
 #    merges:
-#        - oca 13.0
+#        - oca 14.0
 #        - oca refs/pull/552/head
-#    target: &default_target ursais XXX/13.0-RC1    # Replace XXX with the customer code
+#    target: &default_target ursais XXX/14.0-RC1    # Replace XXX with the customer code
 #
 #./src/web:
 #    remotes:
 #        oca: https://github.com/OCA/web.git
 #        ursais: git+ssh://git@github.com/ursais/web.git
 #    merges:
-#        - oca 13.0
+#        - oca 14.0
 #        - oca refs/pull/552/head
 #    target: *default_target
