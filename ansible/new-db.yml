@@ -1,0 +1,98 @@
+- hosts: odoo
+  gather_facts: no
+  vars:
+  - svc: '{{ service | default("odoo") }}'
+  - archives_dir: '{{ archives | default("/home/odoo/archives") }}'
+  - tar_path: '{{ tarpath | default("home/odoo/.local/share/Odoo/filestore/MASTER") }}'
+  tasks:
+  - name: Get filestore path
+    shell: echo $(grep "data_dir" /etc/{{ svc }}/{{ svc }}.conf || echo "/home/odoo/.local/share/Odoo") | sed -e 's/data_dir *= *//g'
+    register: data_dir
+
+  - name: Delete Filestore
+    file:
+      path: "{{ data_dir.stdout }}/filestore/BACKUP"
+      state: absent
+
+  - name: Get PostgreSQL host
+    shell: grep "db_host" /etc/{{ svc }}/{{ svc }}.conf | sed -e 's/db_host = //g'
+    register: pghost
+
+  - name: Get PostgreSQL port
+    shell: grep "db_port" /etc/{{ svc }}/{{ svc }}.conf | sed -e 's/db_port = //g'
+    register: pgport
+
+  - name: Get PostgreSQL user
+    shell: grep "db_user" /etc/{{ svc }}/{{ svc }}.conf | sed -e 's/db_user = //g'
+    register: pguser
+
+  - name: Get PostgreSQL password
+    shell: grep "db_password" /etc/{{ svc }}/{{ svc }}.conf | sed -e 's/db_password = //g'
+    register: pgpassword
+
+  - name: Drop DB
+    postgresql_db:
+      name: BACKUP
+      port: "{{ pgport.stdout }}"
+      login_host: "{{ pghost.stdout }}"
+      login_user: "{{ pguser.stdout }}"
+      login_password: "{{ pgpassword.stdout }}"
+      state: absent
+
+  - name: Create DB
+    postgresql_db:
+      name: BACKUP
+      port: "{{ pgport.stdout }}"
+      login_host: "{{ pghost.stdout }}"
+      login_user: "{{ pguser.stdout }}"
+      login_password: "{{ pgpassword.stdout }}"
+
+  - name: Get dumps
+    find:
+      paths: "{{ archives_dir }}"
+      patterns: '*.sql.*'
+      recurse: yes
+    register: found_files
+
+  - name: Get latest dump
+    set_fact:
+      latest_file: "{{ found_files.files | sort(attribute='mtime') | last }}"
+
+  - name: Load DB
+    shell: bzcat {{ latest_file.path }} | psql -h {{ pghost.stdout }} -p {{ pgport.stdout }} -U {{ pguser.stdout }} BACKUP
+    environment:
+      PGPASSWORD: '{{ pgpassword.stdout }}'
+
+  - name: Get tarballs
+    find:
+      paths: "{{ archives_dir }}"
+      patterns: '*.tar.*'
+      recurse: yes
+    register: found_files
+
+  - name: Get latest tarball
+    set_fact:
+      latest_file: "{{ found_files.files | sort(attribute='mtime') | last }}"
+
+  - name: Get filestore path
+    shell: echo $(grep "data_dir" /etc/{{ svc }}/{{ svc }}.conf || echo "/home/odoo/.local/share/Odoo") | sed -e 's/data_dir *= *//g'
+    register: data_dir
+
+  - name: Decompress Filestore
+    unarchive:
+      src: "{{ latest_file.path }}"
+      dest: "{{ data_dir.stdout }}/filestore"
+      remote_src: yes
+
+  - name: Get the top directory of the tarball
+    shell: echo {{ tar_path }} | awk -F/ '{print $1}'
+    register: tar_top_dir
+
+  - name: Move Filestore
+    command: mv {{ tar_path }} BACKUP
+      chdir={{ data_dir.stdout }}/filestore
+
+  - name: Cleanup
+    file:
+      path: "{{ data_dir.stdout }}/filestore/{{ tar_top_dir.stdout }}"
+      state: absent
