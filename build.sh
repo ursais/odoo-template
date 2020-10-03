@@ -10,8 +10,8 @@ git submodule update --init
 # Activate the env and get the requirements
 . env/bin/activate
 pip install --upgrade pip
+pip install wheel
 pip install -r requirements.txt
-cd odoo && python3 setup.py install && cd ..
 
 # Get Odoo version
 BRANCH=`grep branch .gitmodules | cut  -d '=' -f 2 | sed -e 's/ //'`
