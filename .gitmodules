@@ -4,7 +4,7 @@
 	branch = 13.0
 [submodule "enterprise"]
 	path = src/enterprise
-	url = https://github.com/ursais/enterprise.git
+	url = git@github.com:ursais/enterprise.git
 	branch = 13.0
 [submodule "osi-addons"]
 	path = src/osi-addons
