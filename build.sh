@@ -2,7 +2,7 @@
 
 # Clone submodules
 git submodule sync
-git submodule update --init
+git submodule update --init --depth=1
 
 # Create the virtual environment if it does not exist
 [ ! -d env ] && python3 -m venv env
