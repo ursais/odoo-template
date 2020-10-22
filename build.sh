@@ -32,10 +32,6 @@ if [ -d src ]; then
 fi
 
 # Create the Odoo configuration file for the dev environment
-cat > odoo.conf << EOF
-[options]
-addons_path=$ADDONS_PATH
-db_user=odoo$VERSION
-EOF
+odoo -c odoo.conf --addons-path=$ADDONS_PATH --save --stop-after-init
 
 exit 0
