@@ -22,10 +22,14 @@ Otherwise look at the [INSTALL](./INSTALL.md) file.
 
 ## Build your development environment
 
+Change the working directory to the cloned Github repository and run:
+
 ```shell script
 $ ./build.sh`
 ```
-and start Odoo
+
+To start an Odoo server:
+
 ```shell script
 $ ./env/bin/odoo -c odoo.conf
 ```
