@@ -35,6 +35,12 @@
     become: yes
     become_user: odoo
 
+  - name: Check git branch
+    command: git branch
+      chdir={{ odoo_dir }}
+    become: yes
+    become_user: odoo
+
   - name: Pull the repo
     command: git pull
       chdir={{ odoo_dir }}
@@ -110,8 +116,8 @@
       PGPASSWORD: '{{ pgpassword.stdout }}'
     when: not filestore.stat.exists
 
-  - name: Copy filestore
-    command: cp -r BACKUP/ {{ db }}
+  - name: Create a symlink to the filestore
+    command: ln -s BACKUP {{ db }}
       chdir={{ data_dir.stdout }}/filestore
     become: yes
     become_user: odoo
@@ -158,7 +164,7 @@
     service: name={{ svc }} state=started
 
   - name: Get errors
-    shell: grep -i "CRITICAL\|ERROR\|WARNING" /var/log/odoo/{{ db }}-{{ version }}.log
+    shell: grep -i "CRITICAL\|ERROR\|WARNING" /var/log/odoo/{{ db }}-{{ version }}.log || echo "No critical, error or warning messages"
     register: errors
 
   - debug:

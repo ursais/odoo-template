@@ -2,26 +2,23 @@
   hosts: localhost
   gather_facts: no
   vars:
-    - archives_dir: '{{ archives | default("~/archives") }}'
-    - conf: '{{ config | default("debug.conf") }}'
-    - data_dir: '{{ datadir | default("/home/odoo/.local/share/Odoo") }}'
-    - db_host: '{{ dbhost | default("localhost") }}'
-    - db_name: '{{ dbname | default("MASTER") }}'
-    - db_user: '{{ dbuser | default("odoo") }}'
+    - archives_dir: '{{ archives | default("/home/odoo/archives") }}'
     - svc: '{{ service | default("odoo") }}'
-    - tar_top_dir: '{{ tartopdir | default("home") }}'
-    - tar_path: '{{ tarpath | default("home/odoo/.local/share/Odoo/filestore") }}'
   tasks:
-  - name: Stop Odoo
-    service: name={{ svc }} state=stopped
+  - name: Get PostgreSQL host
+    shell: grep "db_host" /etc/{{ svc }}/{{ svc }}.conf | sed -e 's/db_host = //g'
+    register: pghost
 
-  - name: Delete Filestore
-    file:
-      path: "{{ data_dir }}/filestore/BACKUP"
-      state: absent
+  - name: Get PostgreSQL port
+    shell: grep "db_port" /etc/{{ svc }}/{{ svc }}.conf | sed -e 's/db_port = //g'
+    register: pgport
 
-  - name: Get PostgreSQL password for Odoo
-    shell: grep "db_password" /etc/odoo/{{ conf }} | sed -e 's/db_password = //g'
+  - name: Get PostgreSQL user
+    shell: grep "db_user" /etc/{{ svc }}/{{ svc }}.conf | sed -e 's/db_user = //g'
+    register: pguser
+
+  - name: Get PostgreSQL password
+    shell: grep "db_password" /etc/{{ svc }}/{{ svc }}.conf | sed -e 's/db_password = //g'
     register: pgpassword
 
   - name: Drop DB
@@ -81,36 +78,3 @@
       login_password: "{{ pgpassword.stdout }}"
       db: BACKUP
       query: UPDATE fetchmail_server SET active = 'f'
-
-  - name: Get tarballs
-    find:
-      paths: "{{ archives_dir }}"
-      patterns: '*.tar.gz'
-      recurse: yes
-    register: found_files
-
-  - name: Get latest tarball
-    set_fact:
-      latest_file: "{{ found_files.files | sort(attribute='mtime') | last }}"
-
-  - name: Decompress Filestore
-    unarchive:
-      src: "{{ latest_file.path }}"
-      dest: "{{ data_dir }}/filestore"
-      remote_src: yes
-    become: yes
-    become_user: odoo
-
-  - name: Move Filestore
-    command: mv {{ tar_path }}/{{ db_name }} BACKUP
-      chdir={{ data_dir }}/filestore
-    become: yes
-    become_user: odoo
-
-  - name: Cleanup
-    file:
-      path: "{{ data_dir }}/filestore/{{ tar_top_dir }}"
-      state: absent
-
-  - name: Start Odoo
-    service: name={{ svc }} state=started
