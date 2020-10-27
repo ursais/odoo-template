@@ -1,16 +1,8 @@
 #!/bin/bash
 
-if [ ! -n "$0" ]; then
-  cat << EOF
-Replace the BACKUP db and filestore with the local backup.
-Usage:
-    $0
-EOF
-  exit 1
-fi
-
+OLD_PWD=$PWD
+cd `dirname $0`
 echo "Loading new BACKUP..."
-
-ansible-playbook new-db.yml
-
+ansible-playbook new-db.yml --extra-vars=""
+cd $OLD_PWD
 exit 0

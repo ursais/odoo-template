@@ -127,7 +127,7 @@
     register: update
 
   - name: Update {{ db }}
-    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -u {{ update.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-update-{{ version }}.log
+    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -u {{ update.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-{{ version }}.log
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
@@ -140,7 +140,7 @@
     register: install
 
   - name: Install new modules in {{ db }}
-    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -i {{ install.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-install-{{ version }}.log
+    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -i {{ install.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee -a /var/log/odoo/{{ db }}-{{ version }}.log
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
@@ -161,7 +161,7 @@
     service: name={{ svc }} state=started
 
   - name: Get errors
-    shell: grep -i "CRITICAL\|ERROR\|WARNING" /var/log/odoo/{{ db }}*{{ version }}*
+    shell: grep -i "CRITICAL\|ERROR\|WARNING" /var/log/odoo/{{ db }}-{{ version }}.log
     register: errors
 
   - debug:

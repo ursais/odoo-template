@@ -15,9 +15,12 @@ EOF
   exit 1
 fi
 
+OLD_PWD=$PWD
 DATABASE=$1
 VERSION=$2
 ROLLBACK=$3
+
+cd `dirname $0`
 
 if [ "$ROLLBACK" == 'false' ]; then
   echo "Upgrade to $VERSION..."
@@ -28,5 +31,7 @@ else
   ansible-playbook deploy.yml \
     --extra-vars "database=$DATABASE git_tag=$VERSION"
 fi
+
+cd $OLD_PWD
 
 exit 0

@@ -42,7 +42,7 @@
   - name: Get dumps
     find:
       paths: "{{ archives_dir }}"
-      patterns: '*.sql.gz'
+      patterns: '*.sql.bz2'
       recurse: yes
     register: found_files
 
