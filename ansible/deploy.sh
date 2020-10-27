@@ -9,8 +9,8 @@ if [ ! -n "$3" ]; then
         - version is the target version
         - rollback is optional
     Examples:
-        $0 DB 12.0-RC9 false     # to upgrade to 12.0-RC9
-        $0 DB 12.0-RC9 true      # to rollback to 12.0-RC9
+        $0 DB 12.0 false     # to upgrade to 12.0
+        $0 DB 12.0 true      # to rollback to 12.0
 EOF
   exit 1
 fi
