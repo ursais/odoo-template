@@ -7,7 +7,7 @@ metadata:
     template.alpha.openshift.io/wait-for-ready: 'true'
 spec:
   strategy:
-    type: Rolling
+    type: Recreate
   triggers:
   - type: ImageChange
     imageChangeParams:
@@ -19,6 +19,7 @@ spec:
         name: {{ print .Values.name ":latest" | quote }}
   - type: ConfigChange
   replicas: 1
+  minReadySeconds: 120
   selector:
     name: {{ .Values.name | quote }}
     app: {{ .Values.name | quote }}
@@ -52,6 +53,8 @@ spec:
               secretKeyRef:
                 name: {{ ternary (include "odoo.postgresql.fullname" .) (printf "%s-%s" .Release.Name "externaldb") .Values.postgresql.enabled | quote }}
                 key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
+          - name: MODE
+            value: full
         ports:
         - name: tcp-odoo-http
           containerPort: 8069

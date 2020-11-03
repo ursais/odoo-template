@@ -23,6 +23,8 @@ services:
         - HOST=db
         - USER=odoo
         - PASSWORD=odoo
+        - MODE=full
+#        - MARABUNTA_FORCE_VERSION=setup
 volumes:
   postgres-data:
   odoo-data:

@@ -1,0 +1,44 @@
+migration:
+  options:
+    install_command: odoo
+    install_args: --log-level=debug
+    backup:
+      command: echo "backup command on ${DB_NAME}"
+      stop_on_failure: true
+      ignore_if: test "${DB_NAME}" != "MASTER"
+  versions:
+    - version: setup
+      addons:
+        upgrade:
+          - customer
+      operations:
+        pre:
+          - echo 'pre-operation executed'
+        post:
+          - anthem songs.setup.general::main
+#          - anthem songs.setup.account::main
+#          - anthem songs.setup.hr::main
+#          - anthem songs.setup.project::main
+#          - anthem songs.setup.helpdesk::main
+#          - anthem songs.setup.sale::main
+#          - anthem songs.setup.purchase::main
+          - anthem songs.setup.version::main
+      modes:
+        full:
+          operations:
+            post:
+              - anthem songs.setup.full::main
+        demo:
+          operations:
+            post:
+              - anthem songs.setup.demo::main
+#    - version: 12.0.1.0.0
+#      backup: true
+#      addons:
+#        upgrade:
+#          - customer
+#      operations:
+#        pre:
+#          - echo 'pre-operation executed'
+#        post:
+#          - anthem songs.12-0-1-0-0::main
