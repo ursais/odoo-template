@@ -1,7 +1,7 @@
 {
   "id": "af22b45f-9c76-4a03-85e9-5603711ad1ba",
   "version": "2.0",
-  "name": "HomePro",
+  "name": "OdooTemplate",
   "url": "https://HOST/web?db=DATABASE",
   "tests": [{
     "id": "8f15db82-4f3b-4944-8ba9-6c16f2fb8645",
