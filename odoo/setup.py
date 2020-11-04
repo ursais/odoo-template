@@ -3,9 +3,9 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="odoo-template",
+    name="odoo-project",
     version="13.0.0.0.1",
-    description="Odoo Template",
+    description="odoo-project",
     license="GNU Affero General Public License v3 or later (AGPLv3+)",
     author="Open Source Integrators",
     author_email="support@opensourceintegrators.com",

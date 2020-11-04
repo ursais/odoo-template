@@ -10,19 +10,27 @@ migration:
     - version: setup
       addons:
         upgrade:
-          - osi_pm
+          - customer
       operations:
         pre:
           - echo 'pre-operation executed'
         post:
-          - anthem songs.13-0-0-0-1::main
-#    - version: 12.0.1.0.0
+          - anthem songs.setup.general::main
+#          - anthem songs.setup.account::main
+#          - anthem songs.setup.hr::main
+#          - anthem songs.setup.project::main
+#          - anthem songs.setup.helpdesk::main
+#          - anthem songs.setup.sale::main
+#          - anthem songs.setup.purchase::main
+          - anthem songs.setup.version::main
+#    - version: 13.0.1.0.0
 #      backup: true
 #      addons:
 #        upgrade:
-#          - osi_pm
+#          - customer
 #      operations:
 #        pre:
 #          - echo 'pre-operation executed'
 #        post:
-#          - anthem songs.12-0-1-0-0::main
+#          - anthem songs.13-0-1-0-0::main
+

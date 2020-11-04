@@ -10,6 +10,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - 'postgres-data:/var/lib/postgresql/data/pgdata'
+      - ./scripts/:/docker-entrypoint-initdb.d/
   odoo:
     build: ./odoo
     ports:
@@ -23,6 +24,9 @@ services:
         - HOST=db
         - USER=odoo
         - PASSWORD=odoo
+        - MODE=full
+#        - MARABUNTA_FORCE_VERSION=setup
 volumes:
   postgres-data:
   odoo-data:
+    

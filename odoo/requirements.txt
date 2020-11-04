@@ -1,3 +1,4 @@
+# Add your library with its version below in alphabetic order
 -e . # install the songs
 anthem==0.13.0
 marabunta==0.10.4
