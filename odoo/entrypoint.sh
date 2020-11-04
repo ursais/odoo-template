@@ -8,6 +8,7 @@ set -e
 : ${PORT:=${DB_PORT_5432_TCP_PORT:=5432}}
 : ${USER:=${DB_ENV_POSTGRES_USER:=${POSTGRES_USER:='odoo'}}}
 : ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=${POSTGRES_PASSWORD:='odoo'}}}
+: ${MODE:=${MODE:='full'}}
 
 DB_ARGS=()
 function check_config() {
@@ -33,6 +34,7 @@ export MARABUNTA_DB_USER=$USER
 export MARABUNTA_DB_PASSWORD=$PASSWORD
 export MARABUNTA_DB_PORT=$PORT
 export MARABUNTA_DB_HOST=$HOST
+export MARABUNTA_MODE=$MODE
 # For anthem
 export OPENERP_SERVER=/etc/odoo/odoo.conf
 export ODOO_DATA_PATH=/odoo/data
@@ -45,6 +47,16 @@ grep db_password $OPENERP_SERVER > /dev/null || echo "db_password = $PASSWORD" >
 sed -i -e '/db_name.*$/d' $OPENERP_SERVER
 
 cd /odoo
+
+# For Jenkins
+# Command line args:
+#   ./entrypoint.sh odoo --test-enable --workers=0 --stop-after-init -d odoo_test -i base
+# Check if the 3rd command line argument is --test-enable
+if [ "$2" == "--test-enable" ] ; then
+  # Run odoo with all command line arguments
+  exec odoo "$@"
+  exit 1
+fi
 
 function migrate() {
   OLD=""

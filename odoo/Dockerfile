@@ -6,6 +6,9 @@ SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 # Generate locale C.UTF-8 for postgres and general locale data
 ENV LANG C.UTF-8
 
+# Use backports to avoid install some libs with pip
+RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/backports.list
+
 # Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -62,6 +65,8 @@ RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/od
     && apt-get -y install --no-install-recommends ./odoo.deb \
     && rm -rf /var/lib/apt/lists/* odoo.deb
 
+RUN mkdir -p /odoo && mkdir -p /mnt/extra-addons
+
 # Copy entrypoint script and Odoo configuration file
 COPY entrypoint.sh /
 COPY odoo.conf /etc/odoo/
@@ -79,18 +84,15 @@ COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
 
 # Copy Odoo Addons
 COPY src/private-addons /mnt/extra-addons/
-COPY src/enterprise /mnt/extra-addons/
+# COPY src/enterprise /mnt/extra-addons/
 # Add your module to the list below. Please respect the alphabetic order
-# COPY src/l10n-usa/l10n_us_form_1099 /mnt/extra-addons/l10n_us_form_1099
 
 COPY data /odoo/data
 COPY songs /odoo/songs
 
 RUN cd /odoo && pip3 install -r requirements.txt
 
-RUN mkdir -p /odoo \
-    && mkdir -p /mnt/extra-addons \
-    && chown -R odoo /etc/odoo /mnt/extra-addons /odoo
+RUN chown -R odoo /etc/odoo /mnt/extra-addons /odoo
 
 USER odoo
 
