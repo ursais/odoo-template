@@ -4,6 +4,6 @@
 # For unmerged modules
 # git+https://github.com/ursais/repo_name@branch_name#egg=odoo14-addon-module-name&subdirectory=setup/module_name
 # git+https://github.com/ursais/account-payment@11.0-partner-aging#egg=odoo14-addon-partner-aging&subdirectory=setup/partner_aging
-./odoo
+-e ./odoo
 num2words==0.5.10
 wheel==0.35.1
