@@ -52,7 +52,7 @@ cd /odoo
 # Command line args:
 #   ./entrypoint.sh odoo --test-enable --workers=0 --stop-after-init -d odoo_test -i base
 # Check if the 3rd command line argument is --test-enable
-if [[ "$2" == "--test-enable" ]] ; then
+if [ "$2" == "--test-enable" ] ; then
   # Run odoo with all command line arguments
   exec odoo "$@"
   exit 1

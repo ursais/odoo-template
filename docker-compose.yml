@@ -10,6 +10,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - 'postgres-data:/var/lib/postgresql/data/pgdata'
+      - ./scripts/:/docker-entrypoint-initdb.d/
   odoo:
     build: ./odoo
     ports:
