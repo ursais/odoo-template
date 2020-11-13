@@ -11,9 +11,6 @@
   - name: Stop Odoo
     service: name={{ svc }} state=stopped
 
-  - name: Update OS
-    apt: update_cache=yes upgrade=dist autoclean=yes autoremove=yes
-
   - name: Clean the repo
     command: git clean -df
       chdir={{ odoo_dir }}
