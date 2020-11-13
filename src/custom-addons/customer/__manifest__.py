@@ -8,7 +8,7 @@
     "summary": "Customer Configuration and Data",
     "author": "Open Source Integrators",
     "maintainer": "Open Source Integrators",
-    "website": "http://www.opensourceintegrators.com",
+    "website": "https://www.opensourceintegrators.com",
     "depends": [
     ],
     "data": [
