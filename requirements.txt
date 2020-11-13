@@ -1,9 +1,7 @@
 # For merged modules
-#odoo11-addon-module-name==11.0.1.0.0
-#odoo11-addon-partner-contact-nutrition==11.0.1.0.0
+#odoo12-addon-partner-contact-nutrition==12.0.1.0.0
 # For unmerged modules
-# git+https://github.com/ursais/repo_name@branch_name#egg=odoo11-addon-module-name&subdirectory=setup/module_name
-# git+https://github.com/ursais/account-payment@11.0-partner-aging#egg=odoo11-addon-partner-aging&subdirectory=setup/partner_aging
+# git+https://github.com/ursais/account-payment@12.0-partner-aging#egg=odoo12-addon-partner-aging&subdirectory=setup/partner_aging
 Babel==2.3.4
 beautifulsoup4==4.6.3
 certifi==2018.8.24
