@@ -13,5 +13,4 @@
     "data": [],
     "sequence": 0,
     "application": True,
-    "maintainers": [],
 }
