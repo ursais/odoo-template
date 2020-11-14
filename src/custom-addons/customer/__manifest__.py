@@ -3,16 +3,14 @@
 
 {
     "name": "Customer",
-    "version": "10.0.1.0.0",
+    "version": "12.0.1.0.0",
     "license": "AGPL-3",
     "summary": "Customer Configuration and Data",
     "author": "Open Source Integrators",
     "maintainer": "Open Source Integrators",
     "website": "https://www.opensourceintegrators.com",
-    "depends": [
-    ],
-    "data": [
-    ],
+    "depends": [],
+    "data": [],
     "sequence": 0,
     "application": True,
 }
