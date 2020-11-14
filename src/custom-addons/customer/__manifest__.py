@@ -9,10 +9,9 @@
     "author": "Open Source Integrators",
     "maintainer": "Open Source Integrators",
     "website": "https://www.opensourceintegrators.com",
-    "depends": [
-    ],
-    "data": [
-    ],
+    "depends": [],
+    "data": [],
     "sequence": 0,
     "application": True,
+    "maintainers": [],
 }
