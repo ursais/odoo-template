@@ -34,5 +34,6 @@ if __name__ == "__main__":
             conn.close()
         time.sleep(1)
     if error:
-        logging.error("Database connection failure: %s" % error, file=sys.stderr)
+        logging.error("Database connection failure: %s" % error)
         sys.exit(1)
+        

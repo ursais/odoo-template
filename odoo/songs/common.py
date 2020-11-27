@@ -6,7 +6,7 @@ from anthem.lyrics.loaders import load_csv_stream
 from anthem.lyrics.records import switch_company
 from pkg_resources import Requirement, resource_stream
 
-req = Requirement.parse("odoo-template")
+req = Requirement.parse("odoo-project")
 
 
 def load_csv(ctx, path, model, delimiter=",", header=None, header_exclude=None):

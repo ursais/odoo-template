@@ -15,14 +15,7 @@ migration:
         pre:
           - echo 'pre-operation executed'
         post:
-          - anthem songs.setup.general::main
-#          - anthem songs.setup.account::main
-#          - anthem songs.setup.hr::main
-#          - anthem songs.setup.project::main
-#          - anthem songs.setup.helpdesk::main
-#          - anthem songs.setup.sale::main
-#          - anthem songs.setup.purchase::main
-          - anthem songs.setup.version::main
+          - anthem songs.13-0-0-0-1::main
 #    - version: 13.0.1.0.0
 #      backup: true
 #      addons:
