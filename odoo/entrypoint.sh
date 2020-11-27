@@ -49,11 +49,10 @@ sed -i -e '/db_name.*$/d' $OPENERP_SERVER
 cd /odoo
 
 # For Jenkins
-# Command line args:
-#   ./entrypoint.sh odoo --test-enable --workers=0 --stop-after-init -d odoo_test -i base
-# Check if the 3rd command line argument is --test-enable
-if [ "$2" == "--test-enable" ] ; then
+# Check if the 2nd command line argument is --test-enable
+if [ "$1" == "--test-enable" ] ; then
   # Run odoo with all command line arguments
+  echo "Running Odoo with the following commands: odoo $@"
   exec odoo "$@"
   exit 1
 fi
@@ -68,10 +67,10 @@ function migrate() {
         FROM information_schema.tables
         WHERE table_schema='public' AND
           table_catalog='$1' AND
-          table_name='ir_config_paramater'
+          table_name='ir_config_parameter'
       )";)
     if [ "$TABLE_EXIST" = "1" ]; then
-      OLD=$(psql -X -A -t -h $HOST -p $PORT -v ON_ERROR_STOP=1 -d $1 -c "SELECT value FROM ir_config_parameter WHERE key = 'VERSION'" 2> /dev/null ;)
+      OLD=$(psql -X -A -t -h $HOST -p $PORT -v ON_ERROR_STOP=1 -d $1 -c "SELECT value FROM ir_config_parameter WHERE key = 'database.version'" 2> /dev/null ;)
     fi
   fi
   NEW=$(grep version= /odoo/setup.py | sed -e 's/^ *version="//' -e 's/",$//')
@@ -79,17 +78,18 @@ function migrate() {
     echo "db_name = $1" >> $OPENERP_SERVER
     export MARABUNTA_DATABASE=$1
     [ ! "$OLD" = "" ] && export MARABUNTA_FORCE_VERSION=$NEW
-    marabunta
+    marabunta --allow-serie=True
     sed -i -e '/db_name.*$/d' $OPENERP_SERVER
   fi
 }
 
-# Upgrade the existing databases
+echo "Upgrade existing databases"
 DATABASES=$(psql -X -A -t -h $HOST -p $PORT postgres -c "
   SELECT datname
   FROM pg_database
   WHERE datname not in ('MASTER', 'BACKUP', 'LATEST', 'postgres', 'template0', 'template1')";)
 for DB_NAME in $DATABASES; do
+  echo $DB_NAME
   migrate $DB_NAME
 done
 
@@ -99,25 +99,32 @@ LATEST=$(psql -X -A -t -h $HOST -p $PORT postgres -c "SELECT 1 AS result FROM pg
 
 # If LATEST database exists, drop it, re-create it and upgrade
 if [ "$LATEST" = "1" ]; then
+  echo "Drop, recreate and upgrade LATEST"
   export DB_NAME=LATEST
   dropdb -h $HOST -p $PORT $DB_NAME
   rm -rf /var/lib/odoo/filestore/$DB_NAME
   createdb -h $HOST -p $PORT $DB_NAME
   migrate $DB_NAME
 elif [ "$BACKUP" = "1" ]; then
-  # If BACKUP database exists, copy it and upgrade
+  # If BACKUP database exists, copy it and upgrade it
   # TODO: Build DB_NAME with the tag of the image
-  export DB_NAME=$(date +'%Y%m%d-%H%M')
-  psql -h $HOST -p $PORT postgres -c "CREATE DATABASE $DB_NAME WITH TEMPLATE 'BACKUP'";
-  cp -R /var/lib/odoo/filestore/BACKUP /var/lib/odoo/filestore/$DB_NAME
-  migrate $DB_NAME
+  export DB_NAME=Test_$(date +'%Y%m%d')
+  TODAY=$(psql -X -A -t -h $HOST -p $PORT postgres -c "SELECT 1 AS result FROM pg_database WHERE datname = '$DB_NAME';")
+  # Create one TEST_YYYYMMDD database per day
+  if [ ! "$TODAY" = "1" ] ; then
+    echo "Create and upgrade $DB_NAME"
+    psql -h $HOST -p $PORT postgres -c "CREATE DATABASE \"$DB_NAME\" WITH TEMPLATE 'BACKUP'";
+    cp -R /var/lib/odoo/filestore/BACKUP /var/lib/odoo/filestore/$DB_NAME
+    migrate $DB_NAME
+  fi
 else
   # If MASTER database doesn't exist, create one...
   export DB_NAME=MASTER
   if [ ! "$MASTER" = "1" ]; then
+    echo "Create MASTER"
     createdb -h $HOST -p $PORT $DB_NAME
   fi
-  # ...and upgrade it
+  echo "Upgrade MASTER"
   migrate $DB_NAME
 fi
 
