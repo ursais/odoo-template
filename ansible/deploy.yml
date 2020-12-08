@@ -11,9 +11,6 @@
   - name: Stop Odoo
     service: name={{ svc }} state=stopped
 
-  - name: Update OS
-    apt: update_cache=yes upgrade=dist autoclean=yes autoremove=yes
-
   - name: Clean the repo
     command: git clean -df
       chdir={{ odoo_dir }}
@@ -34,6 +31,12 @@
 
   - name: Reset the submodules
     command: git submodule foreach --recursive git reset --hard
+      chdir={{ odoo_dir }}
+    become: yes
+    become_user: odoo
+
+  - name: Check git branch
+    command: git branch
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
@@ -113,8 +116,8 @@
       PGPASSWORD: '{{ pgpassword.stdout }}'
     when: not filestore.stat.exists
 
-  - name: Copy filestore
-    command: cp -r BACKUP/ {{ db }}
+  - name: Create a symlink to the filestore
+    command: ln -s BACKUP {{ db }}
       chdir={{ data_dir.stdout }}/filestore
     become: yes
     become_user: odoo
@@ -127,7 +130,7 @@
     register: update
 
   - name: Update {{ db }}
-    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -u {{ update.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-update-{{ version }}.log
+    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -u {{ update.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-{{ version }}.log
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
@@ -140,7 +143,7 @@
     register: install
 
   - name: Install new modules in {{ db }}
-    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -i {{ install.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee /var/log/odoo/{{ db }}-install-{{ version }}.log
+    shell: ./env/bin/odoo -c /etc/odoo/{{ svc }}-debug.conf -i {{ install.stdout }} -d {{ db }} --stop-after-init 2>&1 | tee -a /var/log/odoo/{{ db }}-{{ version }}.log
       chdir={{ odoo_dir }}
     become: yes
     become_user: odoo
@@ -161,7 +164,7 @@
     service: name={{ svc }} state=started
 
   - name: Get errors
-    shell: grep -i "CRITICAL\|ERROR\|WARNING" /var/log/odoo/{{ db }}*{{ version }}*
+    shell: grep -i "CRITICAL\|ERROR\|WARNING" /var/log/odoo/{{ db }}-{{ version }}.log || echo "No critical, error or warning messages"
     register: errors
 
   - debug:
