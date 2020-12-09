@@ -1,11 +1,5 @@
-image:
-  registry: docker.io
-  repository: odoo
-  tag: latest
-  pullPolicy: IfNotPresent
-
 odooUsername: admin
-odooEmail: odoo@example.com
+odooEmail: support@opensourceintegrators.com
 
 ## Database external to the cluster
 # externalDatabase:
@@ -43,6 +37,10 @@ resources:
 
 livenessProbe:
   enabled: true
+  httpGet:
+    path: /monitoring/status
+    port: tcp-odoo-http
+    scheme: HTTP
   initialDelaySeconds: 600
   periodSeconds: 30
   timeoutSeconds: 5
@@ -51,6 +49,10 @@ livenessProbe:
 
 readinessProbe:
   enabled: true
+  httpGet:
+    path: /monitoring/status
+    port: tcp-odoo-http
+    scheme: HTTP
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5

@@ -11,7 +11,7 @@
     "depends": [
         # Odoo/Enterprise Addons
         # Public Addons
-        # 'web_timeline',
+        "monitoring_status",
         # Private Addons
     ],
     "data": [],

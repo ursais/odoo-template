@@ -14,8 +14,7 @@
 * [How to publish](#How-to-publish)
 * [How to release](#How-to-release)
 * [Tests](#Tests)
-* [Issues](#Issues)
-* [Roadmap](#Roadmap)
+* [Support](#Support)
 
 ## Installation
 
@@ -126,11 +125,7 @@ oc edit dc odoo
 * For functional tests using Selenium, please go to [tests/selenium](./tests/selenium).
 * For performance tests using Locust, please go to [tests/locust](./tests/locust).
 
-## Issues
+## Support
 
 Report any issue to this
 [Github project](https://github.com/ursais/odoo-template/issues).
-
-## Roadmap
-
-* Push the production database to the other environments

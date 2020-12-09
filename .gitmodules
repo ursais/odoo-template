@@ -1,4 +1,8 @@
-[submodule "web"]
-	path = odoo/src/web
-	url = https://github.com/OCA/web.git
+[submodule "odoo-cloud-platform"]
+	path = odoo/src/odoo-cloud-platform
+	url = https://github.com/ursais/odoo-cloud-platform.git
+	branch = template/13.0
+[submodule "osi-addons"]
+	path = odoo/src/osi-addons
+	url = https://github.com/ursais/osi-addons.git
 	branch = 13.0

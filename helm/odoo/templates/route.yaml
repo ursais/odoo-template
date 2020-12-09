@@ -2,6 +2,8 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: odoo-http
+  annotations:
+    haproxy.router.openshift.io/timeout: 1800s
 spec:
   host: {{ .Values.application_domain | quote }}
   path: "/"
@@ -20,6 +22,8 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: odoo-im
+  annotations:
+    haproxy.router.openshift.io/timeout: 1800s
 spec:
   host: {{ .Values.application_domain | quote }}
   path: "/longpolling"

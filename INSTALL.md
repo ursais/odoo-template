@@ -15,27 +15,11 @@ Create a new repository `odoo-project` on Github or Gitlab
 
 Clone this repository and push it to `odoo-project`
 
-Create SSH keys for the project to clone and pull the repository
-```shell script
-ssh-keygen -C "openshift-source-builder/odoo-project@github" -f github-odoo-project -N ''
-```
-Add the public key in the [Deploy Keys of the repository](https://github.com).
-
 ## Dev environment
 
 Create the project:
 ```shell script
 oc new-project odoo-project-dev --display-name="Odoo Project Dev"
-```
-Add the private key
-```shell script
-oc create secret generic github-osi-erp \
-    --from-file=ssh-privatekey=github-osi-erp \
-    --type=kubernetes.io/ssh-auth
-```
-Allow the builder to use it:
-```shell script
-oc secrets link builder github-osi-erp
 ```
 Add permissions to the default Service Account of the project:
 ```shell script
@@ -46,6 +30,7 @@ Edit the variables in helm/odoo/values.yaml
 
 Run
 ```shell script
+helm dependency update helm/odoo
 helm install odoo helm/odoo
 ```
 Go to the Build Config `odoo` on the [console](https://console-openshift-console.apps.do1.ursasys.net)
@@ -80,7 +65,7 @@ Edit the variables in helm/odoo/values.test.yaml
 
 Run
 ```shell script
-helm install odoo -f values.test.yaml helm/odoo
+helm install odoo -f helm/odoo/values.test.yaml helm/odoo
 ```
 
 ## QA environment
@@ -101,7 +86,7 @@ Edit the variables in helm/odoo/values.qa.yaml
 
 Run
 ```shell script
-helm install odoo -f values.qa.yaml helm/odoo
+helm install odoo -f helm/odoo/values.qa.yaml helm/odoo
 ```
 
 ## Production environment
@@ -122,5 +107,5 @@ Edit the variables in helm/odoo/values.production.yaml
 
 Run
 ```shell script
-helm install odoo -f values.production.yaml helm/odoo
+helm install odoo -f helm/odoo/values.production.yaml helm/odoo
 ```
