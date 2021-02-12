@@ -10,7 +10,7 @@
     "maintainer": "Open Source Integrators",
     "website": "https://www.opensourceintegrators.com",
     "depends": [
-        "discuss",
+        "mail",
     ],
     "data": [
     ],
