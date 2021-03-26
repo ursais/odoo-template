@@ -1,14 +1,3 @@
-# For merged modules
-#odoo14-addon-module-name==14.0.1.0.0
-#odoo14-addon-partner-contact-nutrition==14.0.1.0.0
-# For unmerged modules
-# git+https://github.com/ursais/repo_name@branch_name#egg=odoo14-addon-module-name&subdirectory=setup/module_name
-# git+https://github.com/ursais/account-payment@11.0-partner-aging#egg=odoo14-addon-partner-aging&subdirectory=setup/partner_aging
-
-# Install core odoo packages
-wheel==0.35.1
--r odoo/requirements.txt
--e odoo
-
-# Add project specific packages below
-# num2words
+git-aggregator==1.7.2
+markdown-toc==1.2.6
+pre-commit==2.2.0

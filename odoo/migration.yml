@@ -1,0 +1,31 @@
+migration:
+  options:
+    install_command: odoo
+    install_args: --log-level=debug
+    backup:
+      command: '
+        export DATE=$(date +%Y%m%dT%H%M%S) &&
+        pg_dump --no-owner --clean | gzip > "/tmp/MASTER-$DATE.sql.gz"'
+#      command: '
+#        export DATE=$(date +%Y%m%dT%H%M%S) &&
+#        echo "Dump the database" &&
+#        pg_dump --clean MASTER | gzip > /tmp/$RUNNING_ENV-MASTER-$DATE.sql.gz &&
+#        echo "Push it to the space" &&
+#        s3cmd put /tmp/$RUNNING_ENV-MASTER-$DATE.sql.gz s3://$DO_SPACE/backup/$RUNNING_ENV-MASTER-$DATE.sql.gz &&
+#        echo "Backup the filestore" &&
+#        s3cmd sync s3://$DO_SPACE/$RUNNING_ENV-MASTER/ s3://$DO_SPACE/backup/$RUNNING_ENV-MASTER-$DATE/ &'
+      stop_on_failure: true
+      ignore_if: test "${RUNNING_ENV}" != "production"
+
+  versions:
+    - version: setup
+      # operations:
+        # pre:
+          # - 'sh -c ''psql -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"'''
+        post:
+          - anthem songs.setup.base::main
+          - anthem songs.general::main
+      addons:
+        upgrade:
+          - monitoring_status
+          - web_environment_ribbon
