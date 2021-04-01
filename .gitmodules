@@ -3,3 +3,6 @@
 	url = https://github.com/ursais/odoo.git
 	branch = 14.0
 
+[submodule "src/enterprise"]
+	path = src/enterprise
+	url = https://github.com/ursais/enterprise.git
