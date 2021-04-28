@@ -17,6 +17,6 @@ COPY src/web/web_environment_ribbon /odoo/addons/web_environment_ribbon
 COPY songs /odoo/songs
 
 RUN cd /odoo && pip3 install -r requirements.txt
-RUN chown -R odoo /etc/odoo /odoo
+RUN chown -R odoo /odoo
 
 USER odoo
