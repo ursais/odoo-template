@@ -65,6 +65,7 @@ smtp:
 
 marabunta:
   allow_serie: True
+  mode: base
 
 resources:
   limits:
@@ -72,7 +73,7 @@ resources:
     memory: 2Gi
   requests:
     cpu: 300m
-    memory: 1Gi
+    memory: 512Mi
 
 livenessProbe:
   enabled: true

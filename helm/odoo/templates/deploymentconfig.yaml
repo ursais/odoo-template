@@ -58,8 +58,8 @@ spec:
                 key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
           - name: DEFAULTDB
             value: {{ ternary .Values.postgresql.defaultdb .Values.externalDatabase.defaultdb .Values.postgresql.enabled | quote }}
-          - name: MODE
-            value: full
+          - name: MARABUNTA_MODE
+            value: {{ .Values.marabunta.mode | quote }}
           - name: MARABUNTA_ALLOW_SERIE
             value: {{ .Values.marabunta.allow_serie | quote }}
           - name: ODOO_ADMIN_PASSWD

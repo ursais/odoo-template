@@ -25,7 +25,7 @@ services:
       - PGHOST=db
       - PGUSER=odoo
       - PGPASSWORD=odoo
-      - MODE=full
+      - MARABUNTA_MODE=base
       - MARABUNTA_FORCE_VERSION=setup
 
 volumes:
