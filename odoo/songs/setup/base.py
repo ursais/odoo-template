@@ -50,7 +50,7 @@ def setup_company(ctx):
 @anthem.log
 def setup_filestore(ctx):
     """ Setup the filestore """
-    aws = os.environ.get("AWS_HOST")
+    aws = os.environ.get("AWS_HOST", False)
     if aws is not False:
         value = "s3"
     else:
