@@ -10,7 +10,6 @@ COPY requirements.txt /odoo/
 COPY odoo /odoo/odoo/
 # Copy Addons
 # COPY src/paid-addons /odoo/addons/
-# Copy src/public-addons /odoo/addons/
 COPY src/private-addons /odoo/addons/
 # COPY src/enterprise /odoo/addons/
 COPY src/web/web_environment_ribbon /odoo/addons/web_environment_ribbon
