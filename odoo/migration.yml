@@ -1,0 +1,28 @@
+migration:
+  options:
+    install_command: odoo
+    install_args: --log-level=debug
+    backup:
+      command: '
+        export DATE=$(date +%Y%m%dT%H%M%S) &&
+        psql -c "CREATE DATABASE $DATE WITH TEMPLATE $PGDATABASE;"'
+      stop_on_failure: true
+      ignore_if: test "${RUNNING_ENV}" != "production"
+
+  versions:
+    - version: setup
+      backup: false
+      operations:
+#        pre:
+#          - psql -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+        post:
+          - anthem songs.setup.base::main
+          - anthem songs.general::main
+      addons:
+        upgrade:
+          - monitoring_status
+          - web_environment_ribbon
+#      modes:
+#        demo:
+#          operations:
+#          addons:
