@@ -20,11 +20,10 @@
 
 # Webkit
 
-* Download Webkit from https://github.com/wkhtmltopdf/wkhtmltopdf/releases/tag/0.12.5
+* Download Webkit from https://github.com/wkhtmltopdf/wkhtmltopdf/releases/tag/0.12.1
 * Install Webkit and create a symlink:
-```shell script
-ln -s /usr/local/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
-```
+
+`# ln -s /usr/local/bin/wkhtmltopdf /usr/bin/wkhtmltopdf`
 
 # PostgreSQL
  

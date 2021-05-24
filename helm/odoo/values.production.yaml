@@ -1,0 +1,103 @@
+## Database external to the cluster
+externalDatabase:
+  host: odoo-template.db.example.com
+  user: doadmin
+  port: 25060
+  defaultdb: defaultdb
+
+## Database in the cluster
+postgresql:
+  enabled: false
+#  postgresqlUsername: odoo
+#  defaultdb: postgres
+#  persistence:
+#    enabled: true
+#    accessMode: ReadWriteOnce
+#    size: 2Gi
+
+service:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+
+build:
+  enabled: false
+
+persistence:
+  enabled: false
+#  storageClass: nfs
+#  accessMode: ReadWriteMany
+#  size: 4Gi
+
+s3:
+  enabled: false
+#  aws_host: odoo-template.region.example.com
+#  aws_region: region
+
+redis:
+  enabled: false
+#  host: odoo-redis-master
+#  port: 6379
+#  prefix: odoo-template
+#  expiration: 604800
+#  expiration_anonymous: 10800
+#  copy_existing_fs_sessions: 0
+#  purge_existing_fs_sessions: 1
+#  cluster:
+#    enabled: false
+#  master:
+#    persistence:
+#      storageClass: nfs
+#      size: 2Gi
+
+mailhog:
+  enabled: false
+
+postfix:
+  enabled: False
+
+smtp:
+  enabled: False
+#  port: 465
+#  server: smtp.gmail.com
+#  ssl: True
+#  user: support@opensourceintegrators.com
+
+marabunta:
+  allow_serie: False
+  mode: base
+
+resources:
+  limits:
+    cpu: "1"
+    memory: 4Gi
+  requests:
+    cpu: 300m
+    memory: 512Mi
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 600
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+affinity: {}
+
+name: odoo
+fullname: "Odoo TemplateProduction"
+project: odoo-template
+environment: production
+memory_limit: 2Gi
+application_domain: odoo-template.apps.cluster.example.com
+timezone: America/Phoenix
+odooUsername: admin
+odooEmail: odoo@example.com

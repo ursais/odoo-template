@@ -1,0 +1,125 @@
+{{- if eq .Values.environment "production" }}
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: {{ print .Values.name "-backup" | quote }}
+  annotations:
+    description: Backup the production database and filestore everyday
+spec:
+  schedule: '50 6 * * *'
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      parallelism: 1
+      template:
+        metadata:
+          labels:
+            parent: {{ print .Values.name "-backup" | quote }}
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: odoo-backup
+              image: ursa/backup:latest
+              args:
+                - backup
+                - odoo
+              env:
+                - name: PGHOST
+                  value: {{ ternary "odoo-postgresql" .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+                - name: PGPORT
+                  value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
+                - name: PGDATABASE
+                  value: MASTER
+                - name: PGUSER
+                  value: {{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote }}
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ ternary (include "odoo.postgresql.fullname" .) (printf "%s-%s" .Release.Name "externaldb") .Values.postgresql.enabled | quote }}
+                      key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
+                - name: PGDEFAULTDB
+                  value: {{ ternary .Values.postgresql.defaultdb .Values.externalDatabase.defaultdb .Values.postgresql.enabled | quote }}
+                {{- if .Values.s3.enabled }}
+                - name: AWS_HOST
+                  value: {{ .Values.s3.aws_host }}
+                - name: AWS_REGION
+                  value: {{ .Values.s3.aws_region }}
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ ternary .Values.name "" .Values.s3.enabled | quote }}
+                      key: {{ ternary "aws-access-key-id" "" .Values.s3.enabled | quote }}
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ ternary .Values.name "" .Values.s3.enabled | quote }}
+                      key: {{ ternary "aws-secret-access-key" "" .Values.s3.enabled | quote }}
+                - name: AWS_BUCKETNAME
+                  value: {{ .Values.environment }}
+                {{- end }}
+                - name: RUNNING_ENV
+                  value: {{ .Values.environment }}
+{{- end }}
+---
+{{- if or (eq .Values.environment "qa") (eq .Values.environment "test") }}
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: {{ print .Values.name "-restore" | quote }}
+  annotations:
+    description: Restore the production database and filestore every week in BACKUP
+spec:
+  schedule: '0 12 * * mon'
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      parallelism: 1
+      template:
+        metadata:
+          labels:
+            parent: {{ print .Values.name "-restore" | quote }}
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: odoo-restore
+              image: ursa/backup:latest
+              args:
+                - restore
+                - odoo
+              env:
+                - name: PGHOST
+                  value: {{ ternary "odoo-postgresql" .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+                - name: PGPORT
+                  value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
+                - name: PGDATABASE
+                  value: BACKUP
+                - name: PGUSER
+                  value: {{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote }}
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ ternary (include "odoo.postgresql.fullname" .) (printf "%s-%s" .Release.Name "externaldb") .Values.postgresql.enabled | quote }}
+                      key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
+                - name: PGDEFAULTDB
+                  value: {{ ternary .Values.postgresql.defaultdb .Values.externalDatabase.defaultdb .Values.postgresql.enabled | quote }}
+                {{- if .Values.s3.enabled }}
+                - name: AWS_HOST
+                  value: {{ .Values.s3.aws_host }}
+                - name: AWS_REGION
+                  value: {{ .Values.s3.aws_region }}
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ ternary (.Values.name) "" .Values.s3.enabled | quote }}
+                      key: {{ ternary "aws-access-key-id" "" .Values.s3.enabled | quote }}
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ ternary (.Values.name) "" .Values.s3.enabled | quote }}
+                      key: {{ ternary "aws-secret-access-key" "" .Values.s3.enabled | quote }}
+                - name: AWS_BUCKETNAME
+                  value: {{ .Values.environment }}
+                {{- end }}
+                - name: RUNNING_ENV
+                  value: {{ .Values.environment }}
+{{- end }}
