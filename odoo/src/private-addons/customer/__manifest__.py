@@ -9,10 +9,8 @@
     "author": "Open Source Integrators",
     "maintainer": "Open Source Integrators",
     "website": "https://www.opensourceintegrators.com",
-    "depends": [
-        "mail",
-    ],
-    "data": [
-    ],
+    "depends": ["mail"],
+    "data": [],
     "application": True,
+    "maintainers": ["ursais"],
 }

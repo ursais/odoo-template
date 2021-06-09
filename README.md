@@ -1,4 +1,4 @@
-# Template Project
+# Odoo Template Project
 
 ## Table of Contents
 * [Prerequisites](#Prerequisites)
