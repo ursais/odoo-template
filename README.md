@@ -94,4 +94,4 @@ Report any issue to this
 
 ## Roadmap
 
-* Push the production database to the other environments
+* Create detailed documentation on docker-compose.yml environment variables with examples.
