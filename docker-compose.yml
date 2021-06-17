@@ -22,15 +22,50 @@ services:
     depends_on:
       - db
     environment:
-      - PGHOST=db
-      - PGUSER=odoo
-      - PGPASSWORD=odoo
-      - MARABUNTA_MODE=base
-      #- MARABUNTA_FORCE_VERSION=setup
+      # Odoo
+      - ODOO_ADMIN_PASSWD=admin
+      - ODOO_ADMIN_USER_PASSWORD=admin
+      - ODOO_ADMIN_USER_TIMEZONE=America/Phoenix
       - RUNNING_ENV=template
       - ODOO_DBFILTER=
-      - ODOO_LIST_DB=True
+      - ODOO_LIST_DB=true
+      # PostgreSQL
+      - PGHOST=db
+      - PGPORT=5432
+      - PGUSER=odoo
+      - PGPASSWORD=odoo
+      - DEFAULT_DB=postgres
+      # SMTP
+      - ODOO_SMTP_PASSWORD=False
+      - ODOO_SMTP_PORT=1025
+      - ODOO_SMTP_SERVER=mailhog
+      - ODOO_SMTP_SSL=False
+      - ODOO_SMTP_USER=False
+      # Migration
+      - MARABUNTA_MODE=base
+      #- MARABUNTA_FORCE_VERSION=setup
+
+    stdin_open: true    # To debug
+    tty: true           # To debug
+
+    # Profile
+    # cap_add:
+    #  - sys_ptrace
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
 
 volumes:
   postgres-data:
   odoo-data:
+
+networks:
+  default:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.29.2.0/24
+
