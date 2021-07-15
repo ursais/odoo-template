@@ -70,6 +70,8 @@ spec:
             value: {{ .Values.timezone | quote }}
           - name: RUNNING_ENV
             value: {{ .Values.environment }}
+          - name: PLATFORM
+            value: {{ .Values.platform }}
           - name: ODOO_SMTP_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -111,7 +113,7 @@ spec:
                 name: {{ ternary .Values.name "" .Values.s3.enabled | quote }}
                 key: {{ ternary "aws-secret-access-key" "" .Values.s3.enabled | quote }}
           - name: AWS_BUCKETNAME
-            value: "{{ .Values.environment }}-{db}"
+            value: {{ .Values.s3.aws_bucketname | quote }}
           {{- end }}
           {{- if .Values.azure.enabled }}
           - name: AZURE_STORAGE_ACCOUNT_URL
