@@ -106,6 +106,31 @@ kubectl set image deploy odoo \
     --namespace $NAMESPACE
 ```
 
+## Backup
+
+Install Velero:
+```shell
+export BUCKET=velerobackup-<name>
+export REGION=us-east-2
+velero install \
+    --provider aws \
+    --use-restic \
+    --plugins velero/velero-plugin-for-aws:v1.2.0 \
+    --bucket $BUCKET \
+    --backup-location-config region=$REGION \
+    --snapshot-location-config region=$REGION \
+    --secret-file ./helm/credentials-velero
+```
+
+Create schedules:
+```shell
+velero create schedule full-daily --schedule="@every 24h"
+velero create schedule odoo-daily --schedule="@every 24h" --include-namespaces <name>-odoo
+velero create schedule odoo-qa-daily --schedule="@every 24h" --include-namespaces <name>-odoo-qa
+velero create schedule odoo-test-daily --schedule="@every 24h" --include-namespaces <name>-odoo-test
+velero create schedule odoo-dev-daily --schedule="@every 24h" --include-namespaces <name>-odoo-dev
+```
+
 ## Known issues
 
 * https://github.com/bitnami/charts/issues/6121

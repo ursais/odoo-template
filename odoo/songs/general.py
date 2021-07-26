@@ -4,6 +4,17 @@ import os
 
 import anthem
 
+@anthem.log
+def setup_admin_user(ctx):
+    """ Setup admin user """
+    admin = ctx.env.ref("base.user_admin")
+    admin.write(
+        {
+            "new_password": os.environ.get("ODOO_ADMIN_USER_PASSWORD"),
+            "tz": os.environ.get("ODOO_ADMIN_USER_TIMEZONE"),
+        }
+    )
+    admin._set_new_password()
 
 @anthem.log
 def set_mail_server(ctx):

@@ -2,19 +2,17 @@ FROM ursa/odoo-14.0:latest
 MAINTAINER Open Source Integrators <support@opensourceintegrators.com>
 
 # Copy files
-COPY setup.py /odoo/
-COPY migration.yml /odoo/
-COPY requirements.txt /odoo/
+COPY --chown=odoo setup.py /odoo/
+COPY --chown=odoo migration.yml /odoo/
+COPY --chown=odoo requirements.txt /odoo/
+COPY --chown=odoo songs /odoo/songs
 
 # Copy Odoo
-COPY odoo /odoo/odoo/
+COPY --chown=odoo odoo /odoo/odoo/
 # Copy Addons
 # COPY src/paid-addons /odoo/addons/
-COPY src/private-addons /odoo/addons/
+COPY --chown=odoo src/private-addons /odoo/addons/
 # COPY src/enterprise /odoo/addons/
-COPY src/web/web_environment_ribbon /odoo/addons/web_environment_ribbon
-
-COPY songs /odoo/songs
+COPY --chown=odoo src/web/web_environment_ribbon /odoo/addons/web_environment_ribbon
 
 RUN cd /odoo && pip3 install -r requirements.txt
-RUN chown -R odoo /odoo

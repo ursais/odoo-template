@@ -59,6 +59,8 @@ spec:
                 key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
           - name: DEFAULTDB
             value: {{ ternary .Values.postgresql.defaultdb .Values.externalDatabase.defaultdb .Values.postgresql.enabled | quote }}
+          - name: PGSSLMODE
+            value: {{ ternary .Values.postgresql.sslmode .Values.externalDatabase.sslmode .Values.postgresql.enabled | quote }}
           - name: MARABUNTA_MODE
             value: {{ .Values.marabunta.mode | quote }}
           - name: MARABUNTA_ALLOW_SERIE
@@ -77,6 +79,8 @@ spec:
             value: {{ .Values.timezone | quote }}
           - name: RUNNING_ENV
             value: {{ .Values.environment }}
+          - name: PLATFORM
+            value: {{ .Values.platform }}
           - name: ODOO_SMTP_PASSWORD
             valueFrom:
               secretKeyRef:
