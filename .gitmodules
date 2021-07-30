@@ -6,7 +6,3 @@
 	path = odoo/src/osi-addons
 	url = https://github.com/ursais/osi-addons.git
 	branch = 14.0
-[submodule "web"]
-	path = odoo/src/web
-	url = https://github.com/OCA/web.git
-	branch = 14.0
