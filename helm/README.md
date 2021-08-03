@@ -18,6 +18,7 @@ Description: Environment variables
 | `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
 | `PLATFORM`                    | Used to identify the cloud provider: aws, azure, do or local | `do`          |
 | `APP_IMAGE_VERSION`           | Used to set the version of the image               | `latest` |
+| `DEBUG`                       | Display debugging information if set to `1`        |          |
 
 Description: A list of variables that have default values when not set in docker-compose.yml. 
 These Environment variables can be altered to directly impact configurations of the build when using docker-compose up
