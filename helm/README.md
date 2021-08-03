@@ -1,7 +1,7 @@
 # Odoo Deployment
 
 ## Table of Contents
-* [Docker Compose environment variables](#Docker-Compose-environment-variables)
+* [Environment Variables](#Environment-Variables)
 * [Development environment](#Development-environment)
 * [Test environment](#Test-environment)
 * [QA environment](#QA-environment)
@@ -10,7 +10,15 @@
 * [Release](#Release)
 * [Known issues](#Known-issues)
 
-### Docker Compose environment variables
+## Environment Variables
+
+Description: Environment variables
+| Name                          | Description                                        | Default Value                         |
+| ----------------------------- | -------------------------------------------------- | ------------------------------------- |
+| `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
+| `PLATFORM`                    | Used to identify the cloud provider: aws, azure, do or local | `do`          |
+| `APP_IMAGE_VERSION`           | Used to set the version of the image               | `latest` |
+
 Description: A list of variables that have default values when not set in docker-compose.yml. 
 These Environment variables can be altered to directly impact configurations of the build when using docker-compose up
 
@@ -75,30 +83,40 @@ These Environment variables can be altered to directly impact configurations of 
 | `ODOO_XMLRPC_INTERFACE`       | Value set in odoo.conf for: xmlrpc_interface       |                                       |
 
 
-Description: Environment variables that are related to configuring the Odoo filestore
+Description: Environment variables that are related to configuring Odoo filestore and Rclone
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
-| `AWS_ACCESS_KEY_ID`           | Access key set for connection to AWS cloud filestore bucket  |               |
-| `AWS_SECRET_ACCESS_KEY`       | Secret key set for connection to AWS cloud filtestore bucket |               |
 | `PLATFORM`                    | Used to identify the cloud provider: aws, azure, do or anything else for local filestore | `do`          |
-| `AZURE_STORAGE_ACCOUNT_URL`   | Set value if using azure platform for cloud filestore        |               |
-| `AWS_REGION`                  | Set value if using AWS platform for cloud filestore          |               |
-
-Description: Environment variables that are related to Additional database 
-| Name                          | Description                                        | Default Value                         |
-| ----------------------------- | -------------------------------------------------- | ------------------------------------- |
-| `AWS_HOST`                    | Value for Aws host URL                             | `false` |
+| `AWS_HOST`                    | Set value if using S3 storage for cloud filestore          |               |
+| `AWS_REGION`                  | Set value if using S3 storage for cloud filestore          |               |
+| `AWS_ACCESS_KEY_ID`           | Access key set for connection to S3 bucket                 |               |
+| `AWS_SECRET_ACCESS_KEY`       | Secret key set for connection to S3 bucket                 |               |
+| `AWS_BUCKETNAME`              | Set value if using S3 storage for cloud filestore          |               |
 | `AZURE_STORAGE_CONNECTION_STRING` | Value for Azure connection string              | `false` |
+| `AZURE_STORAGE_ACCOUNT_URL`   | Set value if using Azure Blob Storage for cloud filestore  |               |
 | `AZURE_STORAGE_ACCOUNT_KEY`   | Value for Azure storage account key                | `false` |
 
-Description: Environment variabls related to Marabunta migrations (migration.yml)
+Description: Environment variables related to PostgreSQL client
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
-| `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
-| `APP_IMAGE_VERSION`           | Used to set a custom database name on migration    | `latest` |
+| `PGHOST`                      | Value set in odoo.conf for: db_host                | `db`                                  |
+| `PGPORT`                      | Value set in odoo.conf for: db_port                | `5432`                                |
+| `PGUSER`                      | Value set in odoo.conf for: db_user                | `odoo`                                |
+| `PGPASSWORD`                  | Value set in odoo.conf for: db_password            | `odoo`                                |
+| `PGDATABASE`                  | Value set in odoo.conf for: db_name                | `False`                               |
+| `PGSSLMODE`                   | Value set in odoo.conf for: db_sslmode             | `prefer`                              |
+
+Description: Environment variables related to Marabunta
+| Name                          | Description                                        | Default Value                         |
+| ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `MARABUNTA_MODE`              | The mode controls what operations should occur based off its value of external(serverside) or base(General) | `base` |
 | `MARABUNTA_ALLOW_SERIE`       | Allows multiple versions to upgrade                | `false`  |
 | `MARABUNTA_FORCE_VERSION`     | Force a specific version to be re-ran              |          |
+
+Description: Environment variables related to Anthem
+| Name                          | Description                                        | Default Value                         |
+| ----------------------------- | -------------------------------------------------- | ------------------------------------- |
+| `ODOO_DATA_PATH`              | Path to the folder containing csv files            | `/odoo/songs/data` |
 
 
 ## Development environment
