@@ -48,5 +48,6 @@ def set_ribbon(ctx):
 @anthem.log
 def main(ctx):
     """ Set general settings """
+    setup_admin_user(ctx)
     set_mail_server(ctx)
     set_ribbon(ctx)
