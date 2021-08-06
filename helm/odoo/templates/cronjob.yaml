@@ -19,7 +19,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: odoo-backup
-              image: ursa/backup:latest
+              image: {{ .Values.backup.image }}
               args:
                 - backup
                 - odoo
@@ -149,7 +149,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: odoo-restore
-              image: ursa/backup:latest
+              image: {{ .Values.backup.image }}
               args:
                 - restore
                 - odoo
