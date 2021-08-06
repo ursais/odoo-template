@@ -2,96 +2,74 @@
 
 ## Table of Contents
 * [Prerequisites](#Prerequisites)
-* [Configuration](#Configuration)
-* [Build your development environment](#Build-your-development-environment)
-	* [For custom module](#For-custom-module)
-	* [For contributed module](#For-contributed-module)
-* [Deploy to an environment](#Deploy-to-an-environment)
+* [Build your environment](#Build-your-environment)
+	* [For private modules](#For-private-modules)
+	* [For existing public modules](#For-existing-public-modules)
+	* [For new public modules](#For-new-public-modules)
+* [Deploy](#Deploy)
 * [Tests](#Tests)
 * [Issues](#Issues)
-* [Roadmap](#Roadmap)
 
 ## Prerequisites
 
-For Ursa employees, run the `Install` Job on Jenkins.
-Otherwise look at the [INSTALL](./INSTALL.md) file.
+Look at the [INSTALL](./INSTALL.md) file.
 
-## Configuration
+## Build your environment
 
-* Add your version of Odoo, modules and Python dependencies in `requirements.txt`
-
-## Build your development environment
-
-Change the working directory to the cloned Github repository and run:
-
+Go to the root directory of the cloned Github repository and run:
 ```shell script
-$ ./build.sh`
+docker-compose build
 ```
 
-To start an Odoo server:
-
+To start Odoo:
 ```shell script
-$ ./env/bin/odoo -c odoo.conf
+docker-compose up
 ```
 
-### For custom module
+### For private modules
 
-* Create a new branch and add your module in src/custom-addons
+* Create a new branch and add your module in odoo/src/private-addons
 * Add your module as a dependency of the customer module
-* Push your branch and create a pull request against develop
+* Commit, push your branch and create a pull request against `master`
 
-### For contributed module
+### For existing public modules
 
-* Create a new branch in src/<repo> and add your module
-* Create the setup directory
+Modules must be available on [Pypi](https://pypi.org), otherwise look at [the next section](#For-new-public-modules).
 
+* Create a new branch
+* Add the module in `odoo/requirements.txt`
+* Add the module as a dependency of the customer module
+* Commit, push your branch and create a pull request against `master`
+
+### For new public modules
+
+* In Github, fork the repo in the `ursais` organization
+* Add the repo as a submodule:
+```shell
+git submodule add --name repo -b 14.0 https://github.com/ursais/repo.git odoo/src/repo
 ```
-$ cd src/<repo>/setup
-$ mkdir -p module_name/odoo/addons
-$ ln -s ../module_name module_name/odoo/addons/.
-$ vi module_name/setup.py
-import setuptools
-
-setuptools.setup(
-    setup_requires=['setuptools-odoo'],
-    odoo_addon=True,
-)
-$ vi module_name/odoo/__init__.py
-__import__('pkg_resources').declare_namespace(__name__)
-$ cp module_name/odoo/__init__.py module_name/odoo/addons/__init__.py
-```
-
+* Create a new branch in odoo/src/<repo> and add your module
 * Commit your changes and push your module to Github
-* In Github (http://github.com/ursais/repo), create a pull request against the corresponding OCA repository
+* In Github (https://github.com/ursais), create a pull request against the corresponding OCA repository
+* Add a section (1 per repo) in `repos.yml` and include your pull request
+* Run Git Aggregator:
+```shell
+gitaggregate -c repos.yml -p -j 10
+```
 * Add your module as a dependency of the customer module
-* Push your branch and create a pull request against develop
+* Add your module in `odoo/Dockerfile`
+* Commit, push your branch and create a pull request against `master`
 
-## Deploy to an environment
+## Deploy
 
-For Ursa employees, run the `<Project>_Deploy` Job on Jenkins. Otherwise:
-
-* Pull the repo
-
-`$ git pull`
-
-* Update the environment
-
-`$ . env/bin/activate && pip install -r requirements.txt`
-
-* Restart Odoo
-
-`# service odoo restart`
+Look at the [helm/README.md](./helm/README.md) file.
 
 ## Tests
 
-* For functional tests using Selenium, please go to [tests/selenium](./tests/selenium).
-* For performance tests using Locust, please go to [tests/locust](./tests/locust).
+* For functional tests using Selenium, please go to [odoo/tests/selenium](./odoo/tests/selenium).
+* For performance tests using Locust, please go to [odoo/tests/locust](./odoo/tests/locust).
 
 ## Issues
 
 Report any issue to this
 [Github project](https://github.com/ursais/odoo-template/issues).
-
-## Roadmap
-
-* Push the production database to the other environments
