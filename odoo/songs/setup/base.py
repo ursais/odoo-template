@@ -4,7 +4,6 @@ import os
 from base64 import b64encode
 
 import anthem
-from anthem.lyrics.records import create_or_update
 from pkg_resources import resource_string
 
 from ..common import req
@@ -46,26 +45,7 @@ def setup_company(ctx):
     }
     ctx.env.ref("base.main_company").write(values)
 
-
-@anthem.log
-def setup_filestore(ctx):
-    """ Setup the filestore """
-    aws = os.environ.get("AWS_HOST", False)
-    if aws is not False:
-        value = "s3"
-    else:
-        value = "file"
-    create_or_update(
-        ctx,
-        "ir.config_parameter",
-        "__setup__.ir_attachment_location",
-        {"key": "ir_attachment.location", "value": value},
-    )
-    ctx.env["ir.attachment"].force_storage()
-
-
 @anthem.log
 def main(ctx):
     setup_company(ctx)
-    setup_filestore(ctx)
     setup_admin_user(ctx)
