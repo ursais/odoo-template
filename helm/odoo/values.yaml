@@ -4,7 +4,7 @@ externalDatabase:
 #  user: odoo
 #  port: 5432
 #  defaultdb: postgres
-  sslmode: prefer
+#  sslmode: prefer
 
 ## Database in the cluster
 postgresql:
@@ -15,6 +15,7 @@ postgresql:
     enabled: true
     accessMode: ReadWriteOnce
     size: 2Gi
+  sslmode: prefer
 
 ingress:
   class: alb
