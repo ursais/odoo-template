@@ -29,6 +29,13 @@ spec:
         pathType: Prefix
         backend:
           service:
+            name: ssl-redirect
+            port:
+              name: use-annotation
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
             name: {{ .Values.name | quote }}
             port:
               number: 8069

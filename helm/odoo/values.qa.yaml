@@ -22,7 +22,7 @@ ingress:
   subnets: subnet-abc123,subnet-abc123
 
 service:
-  type: LoadBalancer
+  type: NodePort
   externalTrafficPolicy: Cluster
 
 build:
@@ -128,3 +128,4 @@ odooUsername: admin
 odooEmail: support@example.com
 odooServerWideModules: web,monitoring_status,session_redis
 odooListDB: true
+odooDBFilter: "^.*[^backup].*$"
