@@ -1,7 +1,6 @@
 # Odoo Deployment
 
 ## Table of Contents
-* [Requirements](#Requirements)
 * [Development environment](#Development-environment)
 * [Test environment](#Test-environment)
 * [QA environment](#QA-environment)
@@ -9,10 +8,6 @@
 * [Secrets](#Secrets)
 * [Release](#Release)
 * [Known issues](#Known-issues)
-
-## Requirements
-
-Create a new repository `Odoo-Template` on Github
 
 ## Development environment
 

@@ -26,9 +26,10 @@ services:
       - PGUSER=odoo
       - PGPASSWORD=odoo
       - MARABUNTA_MODE=base
+      - MARABUNTA_ALLOW_SERIE=True
       #- MARABUNTA_FORCE_VERSION=setup
       - PLATFORM=local
-      - RUNNING_ENV=template
+      - RUNNING_ENV=dev
       - ODOO_ADMIN_USER_TIMEZONE=America/Phoenix
       - ODOO_ADMIN_USER_PASSWORD=admin
       - ODOO_DBFILTER=False
