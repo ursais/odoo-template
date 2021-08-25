@@ -20,6 +20,7 @@ migration:
           - anthem songs.general::main
       addons:
         upgrade:
+          - customer
           - monitoring_status
           - web_environment_ribbon
 #      modes:
