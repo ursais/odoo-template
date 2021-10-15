@@ -23,7 +23,7 @@ ingress:
   subnets: subnet-abc123,subnet-abc123
 
 service:
-  type: LoadBalancer
+  type: NodePort
   externalTrafficPolicy: Cluster
 
 build:

@@ -13,6 +13,5 @@ COPY --chown=odoo odoo /odoo/odoo/
 # COPY src/paid-addons /odoo/addons/
 COPY --chown=odoo src/private-addons /odoo/addons/
 # COPY src/enterprise /odoo/addons/
-COPY --chown=odoo src/web/web_environment_ribbon /odoo/addons/web_environment_ribbon
 
 RUN cd /odoo && pip3 install -r requirements.txt
