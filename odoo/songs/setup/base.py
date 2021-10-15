@@ -45,6 +45,7 @@ def setup_company(ctx):
     }
     ctx.env.ref("base.main_company").write(values)
 
+
 @anthem.log
 def main(ctx):
     setup_company(ctx)

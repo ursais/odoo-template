@@ -2,73 +2,73 @@
 
 ## Table of Contents
 * [Prerequisites](#Prerequisites)
-* [Configuration](#Configuration)
-* [Build your development environment](#Build-your-development-environment)
-	* [For custom module](#For-custom-module)
-	* [For contributed module](#For-contributed-module)
-* [Deploy to an environment](#Deploy-to-an-environment)
+* [Build your environment](#Build-your-environment)
+	* [For private modules](#For-private-modules)
+	* [For existing public modules](#For-existing-public-modules)
+	* [For new public modules](#For-new-public-modules)
+* [Deploy](#Deploy)
 * [Tests](#Tests)
 * [Environment Variables](#Environment-Variables)
 * [Issues](#Issues)
-* [Roadmap](#Roadmap)
 
 ## Prerequisites
 
-For Ursa employees, run the `Install` Job on Jenkins.
-Otherwise look at the [INSTALL](./INSTALL.md) file.
+Look at the [INSTALL](./INSTALL.md) file.
 
-## Configuration
+## Build your environment
 
-* Add your version of Odoo, modules and Python dependencies in `requirements.txt`
-
-## Build your development environment
-
-Change the working directory to the cloned Github repository and run:
-
+Go to the root directory of the cloned Github repository and run:
 ```shell script
-$ ./build.sh`
+docker-compose build
 ```
 
-To start an Odoo server:
-
+To start Odoo:
 ```shell script
-$ ./env/bin/odoo -c odoo.conf
+docker-compose up
 ```
 
-### For custom module
+### For private modules
 
-* Create a new branch and add your module in src/custom-addons
+* Create a new branch and add your module in odoo/src/private-addons
 * Add your module as a dependency of the customer module
-* Push your branch and create a pull request against develop
+* Commit, push your branch and create a pull request against `master`
 
-### For contributed module
+### For existing public modules
 
-* Create a new branch in src/<repo> and add your module
+Modules must be available on [Pypi](https://pypi.org), otherwise look at [the next section](#For-new-public-modules).
+
+* Create a new branch
+* Add the module in `odoo/requirements.txt`
+* Add the module as a dependency of the customer module
+* Commit, push your branch and create a pull request against `master`
+
+### For new public modules
+
+* In Github, fork the repo in the `ursais` organization
+* Add the repo as a submodule:
+```shell
+git submodule add --name repo -b 14.0 https://github.com/ursais/repo.git odoo/src/repo
+```
+* Create a new branch in odoo/src/<repo> and add your module
 * Commit your changes and push your module to Github
-* In Github (http://github.com/ursais/repo), create a pull request against the corresponding OCA repository
+* In Github (https://github.com/ursais), create a pull request against the corresponding OCA repository
+* Add a section (1 per repo) in `repos.yml` and include your pull request
+* Run Git Aggregator:
+```shell
+gitaggregate -c repos.yml -p -j 10
+```
 * Add your module as a dependency of the customer module
-* Push your branch and create a pull request against develop
+* Add your module in `odoo/Dockerfile`
+* Commit, push your branch and create a pull request against `master`
 
-## Deploy to an environment
+## Deploy
 
-For Ursa employees, run the `<Project>_Deploy` Job on Jenkins. Otherwise:
-
-* Pull the repo
-
-`$ git pull`
-
-* Update the environment
-
-`$ . env/bin/activate && pip install -r requirements.txt`
-
-* Restart Odoo
-
-`# service odoo restart`
+Look at the [helm/README.md](./helm/README.md) file.
 
 ## Tests
 
-* For functional tests using Selenium, please go to [tests/selenium](./tests/selenium).
-* For performance tests using Locust, please go to [tests/locust](./tests/locust).
+* For functional tests using Selenium, please go to [odoo/tests/selenium](./odoo/tests/selenium).
+* For performance tests using Locust, please go to [odoo/tests/locust](./odoo/tests/locust).
 
 ## Environment Variables
 
@@ -78,6 +78,7 @@ Description: Environment variables
 | `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
 | `PLATFORM`                    | Used to identify the cloud provider: aws, azure, do or local | `do`          |
 | `APP_IMAGE_VERSION`           | Used to set the version of the image               | `latest` |
+| `DEBUG`                       | Display debugging information if set to 1          |          |
 
 Description: A list of variables that have default values when not set in docker-compose.yml.
 These environment variables can be altered to directly impact configurations of the build when using docker-compose up
@@ -184,7 +185,3 @@ Description: Environment variables related to Anthem (songs)
 
 Report any issue to this
 [Github project](https://github.com/ursais/odoo-template/issues).
-
-## Roadmap
-
-* Update helm/odoo/templates/ingress.yaml rules and redirect
