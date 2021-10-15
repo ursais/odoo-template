@@ -1,7 +1,7 @@
 version: '2'
 services:
   db:
-    image: ursa/postgresql-13.0:latest
+    image: ursa/postgresql:latest
     restart: always
     environment:
       - POSTGRES_DB=postgres
