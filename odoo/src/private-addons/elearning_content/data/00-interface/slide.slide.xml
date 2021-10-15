@@ -1,0 +1,56 @@
+<odoo noupdate="1">
+
+    <record id="slide_odoo_interface_support_report_issue" model="slide.slide">
+        <field name="name">Report an issue</field>
+        <field name="sequence">91</field>
+        <field name="slide_type">webpage</field>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
+        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_support"/>
+        <field name="is_category">0</field>
+        <field name="html_content" type="html">
+            <section class="s_text_block o_colored_level pt0 pb0">
+                <div class="container s_allow_columns">
+                    <h1>Methods</h1>
+                    <ul>
+                        <li>By email to support@opensourceintegrators.com</li>
+                        <li>Through the portal at
+                            <a href="https://pm.opensourceintegrators.com/helpdesk/support-1/submit"
+                               target="_blank">
+                                https://pm.opensourceintegrators.com/helpdesk/support-1/submit
+                            </a>
+                        </li>
+                    </ul>
+                    <h1>Subject</h1>
+                    <p>Please enter a meaningful subject including the severity of the
+                        issue (low, medium, high, critical)
+                    </p>
+                    <h2>Description</h2>
+                    <p>Make sure to answer the following questions:</p>
+                    <pre>
+Environment
+
+* What server and database was used for testing?
+* What company (in multi-company setup) and user (or role) was used?
+
+Steps to reproduce
+
+* What is the high level process used? Please provide steps, for example:
+
+  * Go to Accounting/Vendors/Bills
+  * Create new Vendor Bill or open vendor bill 123
+  * Problem when adding product line manually
+
+Result
+
+* What is the current result? If necessary, provide screenshot or complete error message
+
+Expected Result
+
+* What is the expected result?
+                    </pre>
+                </div>
+            </section>
+        </field>
+    </record>
+
+</odoo>
