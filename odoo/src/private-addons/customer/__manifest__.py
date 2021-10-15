@@ -9,7 +9,7 @@
     "author": "Open Source Integrators",
     "maintainer": "Open Source Integrators",
     "website": "https://www.opensourceintegrators.com",
-    "depends": ["mail"],
+    "depends": ["elearning_content"],
     "data": [],
     "application": True,
     "maintainers": ["ursais"],

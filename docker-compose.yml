@@ -26,6 +26,7 @@ services:
       - PGUSER=odoo
       - PGPASSWORD=odoo
       - MARABUNTA_MODE=base
+      - MARABUNTA_ALLOW_SERIE=True
       #- MARABUNTA_FORCE_VERSION=setup
       - PLATFORM=local
       - RUNNING_ENV=dev

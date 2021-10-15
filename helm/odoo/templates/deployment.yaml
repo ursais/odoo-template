@@ -114,6 +114,10 @@ spec:
                 key: {{ ternary "aws-secret-access-key" "" .Values.s3.enabled | quote }}
           - name: AWS_BUCKETNAME
             value: {{ .Values.s3.aws_bucketname | quote }}
+          - name: AWS_DUPLICATE
+            value: "true"
+          - name: AWS_EMPTY_ON_DBDROP
+            value: "true"
           {{- end }}
           {{- if .Values.azure.enabled }}
           - name: AZURE_STORAGE_ACCOUNT_URL
@@ -152,6 +156,8 @@ spec:
           {{- end }}
           - name: ODOO_LIST_DB
             value: {{ .Values.odooListDB | quote }}
+          - name: ODOO_DBFILTER
+            value: {{ .Values.odooDBFilter | quote }}
           - name: ODOO_SERVER_WIDE_MODULES
             value: {{ .Values.odooServerWideModules | quote }}
         ports:

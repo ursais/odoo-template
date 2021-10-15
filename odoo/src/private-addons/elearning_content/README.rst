@@ -1,6 +1,6 @@
-========
-CUSTOMER
-========
+========================
+Training / Documentation
+========================
 
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
@@ -11,22 +11,19 @@ CUSTOMER
 
 |badge1| |badge2|
 
-This module provides the scope (dependencies) and customizations of Odoo for Customer.
+This module provides the base of the training content and documentation of Odoo.
 
 **Table of contents**
 
 .. contents::
    :local:
 
-Configuration
-=============
-
-* Go to the `project blueprint <https://wiki.example.com>`_.
-
 Usage
 =====
 
-* Go to the `project documentation <https://wiki.example.com>`_.
+* Go to Elearning
+* Select or create a training course
+* Invite your employees to their corresponding training
 
 Support
 =======
@@ -41,9 +38,7 @@ Contributors
 
 * Open Source Integrators <contact@opensourceintegrators.com>
 
-  * Project Manager <pm@opensourceintegrators.com>
-  * Business Analyst <ba@opensourceintegrators.com>
-  * Tech Lead <tl@opensourceintegrators.com>
+  * Maxime Chambreuil <mchambreuil@opensourceintegrators.com>
 
 Maintainers
 -----------

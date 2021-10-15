@@ -29,9 +29,9 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.name | quote }}
+            name: ssl-redirect
             port:
-              number: 8069
+              name: use-annotation
       - path: /longpolling
         pathType: Prefix
         backend:
@@ -39,4 +39,11 @@ spec:
             name: {{ .Values.name | quote }}
             port:
               number: 8072
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.name | quote }}
+            port:
+              number: 8069
 {{- end }}

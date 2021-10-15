@@ -1,20 +1,21 @@
 ## Database external to the cluster
 externalDatabase:
-  host: template-odoo-dev.db.example.com
-  user: odoo
-  port: 5432
-  defaultdb: postgres
-  sslmode: prefer
+  host: false
+#  user: odoo
+#  port: 5432
+#  defaultdb: postgres
+#  sslmode: prefer
 
 ## Database in the cluster
 postgresql:
-  enabled: false
-#  postgresqlUsername: odoo
-#  defaultdb: postgres
-#  persistence:
-#    enabled: true
-#    accessMode: ReadWriteOnce
-#    size: 2Gi
+  enabled: true
+  postgresqlUsername: odoo
+  defaultdb: postgres
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 2Gi
+  sslmode: prefer
 
 ingress:
   class: alb
@@ -22,7 +23,7 @@ ingress:
   subnets: subnet-abc123,subnet-abc123
 
 service:
-  type: LoadBalancer
+  type: NodePort
   externalTrafficPolicy: Cluster
 
 build:

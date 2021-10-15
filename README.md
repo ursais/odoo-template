@@ -154,6 +154,8 @@ Description: Environment variables related to the Odoo filestore and Rclone
 | `AZURE_STORAGE_CONNECTION_STRING` | Value for Azure connection string              | `false` |
 | `AZURE_STORAGE_ACCOUNT_URL`   | Set value if using azure platform for cloud filestore        |               |
 | `AZURE_STORAGE_ACCOUNT_KEY`   | Value for Azure storage account key                | `false` |
+| `AWS_DUPLICATE`               | Set value to true to duplicate filestore with database       |               |
+| `AWS_EMPTY_ON_DBDROP`         | Set value to true to remove contents from filestore bucket when dropping db |              |
 
 Description: Environment variables related to PostgreSQL client
 | Name                          | Description                                        | Default Value                         |
