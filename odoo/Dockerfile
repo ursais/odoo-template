@@ -1,4 +1,4 @@
-FROM ursa/odoo-14.0:latest
+FROM ursa/odoo-15.0:latest
 MAINTAINER Open Source Integrators <support@opensourceintegrators.com>
 
 # Copy files
