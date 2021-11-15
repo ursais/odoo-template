@@ -11,12 +11,19 @@
     "depends": ["website_slides"],
     "data": [
         "data/slide.channel.csv",
+        "data/slide.slide.csv",
         # Odoo Interface
-        "data/00-interface/slide.slide.csv",
         "data/00-interface/slide.slide.xml",
         # Accounting
-        "data/10-account/slide.slide.csv",
         # Inventory
+        # Manufacturing
+        # Service
+        # Purchase
+        # Sales / CRM
+        # Website
+        # Human Resources
+        # Administration
+        # Development
     ],
     "application": True,
     "maintainers": ["ursais"],

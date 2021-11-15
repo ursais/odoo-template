@@ -1,5 +1,0 @@
-"id","sequence","name","slide_type","channel_id/id","completion_time","url","is_category","category_id/id"
-"slide_slide_account_receivables","10","Account Receivables","Document","slide_channel_accounting","0.0","","1",
-"slide_slide_account_payables","20","Account Payables","Document","slide_channel_accounting","0.0","","1",
-"slide_slide_banking","30","Banking","Document","slide_channel_accounting","0.0","","1",
-"slide_slide_bank_rec","35","Bank Statements and Reconciliation","Video","slide_channel_accounting","0.1856","https://www.youtube.com/watch?v=EvBHkv7x0-0","0","elearning_content.slide_slide_banking"
