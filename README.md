@@ -55,7 +55,7 @@ git submodule add --name repo -b 14.0 https://github.com/ursais/repo.git odoo/sr
 * Add a section (1 per repo) in `repos.yml` and include your pull request
 * Run Git Aggregator:
 ```shell
-gitaggregate -c repos.yml -p -j 10
+gitaggregate -c repos.yml -p -j 10 aggregate
 ```
 * Add your module as a dependency of the customer module
 * Add your module in `odoo/Dockerfile`
@@ -73,6 +73,7 @@ Look at the [helm/README.md](./helm/README.md) file.
 ## Environment Variables
 
 Description: Environment variables
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
@@ -144,6 +145,7 @@ These environment variables can be altered to directly impact configurations of 
 | `ODOO_XMLRPC_INTERFACE`       | Value set in odoo.conf for: xmlrpc_interface       |                                       |
 
 Description: Environment variables related to the Odoo filestore and Rclone
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `PLATFORM`                    | Used to identify the cloud provider: aws, azure, do or local | `do`|
@@ -158,6 +160,7 @@ Description: Environment variables related to the Odoo filestore and Rclone
 | `AWS_EMPTY_ON_DBDROP`         | Set value to true to remove contents from filestore bucket when dropping db |              |
 
 Description: Environment variables related to PostgreSQL client
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `PGHOST`                      | Value set in odoo.conf for: db_host                | `db`                                  |
@@ -168,6 +171,7 @@ Description: Environment variables related to PostgreSQL client
 | `PGSSLMODE`                   | Value set in odoo.conf for: db_sslmode             | `prefer`                              |
 
 Description: Environment variables related to Marabunta (migration.yml)
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
@@ -177,6 +181,7 @@ Description: Environment variables related to Marabunta (migration.yml)
 | `MARABUNTA_FORCE_VERSION`     | Force a specific version to be re-ran              |          |
 
 Description: Environment variables related to Anthem (songs)
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `ODOO_DATA_PATH`              | Set the path to the csv files                      | `/odoo/songs/data`                    |
