@@ -61,7 +61,7 @@ spec:
                       name: {{ ternary .Values.name "" .Values.s3.enabled | quote }}
                       key: {{ ternary "aws-secret-access-key" "" .Values.s3.enabled | quote }}
                 - name: FILESTORE_AWS_BUCKETNAME
-                  value: {{ .Values.environment }}
+                  value: {{ .Values.s3.aws_bucketname }}
                 {{- end }}
                 {{- if .Values.azure.enabled }}
                 - name: FILESTORE_AZURE_STORAGE_ACCOUNT_URL
