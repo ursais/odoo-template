@@ -77,9 +77,10 @@ Description: Environment variables
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
+| `MIGRATE`                     | Allow Marabunta to run the migration.yml instructions for the next version/s | `true`      |
 | `PLATFORM`                    | Used to identify the cloud provider: aws, azure, do or local | `do`          |
 | `APP_IMAGE_VERSION`           | Used to set the version of the image               | `latest` |
-| `DEBUG`                       | Display debugging information if set to 1          |          |
+| `DEBUG`                       | Display debugging information if set to 1          |   ` `    |
 
 Description: A list of variables that have default values when not set in docker-compose.yml.
 These environment variables can be altered to directly impact configurations of the build when using docker-compose up
@@ -90,7 +91,7 @@ These environment variables can be altered to directly impact configurations of 
 | `ODOO_ADMIN_PASSWD`           | Value set in odoo.conf for: admin_passwd           | `admin`                               |
 | `ODOO_CSV_INTERNAL_SEP`       | Value set in odoo.conf for: csv_internal_sep       | `,`                                   |
 | `ODOO_DATA_DIR`               | Value set in odoo.conf for: data_dir               | `/odoo/data`                          |
-| `ODOO_DBFILTER`               | Value set in odoo.conf for: dbfilter               | `^[^backup\|defaultdb].*$`            |
+| `ODOO_DBFILTER`               | Value set in odoo.conf for: dbfilter               | `^.*[^backup].*$`            |
 | `PGHOST`                      | Value set in odoo.conf for: db_host                | `db`                                  |
 | `ODOO_DB_MAXCONN`             | Value set in odoo.conf for: db_maxconn             | `64`                                  |
 | `PGDATABASE`                  | Value set in odoo.conf for: db_name                | `False`                               |
@@ -109,7 +110,7 @@ These environment variables can be altered to directly impact configurations of 
 | `ODOO_LIMIT_MEMORY_SOFT`      | Value set in odoo.conf for: limit_memory_soft      | `2147483648`                          |
 | `ODOO_LIMIT_REQUEST`          | Value set in odoo.conf for: limit_request          | `8192`                                |
 | `ODOO_LIMIT_TIME_CPU`         | Value set in odoo.conf for: limit_time_cpu         | `1800`                                |
-| `ODOO_LIMIT_TIME_REAL_CRON`   | Value set in odoo.conf for: limit_time_real_cron   | `120`                                 |
+| `ODOO_LIMIT_TIME_REAL_CRON`   | Value set in odoo.conf for: limit_time_real_cron   | `1800`                                 |
 | `ODOO_LIMIT_TIME_REAL`        | Value set in odoo.conf for: limit_time_real        | `1800`                                |
 | `ODOO_LIST_DB`                | Value set in odoo.conf for: list_db                | `False`                               |
 | `ODOO_LOG_DB`                 | Value set in odoo.conf for: log_db                 | `False`                               |
@@ -130,7 +131,7 @@ These environment variables can be altered to directly impact configurations of 
 | `ODOO_SMTP_PASSWORD`          | Value set in odoo.conf for: smtp_password          | `False`                               |
 | `ODOO_SMTP_PORT`              | Value set in odoo.conf for: smtp_port              | `25`                                  |
 | `ODOO_SMTP_SERVER`            | Value set in odoo.conf for: smtp_server            | `localhost`                           |
-| `ODOO_SMTP_SSL`               | Value set in odoo.conf for: smtp_ssl               | `False`                               |
+| `ODOO_SMTP_SSL`               | Value set in odoo.conf for: smtp_ssl               | `none`                               |
 | `ODOO_SMTP_USER`              | Value set in odoo.conf for: smtp_user              | `False`                               |
 | `ODOO_SYSLOG`                 | Value set in odoo.conf for: syslog                 | `False`                               |
 | `ODOO_TEST_ENABLE`            | Value set in odoo.conf for: test_enable            | `False`                               |
