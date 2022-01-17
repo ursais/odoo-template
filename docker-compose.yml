@@ -25,6 +25,8 @@ services:
       - PGHOST=db
       - PGUSER=odoo
       - PGPASSWORD=odoo
+      # Marabunta
+      - MIGRATE=True
       - MARABUNTA_MODE=base
       - MARABUNTA_ALLOW_SERIE=True
       #- MARABUNTA_FORCE_VERSION=setup
@@ -34,6 +36,19 @@ services:
       - ODOO_ADMIN_USER_PASSWORD=admin
       - ODOO_DBFILTER=False
       - ODOO_LIST_DB=True
+      # Email
+      - ODOO_SMTP_SERVER=mail
+      - ODOO_SMTP_PORT=1025
+      - ODOO_SMTP_SSL=none
+      - ODOO_SMTP_USER=False
+      - ODOO_SMTP_PASSWORD=False
+    stdin_open: true
+    tty: true
+
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
 
 volumes:
   postgres-data:
