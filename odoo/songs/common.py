@@ -47,7 +47,7 @@ def load_warehouses(ctx, company, path):
 
 
 def get_files(default_file):
-    """ Check if there is a DATA_DIR in environment else open default_file.
+    """Check if there is a DATA_DIR in environment else open default_file.
 
     DATA_DIR is passed by importer.sh when importing splitted file in parallel
 
