@@ -11,7 +11,7 @@ from ..common import req
 
 @anthem.log
 def setup_admin_user(ctx):
-    """ Setup admin user """
+    """Setup admin user"""
     admin = ctx.env.ref("base.user_admin")
     admin.write(
         {
@@ -24,7 +24,7 @@ def setup_admin_user(ctx):
 
 @anthem.log
 def setup_company(ctx):
-    """ Setup company """
+    """Setup company"""
     # load logo on company
     logo_content = resource_string(req, "songs/data/images/logo.png")
     b64_logo = b64encode(logo_content)

@@ -3,7 +3,7 @@ default_language_version:
   python: python3
 repos:
 - repo: https://github.com/psf/black
-  rev: 19.10b0
+  rev: 22.3.0
   hooks:
   - id: black
 - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -42,11 +42,11 @@ repos:
     name: pylint with optional checks
     args: ["--rcfile=.pylintrc", "--exit-zero"]
     verbose: true
-    additional_dependencies: ["pylint-odoo==3.0.3"]
+    additional_dependencies: ["pylint-odoo"]
   - id: pylint
     name: pylint with mandatory checks
     args: ["--rcfile=.pylintrc-mandatory"]
-    additional_dependencies: ["pylint-odoo==3.0.3"]
+    additional_dependencies: ["pylint-odoo"]
 - repo: https://github.com/asottile/pyupgrade
   rev: v1.24.0
   hooks:
