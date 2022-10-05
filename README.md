@@ -47,7 +47,8 @@ Modules must be available on [Pypi](https://pypi.org), otherwise look at [the ne
 * In Github, fork the repo in the `ursais` organization
 * Add the repo as a submodule:
 ```shell
-git submodule add --name repo -b 15.0 https://github.com/ursais/repo.git odoo/src/repo
+git submodule add --name repo -b 16.0 https://github.com/ursais/repo.git
+odoo/src/repo
 ```
 * Create a new branch in odoo/src/<repo> and add your module
 * Commit your changes and push your module to Github
