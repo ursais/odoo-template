@@ -1,0 +1,4 @@
+[submodule "osi-addons"]
+	path = odoo/src/osi-addons
+	url = https://github.com/ursais/osi-addons.git
+	branch = 16.0
