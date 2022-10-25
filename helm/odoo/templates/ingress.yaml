@@ -14,18 +14,21 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/subnets: {{ .Values.ingress.subnets }}
     alb.ingress.kubernetes.io/target-type: instance
-    external-dns.alpha.kubernetes.io/hostname: {{ .Values.application_domain }}
     {{ end }}
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.application_domain }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
+  {{ if .Values.azure.enabled }}
   tls:
   - hosts:
     - {{ .Values.application_domain | quote }}
     secretName: aks-ingress-tls
+  {{ end }}
   rules:
   - host: {{ .Values.application_domain | quote }}
     http:
       paths:
+      {{ if eq .Values.ingress.class "alb" }}
       - path: /
         pathType: Prefix
         backend:
@@ -33,6 +36,7 @@ spec:
             name: ssl-redirect
             port:
               name: use-annotation
+      {{ end }}
       - path: /longpolling
         pathType: Prefix
         backend:
