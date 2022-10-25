@@ -16,3 +16,7 @@ python3 -m venv env
 pip install -r requirements.txt
 pre-commit install
 ```
+
+* Change the permission of the certificate file
+* Enable new odoo virtual host
+* Enable and start Nginx
