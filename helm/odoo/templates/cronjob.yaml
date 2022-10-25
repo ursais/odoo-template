@@ -1,6 +1,6 @@
 {{- if eq .Values.environment "production" }}
 kind: CronJob
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 metadata:
   name: {{ print .Values.name "-backup" | quote }}
   annotations:
@@ -61,7 +61,7 @@ spec:
                       name: {{ ternary .Values.name "" .Values.s3.enabled | quote }}
                       key: {{ ternary "aws-secret-access-key" "" .Values.s3.enabled | quote }}
                 - name: FILESTORE_AWS_BUCKETNAME
-                  value: {{ .Values.environment }}
+                  value: {{ .Values.s3.aws_bucketname }}
                 {{- end }}
                 {{- if .Values.azure.enabled }}
                 - name: FILESTORE_AZURE_STORAGE_ACCOUNT_URL
@@ -130,7 +130,7 @@ spec:
 ---
 {{- if or (eq .Values.environment "qa") (eq .Values.environment "test") }}
 kind: CronJob
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 metadata:
   name: {{ print .Values.name "-restore" | quote }}
   annotations:

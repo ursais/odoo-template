@@ -160,6 +160,8 @@ spec:
             value: {{ .Values.odooDBFilter | quote }}
           - name: ODOO_SERVER_WIDE_MODULES
             value: {{ .Values.odooServerWideModules | quote }}
+          - name: MIGRATE
+            value: "true"
         ports:
         - name: tcp-odoo-http
           containerPort: 8069

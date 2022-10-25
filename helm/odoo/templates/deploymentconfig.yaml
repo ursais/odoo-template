@@ -122,7 +122,7 @@ spec:
                 name: {{ ternary .Values.name "" .Values.s3.enabled | quote }}
                 key: {{ ternary "aws-secret-access-key" "" .Values.s3.enabled | quote }}
           - name: AWS_BUCKETNAME
-            value: "{{ .Values.environment }}-{db}"
+            value: "{{ .Values.s3.aws_bucketname }}"
           {{- end }}
           {{- if .Values.redis.enabled }}
           - name: ODOO_SESSION_REDIS
