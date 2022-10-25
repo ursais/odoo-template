@@ -4,9 +4,10 @@ import os
 
 import anthem
 
+
 @anthem.log
 def setup_admin_user(ctx):
-    """ Setup admin user """
+    """Setup admin user"""
     admin = ctx.env.ref("base.user_admin")
     admin.write(
         {
@@ -16,9 +17,10 @@ def setup_admin_user(ctx):
     )
     admin._set_new_password()
 
+
 @anthem.log
 def set_mail_server(ctx):
-    """ Set Mail Server """
+    """Set Mail Server"""
     if os.getenv("RUNNING_ENV") != "production":
         mailhog = ctx.env["ir.mail_server"].create(
             {"name": "MailHog", "smtp_host": "odoo-mailhog", "smtp_port": 1025}
@@ -31,7 +33,7 @@ def set_mail_server(ctx):
 
 @anthem.log
 def set_ribbon(ctx):
-    """ Set Ribbon """
+    """Set Ribbon"""
     if os.getenv("RUNNING_ENV") != "production":
         background = ctx.env["ir.config_parameter"].search(
             [("key", "=", "ribbon.background.color")]
@@ -47,7 +49,7 @@ def set_ribbon(ctx):
 
 @anthem.log
 def main(ctx):
-    """ Set general settings """
+    """Set general settings"""
     setup_admin_user(ctx)
     set_mail_server(ctx)
     set_ribbon(ctx)
