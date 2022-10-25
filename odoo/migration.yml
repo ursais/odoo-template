@@ -16,9 +16,9 @@ migration:
 # Anthem songs does not work for Odoo 15.0 yet.
 #        pre:
 #          - psql -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
-#        post:
-#          - anthem songs.setup.base::main
-#          - anthem songs.general::main
+        post:
+          - anthem songs.setup.base::main
+          - /bin/sh -c "VERSION=15.0.1.0.0 anthem songs.environment::main"
       addons:
         upgrade:
           - monitoring_status

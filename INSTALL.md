@@ -26,7 +26,7 @@
 `# ln -s /usr/local/bin/wkhtmltopdf /usr/bin/wkhtmltopdf`
 
 # PostgreSQL
- 
+
 * Create a PostgreSQL user for odoo
 
 # Odoo
