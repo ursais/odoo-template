@@ -4,8 +4,8 @@ migration:
     install_args: --log-level=debug
     backup:
       command: '
-        export DATE=$(date +%Y%m%dT%H%M%S) &&
-        psql -c "CREATE DATABASE $DATE WITH TEMPLATE $PGDATABASE;"'
+        export DATE=$(date +%Y%m%dT%H%M%S) && psql -c "CREATE DATABASE $DATE WITH
+        TEMPLATE $PGDATABASE;"'
       stop_on_failure: true
       ignore_if: test "${RUNNING_ENV}" != "production"
 
@@ -13,8 +13,8 @@ migration:
     - version: setup
       backup: false
       operations:
-#        pre:
-#          - psql -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+        #        pre:
+        #          - psql -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
         post:
           - anthem songs.setup.base::main
           - /bin/sh -c "VERSION=15.0.1.0.0 anthem songs.environment::main"

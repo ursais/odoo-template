@@ -5,8 +5,11 @@
         <field name="name">Log in</field>
         <field name="sequence">110</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_navigation"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_navigation"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -22,8 +25,11 @@
         <field name="name">Browse the menu</field>
         <field name="sequence">120</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_navigation"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_navigation"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -39,8 +45,11 @@
         <field name="name">Search, filter and group</field>
         <field name="sequence">130</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_navigation"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_navigation"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -56,8 +65,11 @@
         <field name="name">Favorites and Dashboard</field>
         <field name="sequence">140</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_navigation"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_navigation"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -73,8 +85,11 @@
         <field name="name">Import/Export</field>
         <field name="sequence">150</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_navigation"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_navigation"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -90,8 +105,11 @@
         <field name="name">List</field>
         <field name="sequence">210</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_views"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_views"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -107,8 +125,11 @@
         <field name="name">Form</field>
         <field name="sequence">220</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_views"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_views"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -124,8 +145,11 @@
         <field name="name">Kanban</field>
         <field name="sequence">230</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_views"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_views"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -141,8 +165,11 @@
         <field name="name">Calendar</field>
         <field name="sequence">240</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_views"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_views"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -158,8 +185,11 @@
         <field name="name">Map</field>
         <field name="sequence">250</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_views"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_views"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -175,8 +205,11 @@
         <field name="name">Report an issue</field>
         <field name="sequence">310</field>
         <field name="slide_type">webpage</field>
-        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface"/>
-        <field name="category_id" ref="elearning_content.slide_slide_odoo_interface_support"/>
+        <field name="channel_id" ref="elearning_content.slide_channel_odoo_interface" />
+        <field
+            name="category_id"
+            ref="elearning_content.slide_slide_odoo_interface_support"
+        />
         <field name="is_category">0</field>
         <field name="html_content" type="html">
             <section class="s_text_block o_colored_level pt0 pb0">
@@ -185,8 +218,10 @@
                     <ul>
                         <li>By email to support@opensourceintegrators.com</li>
                         <li>Through the portal at
-                            <a href="https://pm.opensourceintegrators.com/helpdesk/support-1/submit"
-                               target="_blank">
+                            <a
+                                href="https://pm.opensourceintegrators.com/helpdesk/support-1/submit"
+                                target="_blank"
+                            >
                                 https://pm.opensourceintegrators.com/helpdesk/support-1/submit
                             </a>
                         </li>
