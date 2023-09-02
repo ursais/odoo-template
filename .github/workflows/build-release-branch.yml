@@ -1,0 +1,52 @@
+name: Build Release Branch
+on:
+  workflow_dispatch:
+    inputs:
+      perform_deploy:
+        description: 'Deploy To Test Instance?'
+        required: true
+        type: boolean
+
+env:
+  DOCKER_BUILDKIT: 1
+  IMAGE_NAME: template-odoo
+  TAG: ${{ github.ref_name }}-${{ github.sha }}
+  REGISTRY: ???.dkr.ecr.us-west-2.amazonaws.com
+  REGION: us-west-2
+#  CLUSTER_NAME: odoo-csn
+#  EKS_ROLE_ARN: arn:aws:iam::840634009922:role/eks-deploy-role
+#  NAMESPACE: csn-odoo-test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: 'Build image'
+        run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.TAG }} odoo
+
+      - name: 'Push to registry'
+        uses: jwalton/gh-ecr-push@v1
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ env.REGION }}
+          image: ${{ env.IMAGE_NAME }}:${{ env.TAG }}
+
+#      - name: 'Deploy image'
+#        if: ${{ inputs.perform_deploy }}
+#        uses: ianbelcher/eks-kubectl-action@master
+#        with:
+#          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws_region: ${{ env.REGION }}
+#          cluster_name: ${{ env.CLUSTER_NAME }}
+#          eks_role_arn: ${{ env.EKS_ROLE_ARN }}
+#          args: set image -n ${{ env.NAMESPACE }} --record deployment/odoo odoo=${{env.REGISTRY}}/${{ env.IMAGE_NAME }}:${{ env.TAG }}

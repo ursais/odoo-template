@@ -6,7 +6,15 @@ from base64 import b64encode
 import anthem
 from pkg_resources import resource_string
 
-from ..common import req
+from ..common import load_users, req
+
+VERSION = os.path.split(os.path.dirname(__file__))[1]
+
+
+@anthem.log
+def import_users(ctx):
+    """Import users"""
+    load_users(ctx, VERSION + "/" + "res.users.csv")
 
 
 @anthem.log
@@ -50,3 +58,4 @@ def setup_company(ctx):
 def main(ctx):
     setup_company(ctx)
     setup_admin_user(ctx)
+    # import_users(ctx)
