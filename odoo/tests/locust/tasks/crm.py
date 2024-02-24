@@ -9,10 +9,11 @@ from locust import task
 
 class CRMTaskSet(helper.BaseBackendTaskSet):
     def on_start(self, *args, **kwargs):
-        super(CRMTaskSet, self).on_start(*args, **kwargs)
+        res = super().on_start(*args, **kwargs)
         self.Lead = self.client.env["crm.lead"]
         self.Sale = self.client.env["sale.order"]
         self.Partner = self.client.env["res.partner"]
+        return res
 
     @task(20)
     def create_lead(self):

@@ -9,7 +9,7 @@ from locust import task
 
 class AccountTaskSet(helper.BaseBackendTaskSet):
     def on_start(self, *args, **kwargs):
-        super(AccountTaskSet, self).on_start(*args, **kwargs)
+        return super().on_start(*args, **kwargs)
 
     @task(20)
     def generate_invoice_from_task(self):

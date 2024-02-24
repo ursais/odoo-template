@@ -1,4 +1,4 @@
-# Odoo 16.0 Template Project
+# Template for an Odoo 17 Project
 
 ## Table of Contents
 * [Prerequisites](#Prerequisites)

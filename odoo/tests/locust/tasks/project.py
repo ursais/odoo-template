@@ -8,7 +8,7 @@ from locust import task
 
 class ProjectTaskSet(helper.BaseBackendTaskSet):
     def on_start(self, *args, **kwargs):
-        super(ProjectTaskSet, self).on_start(*args, **kwargs)
+        return super().on_start(*args, **kwargs)
 
     @task(10)
     def edit_task(self):

@@ -25,7 +25,7 @@ def load_csv(ctx, path, delimiter=",", header=None, header_exclude=None):
 def load_users_csv(ctx, path, delimiter=","):
     # make sure we don't send any email
     ctx.env["res.users"].with_context(
-        {"no_reset_password": True, "tracking_disable": True}
+        **{"no_reset_password": True, "tracking_disable": True}
     )
     load_csv(ctx, path, delimiter)
 

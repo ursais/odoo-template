@@ -8,8 +8,9 @@ from locust import task
 
 class StockTaskSet(helper.BaseBackendTaskSet):
     def on_start(self, *args, **kwargs):
-        super(StockTaskSet, self).on_start(*args, **kwargs)
+        res = super().on_start(*args, **kwargs)
         self.Task = self.client.env["project.task"]
+        return res
 
     @task(10)
     def edit_delivery_lines(self):

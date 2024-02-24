@@ -9,9 +9,10 @@ from locust import task
 
 class SaleTaskSet(helper.BaseBackendTaskSet):
     def on_start(self, *args, **kwargs):
-        super(SaleTaskSet, self).on_start(*args, **kwargs)
+        res = super().on_start(*args, **kwargs)
         self.Sale = self.client.env["sale.order"]
         self.now = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
+        return res
 
     @task(10)
     def create_sale_order(self):

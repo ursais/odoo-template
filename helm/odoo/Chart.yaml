@@ -6,14 +6,14 @@ description: Odoo instance
 home: https://www.opensourceintegrators.com
 icon: https://github.com/ursais.png
 keywords:
-- odoo
-- crm
-- www
-- http
-- web
+  - odoo
+  - crm
+  - www
+  - http
+  - web
 sources:
-- https://github.com/ursais/odoo-template
+  - https://github.com/ursais/odoo-template
 maintainers:
-- name: Open Source Integrators
-  email: support@opensourceintegrators.com
+  - name: Open Source Integrators
+    email: support@opensourceintegrators.com
 engine: gotpl

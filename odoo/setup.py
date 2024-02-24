@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="odoo-songs",
-    version="14.0.1.0.0",
+    version="17.0.1.0.0",
     description="Odoo ERP",
     license="GNU Affero General Public License v3 or later (AGPLv3+)",
     author="Open Source Integrators",
