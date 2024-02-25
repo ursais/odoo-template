@@ -73,16 +73,19 @@ Look at the [helm/README.md](./helm/README.md) file.
 
 ## Environment Variables
 
-Description: Environment variables
+### General
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
-| `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
+| `RUNNING_ENV` | Set to replicate what type of migration will occur. Options are `production` (create, migrate), `qa` (upgrade existing, duplicate), `test` (upgrade existing, duplicate), `dev` (drop latest, create, migrate). Anything else will not trigger migration | `dev` |
 | `PLATFORM`                    | Used to identify the cloud provider: aws, azure, do or local | `do`          |
 | `APP_IMAGE_VERSION`           | Used to set the version of the image               | `latest` |
 | `DEBUG`                       | Display debugging information if set to 1          |          |
 
 Description: A list of variables that have default values when not set in docker-compose.yml.
 These environment variables can be altered to directly impact configurations of the build when using docker-compose up
+
+### Odoo
 
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
@@ -144,7 +147,8 @@ These environment variables can be altered to directly impact configurations of 
 | `ODOO_WORKERS`                | Value set in odoo.conf for: workers                | `3`                                   |
 | `ODOO_XMLRPC_INTERFACE`       | Value set in odoo.conf for: xmlrpc_interface       |                                       |
 
-Description: Environment variables related to the Odoo filestore and Rclone
+### Odoo filestore and Rclone
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `PLATFORM`                    | Used to identify the cloud provider: aws, azure, do or local | `do`|
@@ -158,7 +162,8 @@ Description: Environment variables related to the Odoo filestore and Rclone
 | `AWS_DUPLICATE`               | Set value to true to duplicate filestore with database       |               |
 | `AWS_EMPTY_ON_DBDROP`         | Set value to true to remove contents from filestore bucket when dropping db |              |
 
-Description: Environment variables related to PostgreSQL client
+### PostgreSQL
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `PGHOST`                      | Value set in odoo.conf for: db_host                | `db`                                  |
@@ -168,16 +173,18 @@ Description: Environment variables related to PostgreSQL client
 | `PGDATABASE`                  | Value set in odoo.conf for: db_name                | `False`                               |
 | `PGSSLMODE`                   | Value set in odoo.conf for: db_sslmode             | `prefer`                              |
 
-Description: Environment variables related to Marabunta (migration.yml)
+### Marabunta
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
-| `RUNNING_ENV` | Set to replicate what type of migration will occur options are production(create, migrate), qa(upgrade_existing,duplicate), test(upgrade_existing,duplicate), dev(drop latest, create, migrate), anything else for not triggering migration | `dev` |
+| `RUNNING_ENV` | Set to replicate what type of migration will occur. Options are `production` (create, migrate), `qa` (upgrade existing, duplicate), `test` (upgrade existing, duplicate), `dev` (drop latest, create, migrate). Anything else will not trigger migration | `dev` |
 | `APP_IMAGE_VERSION`           | Used to set a custom database name on migration    | `latest` |
 | `MARABUNTA_MODE`              | The mode controls what operations should occur based off its value of external(serverside) or base(General) | `base` |
 | `MARABUNTA_ALLOW_SERIE`       | Allows multiple versions to upgrade                | `false`  |
 | `MARABUNTA_FORCE_VERSION`     | Force a specific version to be re-ran              |          |
 
-Description: Environment variables related to Anthem (songs)
+### Anthem
+
 | Name                          | Description                                        | Default Value                         |
 | ----------------------------- | -------------------------------------------------- | ------------------------------------- |
 | `ODOO_DATA_PATH`              | Set the path to the csv files                      | `/odoo/songs/data`                    |
