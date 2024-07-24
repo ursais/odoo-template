@@ -9,7 +9,7 @@ COPY --chown=odoo songs /odoo/songs
 
 # Copy Addons
 # COPY src/paid-addons /odoo/addons/
-COPY --chown=odoo src/private-addons /odoo/addons/
+COPY --chown=odoo src/l10n-mexico /odoo/addons/
 # COPY src/enterprise /odoo/addons/
 
 RUN cd /odoo && pip3 install -r requirements.txt
