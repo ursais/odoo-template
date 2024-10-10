@@ -1,4 +1,4 @@
-FROM ursa/odoo-17.0:latest
+FROM public.ecr.aws/t4c3a5h0/odoo-base:18.0-test-20241010
 MAINTAINER Open Source Integrators <support@opensourceintegrators.com>
 
 # Copy files
@@ -9,7 +9,7 @@ COPY --chown=odoo songs /odoo/songs
 
 # Copy Addons
 # COPY src/paid-addons /odoo/addons/
-COPY --chown=odoo src/l10n-mexico /odoo/addons/
-# COPY src/enterprise /odoo/addons/
+# COPY --chown=odoo src/l10n-mexico /odoo/addons/
+COPY src/enterprise /odoo/addons/
 
 RUN cd /odoo && pip3 install -r requirements.txt
