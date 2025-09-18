@@ -1,4 +1,4 @@
-FROM public.ecr.aws/t4c3a5h0/odoo-base:18.0-test-20241022
+FROM public.ecr.aws/t4c3a5h0/odoo-base:19.0-20250918
 MAINTAINER Open Source Integrators <support@opensourceintegrators.com>
 
 # Copy files

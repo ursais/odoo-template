@@ -1,4 +1,4 @@
-# Template for an Odoo 18 Project
+# Template for an Odoo 19 Project
 
 ## Table of Contents
 * [Prerequisites](#Prerequisites)

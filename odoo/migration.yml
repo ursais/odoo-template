@@ -8,7 +8,7 @@ migration:
       operations:
         post:
           - anthem songs.setup.base::main
-          - /bin/sh -c "VERSION=18.0.1.0.0 anthem songs.environment::main"
+          - /bin/sh -c "VERSION=19.0.1.0.0 anthem songs.environment::main"
       addons:
         upgrade:
           - contacts
