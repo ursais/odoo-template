@@ -14,6 +14,5 @@ COPY --chown=odoo songs /odoo/songs
 # COPY --chown=odoo src/l10n-mexico /odoo/addons/
 COPY --chown=odoo src/osi-addons /odoo/addons/
 COPY --chown=odoo src/private-addons /odoo/addons/
-COPY --chown=odoo src/pms /odoo/addons/
 
 RUN cd /odoo && pip3 install -r requirements.txt --break-system-packages
