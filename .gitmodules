@@ -2,27 +2,3 @@
 	path = odoo/src/osi-addons
 	url = https://github.com/ursais/osi-addons.git
 	branch = 19.0
-[submodule "pms"]
-	path = odoo/src/pms
-	url = https://github.com/oca/pms.git
-	branch = 14.0-pms_base
-[submodule "l10n-mexico"]
-	path = odoo/src/l10n-mexico
-	url = https://github.com/OCA/l10n-mexico.git
-	branch = 19.0
-[submodule "account-financial-tools"]
-	path = odoo/src/account-financial-tools
-	url = https://github.com/OCA/account-financial-tools.git
-	branch = 19.0
-[submodule "web"]
-	path = odoo/src/web
-	url = https://github.com/OCA/web.git
-	branch = 19.0
-[submodule "ursa_dev"]
-	path = odoo/src/ursa_dev
-	url = https://github.com/opensourceintegrators/ursa_dev.git
-	branch = 19.0
-[submodule "management-system"]
-	path = odoo/src/management-system
-	url = https://github.com/OCA/management-system.git
-	branch = 19.0

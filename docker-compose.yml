@@ -33,8 +33,6 @@ services:
       - RUNNING_ENV=dev
       - ODOO_ADMIN_USER_TIMEZONE=America/Phoenix
       - ODOO_ADMIN_USER_PASSWORD=admin
-      - ODOO_DBFILTER=False
-      - ODOO_LIST_DB=True
     stdin_open: true
     tty: true
   #    cap_add:
@@ -46,7 +44,7 @@ services:
       - 8025:8025
 
 #  spy:
-#    image: ursa/pyspy:latest
+#    image: ghcr.io/ursa/pyspy:latest
 #    pid: "host"
 #    privileged: "true"
 #    volumes:
