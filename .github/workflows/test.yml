@@ -21,4 +21,4 @@ jobs:
       - name: "Run tests"
         uses: sudo-bot/action-docker-compose@latest
         with:
-          cli-args: "run app --test-enable --workers=0 --stop-after-init -d test -i customer"
+          cli-args: "run app --test-enable --test-tags=/customer,/elearning_content --workers=0 --stop-after-init -d test -i customer"
