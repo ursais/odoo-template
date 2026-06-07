@@ -8,7 +8,7 @@ import click
 import click_odoo
 from pkg_resources import resource_string
 
-from ..common import req
+from songs.common import req
 
 _logger = logging.getLogger(__name__)
 

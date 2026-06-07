@@ -32,9 +32,6 @@ services:
       - RUNNING_ENV=dev
       - ODOO_ADMIN_USER_TIMEZONE=America/Phoenix
       - ODOO_ADMIN_USER_PASSWORD=admin
-      - ODOO_DBFILTER=False
-      - ODOO_LIST_DB=True
-      - ODOO_SERVER_WIDE_MODULES=web
     stdin_open: true
     tty: true
   #    cap_add:

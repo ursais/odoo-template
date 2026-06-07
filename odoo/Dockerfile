@@ -1,4 +1,4 @@
-FROM public.ecr.aws/t4c3a5h0/odoo-base:19.0-20250918
+FROM ghcr.io/ursais/odoo-19.0:latest
 LABEL MAINTAINER="Gray Matter Logic <support@graymatterlogic.com>"
 
 # Copy files
@@ -8,8 +8,12 @@ COPY --chown=odoo requirements.txt /odoo/
 COPY --chown=odoo songs /odoo/songs
 
 # Copy Addons
-# COPY src/paid-addons /odoo/addons/
+# COPY --chown=odoo src/enterprise /odoo/addons/
+# COPY --chown=odoo src/paid-addons /odoo/addons/
+# COPY --chown=odoo src/public-addons /odoo/addons/
 # COPY --chown=odoo src/l10n-mexico /odoo/addons/
-COPY src/enterprise /odoo/addons/
+COPY --chown=odoo src/osi-addons /odoo/addons/
+COPY --chown=odoo src/private-addons /odoo/addons/
+COPY --chown=odoo src/pms /odoo/addons/
 
 RUN cd /odoo && pip3 install -r requirements.txt --break-system-packages

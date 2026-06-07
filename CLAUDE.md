@@ -32,7 +32,7 @@ Set `MARABUNTA_FORCE_VERSION=setup` in docker-compose.yml (uncomment the line), 
 ### Run Odoo tests for a module
 
 ```shell
-docker-compose run --rm app odoo --test-enable --stop-after-init -d <dbname> -i <module_name>
+docker compose run --rm app odoo --test-enable --stop-after-init -d <dbname> -i <module_name>
 ```
 
 Or set `ODOO_TEST_ENABLE=True` and `ODOO_TEST_TAGS=<tags>` as environment variables.
@@ -43,8 +43,7 @@ Or set `ODOO_TEST_ENABLE=True` and `ODOO_TEST_TAGS=<tags>` as environment variab
 
 - **`odoo/src/private-addons/`** — Custom modules for this project. The `customer` module is the top-level dependency anchor; all other private modules should be listed as dependencies of `customer`.
 - **`odoo/src/public-addons/`** — New OCA modules being contributed upstream; added as git submodules.
-- **`odoo/src/osi-addons/`**, **`odoo/src/l10n-mexico/`**, **`odoo/src/pms/`** — External git submodules from OCA/ursais.
-- **`odoo/src/amxodoo/`** — Additional addon directory (not a submodule).
+- **`odoo/src/osi-addons/`**, — External git submodules from OCA/ursais.
 
 ### Adding modules
 

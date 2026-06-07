@@ -71,10 +71,103 @@ def load_users_csv(env, path, delimiter=","):
 
 
 def get_files(default_file):
+    """Check if there is a DATA_DIR in environment else open default_file.
+
+    DATA_DIR is passed by importer.sh when importing splitted file in parallel
+
+    Returns a generator of file to import as DATA_DIR can contain a split of
+    csv file
+    """
     try:
         dir_path = os.environ["DATA_DIR"]
     except KeyError:
         yield resource_stream(req, default_file)
     else:
-        for file_name in os.listdir(dir_path):
-            yield open(os.path.join(dir_path, file_name))
+        file_list = os.listdir(dir_path)
+        for file_name in file_list:
+            file_path = os.path.join(dir_path, file_name)
+            yield open(file_path)
+
+def load_csv_parallel(ctx, path, defer_parent_computation=True, delimiter=","):
+    """Use me to load an heavy file ~2k of lines or more.
+
+    Then calling this method as a parameter of importer.sh
+
+    importer.sh will split the file in chunks per number of processor
+    and per 500.
+    This method will be called once per chunk in order to do the csv loading
+    on multiple processes.
+
+    Usage::
+
+        @anthem.log
+        def setup_locations(ctx):
+            load_csv_parallel(
+                ctx,
+                'data/install/stock.location.csv',
+                defer_parent_computation=True)
+
+    Then in `migration.yml`::
+
+        - importer.sh songs.install.inventory::setup_locations /opt/odoo/data/install/stock.location.csv
+        # if defer_parent_computation=True
+        - anthem songs.install.inventory::location_compute_parents
+
+    """  # noqa
+    load_ctx = ctx.env.context.copy()
+    model = os.path.splitext(os.path.basename(path))[0]
+    if defer_parent_computation:
+        load_ctx.update({"defer_parent_store_computation": "manually"})
+    if isinstance(model, str):
+        model = ctx.env[model]
+    model = model.with_context(**load_ctx)
+    for content in get_files(path):
+        load_csv_stream(ctx, model, content, delimiter=delimiter)
+
+def deferred_compute_parents(ctx, model):
+    """Use me for heavy files after calling `deferred_import`.
+
+    Usage::
+
+        @anthem.log
+        def location_compute_parents(ctx):
+            deferred_compute_parents(ctx, 'stock.location')
+
+    """
+    ctx.env[model]._parent_store_compute()
+
+def reset_xml_ids(ctx, model, field, changes=None):
+    """
+    Reset the XML IDs of existing records to easily reference them.
+
+        Parameters:
+            model (string): Name of the model
+            field (string): Name of the field to use to generate the new XML ID
+            changes (dictionary): {Key: Value} where Key is the old value and
+            Value is the new value of the field
+    """
+    # Force the XML ID to allow easy import and avoid duplicate code error
+    with ctx.log("Resetting XML IDs of %s" % model):
+        records = ctx.env[model].search([])
+        records.export_data(["id"])
+        datas = ctx.env["ir.model.data"].search(
+            [("model", "=", model), ("module", "=", "__export__")]
+        )
+        for data in datas:
+            val = str(ctx.env[model].browse(data.res_id).read([field])[0][field])
+            if changes and val in changes:
+                val = changes[val]
+            val = (
+                val.replace("-", "_")
+                .replace(",", "_")
+                .replace(".", "_")
+                .replace(" ", "_")
+            )
+            data.write(
+                {
+                    "name": (model.replace(".", "_") + "_" + val).lower(),
+                    "module": "__setup__",
+                }
+            )
+        datas.flush_recordset()
+        ctx.log_line("XML IDs of %s reset." % model)
