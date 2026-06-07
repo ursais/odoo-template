@@ -6,9 +6,19 @@ migration:
   versions:
     - version: setup
       operations:
+        # pre:
+        #   - psql -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
         post:
-          - anthem songs.setup.base::main
-          - /bin/sh -c "VERSION=19.0.1.0.0 anthem songs.environment::main"
+          - click-odoo songs/setup/base.py
+          - /bin/sh -c "VERSION=19.0.1.0.0 click-odoo songs/env.py"
       addons:
         upgrade:
-          - contacts
+          - customer
+          # - monitoring_status
+          - web_environment_ribbon
+#      modes:
+#        external:
+#          operations:
+#          addons:
+#            upgrade:
+#              - session_redis

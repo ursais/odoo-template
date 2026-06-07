@@ -31,7 +31,7 @@ Usage
 Support
 =======
 
-Please report any issue or bugs to support@opensourceintegrators.com.
+Please report any issue or bugs to support@graymatterlogic.com.
 
 Credits
 =======
@@ -39,22 +39,22 @@ Credits
 Contributors
 ------------
 
-* Open Source Integrators <contact@opensourceintegrators.com>
+* Gray Matter Logic <contact@graymatterlogic.com>
 
-  * Project Manager <pm@opensourceintegrators.com>
-  * Business Analyst <ba@opensourceintegrators.com>
-  * Tech Lead <tl@opensourceintegrators.com>
+  * Project Manager <pm@graymatterlogic.com>
+  * Business Analyst <ba@graymatterlogic.com>
+  * Tech Lead <tl@graymatterlogic.com>
 
 Maintainers
 -----------
 
-This module is maintained by Open Source Integrators.
+This module is maintained by Gray Matter Logic.
 
 .. image:: https://github.com/ursais.png
-   :alt: Open Source Integrators
-   :target: https://www.opensourceintegrators.com
+   :alt: Gray Matter Logic
+   :target: https://www.graymatterlogic.com
 
-Open Source Integrators™ (OSI) provides customers a unique combination of
+Gray Matter Logic™ provides customers a unique combination of
 open source business process consulting and implementations.
 
 .. |maintainer-max3903| image:: https://github.com/max3903.png?size=40px

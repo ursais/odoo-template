@@ -1,13 +1,13 @@
-# Copyright (C) 2021 Open Source Integrators
+# Copyright (C) 2021 Gray Matter Logic
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "Elearning Content",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "license": "AGPL-3",
     "summary": "Training Content and Documentation",
-    "author": "Open Source Integrators",
-    "maintainer": "Open Source Integrators",
-    "website": "https://www.opensourceintegrators.com",
+    "author": "Gray Matter Logic",
+    "maintainer": "Gray Matter Logic",
+    "website": "https://www.graymatterlogic.com",
     "depends": ["website_slides"],
     "data": [
         "data/slide.channel.csv",

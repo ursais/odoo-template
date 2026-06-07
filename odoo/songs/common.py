@@ -1,19 +1,65 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
+import csv
+import io
+import logging
 import os
 
-from anthem.lyrics.loaders import load_csv_stream
-from anthem.lyrics.records import switch_company
 from pkg_resources import Requirement, resource_stream
+
+_logger = logging.getLogger(__name__)
 
 req = Requirement.parse("odoo-songs")
 
 
-def load_csv(ctx, path, delimiter=",", header=None, header_exclude=None):
+def create_or_update(env, model, xmlid, values):
+    module, name = xmlid.split(".", 1)
+    record = env.ref(xmlid, raise_if_not_found=False)
+    if record is None:
+        record = env[model].create(values)
+        env["ir.model.data"].create(
+            {"module": module, "name": name, "model": model, "res_id": record.id}
+        )
+    else:
+        record.write(values)
+    return record
+
+
+def switch_company(env, company):
+    return env(context=dict(env.context, allowed_company_ids=[company.id]))
+
+
+def load_csv_stream(
+    env, model, stream, delimiter=",", header=None, header_exclude=None
+):
+    reader = csv.reader(
+        io.TextIOWrapper(stream, encoding="utf-8")
+        if isinstance(stream, io.RawIOBase)
+        else io.StringIO(stream.read().decode("utf-8")),
+        delimiter=delimiter,
+    )
+    rows = list(reader)
+    if not rows:
+        return
+    fields = rows[0]
+    if header is not None:
+        fields = header
+    elif header_exclude:
+        fields = [f for f in fields if f not in header_exclude]
+        rows = [rows[0]] + rows[1:]
+    data = rows[1:]
+    result = env[model].load(fields, data)
+    if result.get("messages"):
+        for msg in result["messages"]:
+            _logger.warning("load %s: %s", model, msg)
+    return result
+
+
+def load_csv(env, path, delimiter=",", header=None, header_exclude=None):
     content = resource_stream(req, path)
     model = os.path.splitext(os.path.basename(path))[0]
     load_csv_stream(
-        ctx,
+        env,
         model,
         content,
         delimiter=delimiter,
@@ -22,28 +68,9 @@ def load_csv(ctx, path, delimiter=",", header=None, header_exclude=None):
     )
 
 
-def load_users_csv(ctx, path, delimiter=","):
-    # make sure we don't send any email
-    ctx.env["res.users"].with_context(
-        **{"no_reset_password": True, "tracking_disable": True}
-    )
-    load_csv(ctx, path, delimiter)
-
-
-def load_warehouses(ctx, company, path):
-    # in multicompany moded we must force the company
-    # otherwise the sequences that stock module generates automatically
-    # will have the wrong company assigned.
-    with switch_company(ctx, company) as ctx:
-        load_csv(ctx, path)
-        # NOTE: dirty hack here.
-        # We are forced to load the CSV twice because
-        # if you are modifying the existing base warehouse (stock.warehouse0)
-        # and you've changed the `code` (short name)
-        # the changes are not reflected on existing sequences
-        # until you load warehouse data again.
-        # We usually don't have that many WHs so... it's fine :)
-        load_csv(ctx, path)
+def load_users_csv(env, path, delimiter=","):
+    env["res.users"].with_context(no_reset_password=True, tracking_disable=True)
+    load_csv(env, path, delimiter)
 
 
 def get_files(default_file):
@@ -113,3 +140,40 @@ def deferred_compute_parents(ctx, model):
 
     """
     ctx.env[model]._parent_store_compute()
+
+
+def reset_xml_ids(ctx, model, field, changes=None):
+    """
+    Reset the XML IDs of existing records to easily reference them.
+
+        Parameters:
+            model (string): Name of the model
+            field (string): Name of the field to use to generate the new XML ID
+            changes (dictionary): {Key: Value} where Key is the old value and
+            Value is the new value of the field
+    """
+    # Force the XML ID to allow easy import and avoid duplicate code error
+    with ctx.log("Resetting XML IDs of %s" % model):
+        records = ctx.env[model].search([])
+        records.export_data(["id"])
+        datas = ctx.env["ir.model.data"].search(
+            [("model", "=", model), ("module", "=", "__export__")]
+        )
+        for data in datas:
+            val = str(ctx.env[model].browse(data.res_id).read([field])[0][field])
+            if changes and val in changes:
+                val = changes[val]
+            val = (
+                val.replace("-", "_")
+                .replace(",", "_")
+                .replace(".", "_")
+                .replace(" ", "_")
+            )
+            data.write(
+                {
+                    "name": (model.replace(".", "_") + "_" + val).lower(),
+                    "module": "__setup__",
+                }
+            )
+        datas.flush_recordset()
+        ctx.log_line("XML IDs of %s reset." % model)

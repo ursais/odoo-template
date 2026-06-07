@@ -1,9 +1,16 @@
-./odoo/src/l10n-mexico:
-  remotes:
-    oca: https://github.com/OCA/l10n-mexico.git
-    ursais: git+ssh://git@github.com/ursais/l10n-mexico.git
-  merges:
-    - oca 17.0
-    - oca refs/pull/43/head
-    - ursais 17.0-mig-l10n_mx_cfdi
-  target: ursais 17.0-cfdi_mixed
+#./odoo/src/l10n-mexico:
+#  remotes:
+#    oca: https://github.com/OCA/l10n-mexico.git
+#    ursais: git+ssh://git@github.com/ursais/l10n-mexico.git
+#  merges:
+#    - oca 19.0
+#    - oca refs/pull/??/head
+#  target: &default_target ursais CUS/19.0.1.0.0
+#
+#./odoo/src/osi-addons:
+#  remotes:
+#    ursais: git+ssh://git@github.com/ursais/osi-addons.git
+#  merges:
+#    - ursais 19.0
+#    - ursais refs/pull/??/head # helpdesk_ticket_type_team
+#  target: *default_target
