@@ -12,7 +12,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-          token: ${{ secrets.ACCESS_TOKEN || github.token }}
 
       - name: 'Build'
         uses: sudo-bot/action-docker-compose@latest
