@@ -7,7 +7,6 @@ from base64 import b64encode
 import click
 import click_odoo
 from pkg_resources import resource_string
-
 from songs.common import req
 
 _logger = logging.getLogger(__name__)

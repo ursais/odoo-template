@@ -29,9 +29,12 @@ def switch_company(env, company):
     return env(context=dict(env.context, allowed_company_ids=[company.id]))
 
 
-def load_csv_stream(env, model, stream, delimiter=",", header=None, header_exclude=None):
+def load_csv_stream(
+    env, model, stream, delimiter=",", header=None, header_exclude=None
+):
     reader = csv.reader(
-        io.TextIOWrapper(stream, encoding="utf-8") if isinstance(stream, io.RawIOBase)
+        io.TextIOWrapper(stream, encoding="utf-8")
+        if isinstance(stream, io.RawIOBase)
         else io.StringIO(stream.read().decode("utf-8")),
         delimiter=delimiter,
     )
@@ -88,6 +91,7 @@ def get_files(default_file):
             file_path = os.path.join(dir_path, file_name)
             yield open(file_path)
 
+
 def load_csv_parallel(ctx, path, defer_parent_computation=True, delimiter=","):
     """Use me to load an heavy file ~2k of lines or more.
 
@@ -124,6 +128,7 @@ def load_csv_parallel(ctx, path, defer_parent_computation=True, delimiter=","):
     for content in get_files(path):
         load_csv_stream(ctx, model, content, delimiter=delimiter)
 
+
 def deferred_compute_parents(ctx, model):
     """Use me for heavy files after calling `deferred_import`.
 
@@ -135,6 +140,7 @@ def deferred_compute_parents(ctx, model):
 
     """
     ctx.env[model]._parent_store_compute()
+
 
 def reset_xml_ids(ctx, model, field, changes=None):
     """

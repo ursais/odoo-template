@@ -1,6 +1,4 @@
-[submodule "odoo/src/enterprise"]
-	path = odoo/src/enterprise
-	url = https://github.com/ursais/enterprise.git
-[submodule "odoo/odoo"]
-	path = odoo/odoo
-	url = https://github.com/ursais/odoo.git
+[submodule "osi-addons"]
+	path = odoo/src/osi-addons
+	url = https://github.com/ursais/osi-addons.git
+	branch = 19.0

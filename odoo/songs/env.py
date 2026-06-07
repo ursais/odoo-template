@@ -5,7 +5,6 @@ import os
 
 import click
 import click_odoo
-
 from songs.common import create_or_update
 
 _logger = logging.getLogger(__name__)
