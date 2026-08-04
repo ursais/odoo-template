@@ -1,24 +1,22 @@
-# Copyright (c) 2021 Gray Matter Logic
+# Copyright (c) 2021 Open Source Integrators
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
-import logging
 import os
 
-import click
-import click_odoo
-from songs.common import create_or_update
-
-_logger = logging.getLogger(__name__)
+import anthem
+from anthem.lyrics.records import create_or_update
 
 
-def reset_queue_jobs(env):
+@anthem.log
+def reset_queue_jobs(ctx):
     """Reset Queue Jobs"""
-    jobs = env["queue.job"].search([("state", "in", ["started", "enqueued"])])
+    jobs = ctx.env["queue.job"].search([("state", "in", ["started", "enqueued"])])
     jobs.write({"state": "pending"})
 
 
-def setup_admin_user(env):
+@anthem.log
+def setup_admin_user(ctx):
     """Setup Admin User"""
-    admin = env.ref("base.user_admin")
+    admin = ctx.env.ref("base.user_admin")
     admin.write(
         {
             "new_password": os.environ.get("ODOO_ADMIN_USER_PASSWORD"),
@@ -28,11 +26,12 @@ def setup_admin_user(env):
     admin._set_new_password()
 
 
-def set_mail_server(env):
+@anthem.log
+def set_mail_server(ctx):
     """Set Mail Server"""
     if os.getenv("RUNNING_ENV") != "production":
         mailhog = create_or_update(
-            env,
+            ctx,
             "ir.mail_server",
             "__setup__.ir_mail_server_mailhog",
             {
@@ -44,41 +43,54 @@ def set_mail_server(env):
         try:
             mailhog.test_smtp_connection()
         except Exception as exception:
-            _logger.warning("Test SMTP connection to MailHog: %s", exception)
+            ctx.log_line("Test SMTP connection to MailHog: %s" % str(exception))
 
+@anthem.log
+def set_avatax(ctx):
+    """Clear Avatax Creds"""
+    if os.getenv("RUNNING_ENV") != "production":
+        companies = ctx.env["res.company"].sudo().search([])
+        for company in companies:
+            if "avalara_api_id" in company:
+                company.sudo().write(
+                    {
+                        "avalara_api_id": "2000349807",
+                        "avalara_api_key": "CA2B45B8647749DF",
+                        "avalara_environment": "sandbox",
+                    }
+                )
 
-def set_ribbon(env):
+@anthem.log
+def set_ribbon(ctx):
     """Set Ribbon"""
     if os.getenv("RUNNING_ENV") != "production":
-        background = env["ir.config_parameter"].search(
+        background = ctx.env["ir.config_parameter"].search(
             [("key", "=", "ribbon.background.color")]
         )
         background.value = "rgba(0,128,0,.6)"
-        color = env["ir.config_parameter"].search([("key", "=", "ribbon.color")])
+        color = ctx.env["ir.config_parameter"].search([("key", "=", "ribbon.color")])
         color.value = "#f0f0f0"
-        name = env["ir.config_parameter"].search([("key", "=", "ribbon.name")])
+        name = ctx.env["ir.config_parameter"].search([("key", "=", "ribbon.name")])
         name.value = os.getenv("RUNNING_ENV").upper() + "<br/>({db_name})"
 
 
-def set_version(env):
-    """Set version in the database"""
+@anthem.log
+def set_version(ctx):
+    """Set in the database"""
     create_or_update(
-        env,
+        ctx,
         "ir.config_parameter",
         "__setup__.ir_database_version",
         {"key": "database.version", "value": os.getenv("VERSION", "setup")},
     )
 
 
-@click.command()
-@click_odoo.env_options(default_log_level="warn")
-def main(env):
-    setup_admin_user(env)
-    set_mail_server(env)
-    set_ribbon(env)
-    # reset_queue_jobs(env)
-    set_version(env)
-
-
-if __name__ == "__main__":
-    main()
+@anthem.log
+def main(ctx):
+    """Environment"""
+    setup_admin_user(ctx)
+    set_mail_server(ctx)
+    set_avatax(ctx)
+    set_ribbon(ctx)
+    #    reset_queue_jobs(ctx)
+    set_version(ctx)

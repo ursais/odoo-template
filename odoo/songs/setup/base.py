@@ -4,14 +4,13 @@ import logging
 import os
 from base64 import b64encode
 
-import click
-import click_odoo
+import anthem
 from pkg_resources import resource_string
-from songs.common import req
-
-_logger = logging.getLogger(__name__)
+from ..common import req
 
 
+
+@anthem.log
 def setup_admin_user(env):
     """Setup admin user"""
     admin = env.ref("base.user_admin")
@@ -23,7 +22,7 @@ def setup_admin_user(env):
     )
     admin._set_new_password()
 
-
+@anthem.log
 def setup_company(env):
     """Setup company"""
     logo_content = resource_string(req, "songs/data/images/logo.png")
@@ -46,14 +45,7 @@ def setup_company(env):
     env.ref("base.main_company").write(values)
 
 
-@click.command()
-@click_odoo.env_options(default_log_level="warn")
-def main(env):
-    _logger.info("Setting up company")
-    setup_company(env)
-    _logger.info("Setting up admin user")
-    setup_admin_user(env)
-
-
-if __name__ == "__main__":
-    main()
+@anthem.log
+def main(ctx):
+    setup_company(ctx)
+    setup_admin_user(ctx)
