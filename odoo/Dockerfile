@@ -1,4 +1,13 @@
-FROM public.ecr.aws/t4c3a5h0/odoo-base:18.0-test-20241022
+FROM public.ecr.aws/t4c3a5h0/odoo-base:18.0-20260601 AS addons_builder
+
+# Materialize addons from addons.manifest.yml plus always-included trees.
+# This stage is not part of the final runtime image.
+COPY --chown=odoo src /src
+RUN chmod +x /src/sync-addons.sh \
+    && /src/sync-addons.sh --dest /odoo/addons \
+    && chown -R odoo:odoo /odoo/addons
+
+FROM public.ecr.aws/t4c3a5h0/odoo-base:18.0-20260601
 MAINTAINER Open Source Integrators <support@opensourceintegrators.com>
 
 # Copy files
@@ -7,9 +16,6 @@ COPY --chown=odoo migration.yml /odoo/
 COPY --chown=odoo requirements.txt /odoo/
 COPY --chown=odoo songs /odoo/songs
 
-# Copy Addons
-# COPY src/paid-addons /odoo/addons/
-# COPY --chown=odoo src/l10n-mexico /odoo/addons/
-COPY src/enterprise /odoo/addons/
+COPY --from=addons_builder --chown=odoo /odoo/addons /odoo/addons
 
 RUN cd /odoo && pip3 install -r requirements.txt --break-system-packages

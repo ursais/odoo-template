@@ -1,0 +1,14 @@
+# Source of truth for modules copied from larger addon repositories.
+# Paths are relative to odoo/src.
+#
+# enterprise/, paid-addons/, and private-addons/ are always included and
+# must not be listed here.
+#
+# public: copied to public-addons/ (standalone) or --dest (container)
+# gml:    copied to gml-addons/    (standalone) or --dest (container)
+
+public:
+  # - public-submodules/repository/addon_name
+
+gml:
+  # - gml-submodules/repository/addon_name
