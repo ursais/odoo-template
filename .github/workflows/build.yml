@@ -1,0 +1,41 @@
+name: Docker Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      update_pgdatabase:
+        description: "Reset PGDATABASE to YYYYMMDD (fresh database; does not require queue_job)"
+        required: false
+        default: false
+        type: boolean
+  push:
+    branches:
+      - "17.0"
+      - main
+      - master
+
+env:
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get date
+        run: echo "RUN_DATE=$(date +%Y%m%d)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Build application image
+        run: docker build odoo
+      - name: Reset PGDATABASE
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_pgdatabase }}
+        env:
+          DEPLOY_NAMESPACE: ${{ vars.DEPLOY_NAMESPACE }}
+        run: |
+          echo "PGDATABASE reset requested: ${RUN_DATE}"
+          if [ -z "${DEPLOY_NAMESPACE}" ]; then
+            echo "DEPLOY_NAMESPACE is unset; skipping cluster update."
+            exit 0
+          fi
+          kubectl set env -n "${DEPLOY_NAMESPACE}" deployment/odoo PGDATABASE="${RUN_DATE}"

@@ -3,6 +3,7 @@
 ## Table of Contents
 * [Prerequisites](#Prerequisites)
 * [Build your environment](#Build-your-environment)
+	* [Addon farms](#Addon-farms)
 	* [For private modules](#For-private-modules)
 	* [For existing public modules](#For-existing-public-modules)
 	* [For new public modules](#For-new-public-modules)
@@ -27,6 +28,24 @@ To start Odoo:
 docker-compose up
 ```
 
+### Addon farms
+
+`odoo/src/addons.manifest.yml` is the include list for modules copied out of larger checkouts. `odoo/src/sync-addons.sh` is the only script that materializes it; it copies modules and never creates symlinks.
+
+* Odoo core is included at `odoo/odoo` for standalone installs (`odoo/odoo/odoo-bin` and `odoo/odoo/addons` on `addons_path`). Docker images already ship Odoo, so containers do not use this tree.
+* `enterprise/`, `paid-addons/`, and `private-addons/` are always included and are not listed in the manifest. The sync script skips any of these trees that are absent, so a project without Enterprise still builds. Projects entitled to Enterprise add it as a submodule:
+```shell
+git submodule add --name enterprise -b 17.0 https://github.com/ursais/enterprise.git \
+  odoo/src/enterprise
+```
+* OCA checkouts live under `odoo/src/public-submodules/` and are listed under `public:` in the manifest.
+* GML checkouts live under `odoo/src/gml-submodules/` and are listed under `gml:` in the manifest.
+* `public-addons/` and `gml-addons/` are generated copies and are gitignored. Run the sync script after cloning, updating submodules, or changing the manifest.
+
+For a standalone environment, run `odoo/src/sync-addons.sh`, then include `odoo/odoo/addons`, `src/enterprise`, `src/paid-addons`, `src/private-addons`, `src/public-addons`, and `src/gml-addons` in `addons_path`.
+
+For containers, the Dockerfile runs `sync-addons.sh --dest /odoo/addons`. Adding a module does not require a Dockerfile change.
+
 ### For private modules
 
 * Create a new branch and add your module in odoo/src/private-addons
@@ -45,12 +64,12 @@ Modules must be available on [Pypi](https://pypi.org), otherwise look at [the ne
 ### For new public modules
 
 * In Github, fork the repo in the `ursais` organization
-* Add the repo as a submodule:
+* Add the repo as a submodule under `odoo/src/public-submodules/` (or `odoo/src/gml-submodules/` for GML):
 ```shell
-git submodule add --name repo -b 16.0 https://github.com/ursais/repo.git
-odoo/src/repo
+git submodule add --name repo -b 17.0 https://github.com/ursais/repo.git \
+  odoo/src/public-submodules/repo
 ```
-* Create a new branch in odoo/src/<repo> and add your module
+* Create a new branch in the submodule and add your module
 * Commit your changes and push your module to Github
 * In Github (https://github.com/ursais), create a pull request against the corresponding OCA repository
 * Add a section (1 per repo) in `repos.yml` and include your pull request
@@ -58,8 +77,9 @@ odoo/src/repo
 ```shell
 gitaggregate -c repos.yml -p -j 10
 ```
+* Add your module path to `odoo/src/addons.manifest.yml` (`public:` or `gml:`)
 * Add your module as a dependency of the customer module
-* Add your module in `odoo/Dockerfile`
+* Run `odoo/src/sync-addons.sh`
 * Commit, push your branch and create a pull request against `master`
 
 ## Deploy
