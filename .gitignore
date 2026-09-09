@@ -14,3 +14,7 @@ __pycache__
 # Helm
 /helm/odoo/charts
 /helm/odoo/requirements.lock
+
+# Generated addon farms (odoo/src/sync-addons.sh)
+/odoo/src/public-addons/
+/odoo/src/gml-addons/
