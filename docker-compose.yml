@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   db:
     image: ursa/postgresql:latest
@@ -9,16 +9,16 @@ services:
       - POSTGRES_PASSWORD=odoo
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - 'postgres-data:/var/lib/postgresql/data'
+      - "postgres-data:/var/lib/postgresql/data"
 
-  odoo:
+  app:
     build:
       context: odoo
     ports:
-      - '8069:8069'
-      - '8072:8072'
+      - "8069:8069"
+      - "8072:8072"
     volumes:
-      - 'odoo-data:/odoo/data'
+      - "odoo-data:/odoo/data"
     depends_on:
       - db
     environment:
@@ -35,10 +35,11 @@ services:
       - ODOO_ADMIN_USER_PASSWORD=admin
       - ODOO_DBFILTER=False
       - ODOO_LIST_DB=True
+      - ODOO_SERVER_WIDE_MODULES=web
     stdin_open: true
     tty: true
-#    cap_add:
-#      - sys_ptrace
+  #    cap_add:
+  #      - sys_ptrace
 
   mail:
     image: mailhog/mailhog
