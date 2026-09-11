@@ -47,12 +47,23 @@ Or set `ODOO_TEST_ENABLE=True` and `ODOO_TEST_TAGS=<tags>` as environment variab
 
 ### Module organization
 
+- **`odoo/odoo/`** — Odoo core submodule for standalone installs (`odoo-bin` and
+  `addons`). Docker images already ship Odoo, so containers do not use this tree.
 - **`odoo/src/private-addons/`** — Custom modules for this project. The `customer`
   module is the top-level dependency anchor; all other private modules should be listed
   as dependencies of `customer`.
-- **`odoo/src/public-addons/`** — New OCA modules being contributed upstream; added as
-  git submodules.
-- **`odoo/src/osi-addons/`**, — External git submodules from OCA/ursais.
+- **`odoo/src/public-submodules/`** — OCA/ursais repositories checked out as git
+ submodules. These repositories are not added directly to `addons_path`.
+- **`odoo/src/gml-submodules/`** — Gray Matter Logic repositories checked out as git
+ submodules. These repositories are not added directly to `addons_path`.
+- **`odoo/src/addons.manifest.yml`** — The source of truth for selecting modules from
+ public and GML submodules.
+- **`odoo/src/public-addons/`** and **`odoo/src/gml-addons/`** — Generated,
+ gitignored copies created by `odoo/src/sync-addons.sh`.
+- **`odoo/src/enterprise/`**, **`odoo/src/paid-addons/`**, and
+ **`odoo/src/private-addons/`** — Real addon trees that are always included.
+ `enterprise/` is absent until a project adds it as a submodule; the sync script
+ skips always-included trees that do not exist.
 
 ### Adding modules
 
@@ -60,9 +71,14 @@ Or set `ODOO_TEST_ENABLE=True` and `ODOO_TEST_TAGS=<tags>` as environment variab
   `customer/__manifest__.py`.
 - **Public module from PyPI**: Add to `odoo/requirements.txt`, add as dependency in
   `customer/__manifest__.py`.
-- **New public module (not on PyPI)**: Fork repo into `ursais` org, `git submodule add`
-  under `odoo/src/`, add to `odoo/Dockerfile`, add as dependency in
-  `customer/__manifest__.py`. Use `repos.yml` + `gitaggregate` for merging pending PRs.
+- **New public module (not on PyPI)**: Fork the repo into the `ursais` org, add it as a
+ submodule under `odoo/src/public-submodules/`, list the module in
+ `odoo/src/addons.manifest.yml`, and add it as a dependency in
+ `customer/__manifest__.py`. Use `repos.yml` + `gitaggregate` for merging pending PRs.
+- **GML module**: Add its repository under `odoo/src/gml-submodules/`, list the module
+ under `gml:` in `odoo/src/addons.manifest.yml`, and add it as a customer dependency.
+- Run `odoo/src/sync-addons.sh` after cloning, updating submodules, or changing the
+ manifest. Do not add addon paths to the Dockerfile.
 
 ### Migration and data loading
 

@@ -1,0 +1,8 @@
+/odoo
+src/public-addons
+src/gml-addons
+src/**/.git
+src/**/.github
+src/**/__pycache__
+src/**/.pytest_cache
+src/**/node_modules
