@@ -5,7 +5,7 @@ this repository.
 
 ## Overview
 
-This is an Odoo 19.0 project template maintained by Gray Matter Logic. It uses Docker
+This is an Odoo 20.0 project template maintained by Gray Matter Logic. It uses Docker
 for development, Marabunta for database migrations, Anthem (songs) for data
 initialization, and Helm for Kubernetes deployment.
 

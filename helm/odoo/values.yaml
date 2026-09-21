@@ -29,7 +29,7 @@ service:
 build:
   enabled: false
 #  source_repository_url: https://github.com/ursais/odoo-template.git
-#  source_repository_ref: 14.0
+#  source_repository_ref: 20.0
 #  context_dir: odoo
 
 persistence:

@@ -1,4 +1,4 @@
-# Template for an Odoo 19 Project
+# Template for an Odoo 20 Project
 
 ## Table of Contents
 * [Prerequisites](#Prerequisites)
@@ -35,7 +35,7 @@ docker-compose up
 * Odoo core is included at `odoo/odoo` for standalone installs (`odoo/odoo/odoo-bin` and `odoo/odoo/addons` on `addons_path`). Docker images already ship Odoo, so containers do not use this tree.
 * `enterprise/`, `paid-addons/`, and `private-addons/` are always included and are not listed in the manifest. The sync script skips any of these trees that are absent, so a project without Enterprise still builds. Projects entitled to Enterprise add it as a submodule:
 ```shell
-git submodule add --name enterprise -b 19.0 https://github.com/ursais/enterprise.git \
+git submodule add --name enterprise -b 20.0 https://github.com/ursais/enterprise.git \
   odoo/src/enterprise
 ```
 * OCA checkouts live under `odoo/src/public-submodules/` and are listed under `public:` in the manifest.
@@ -50,7 +50,7 @@ For containers, the Dockerfile runs `sync-addons.sh --dest /odoo/addons`. Adding
 
 * Create a new branch and add your module in odoo/src/private-addons
 * Add your module as a dependency of the customer module
-* Commit, push your branch and create a pull request against `master`
+* Commit, push your branch and create a pull request against `20.0`
 
 ### For existing public modules
 
@@ -59,14 +59,14 @@ Modules must be available on [Pypi](https://pypi.org), otherwise look at [the ne
 * Create a new branch
 * Add the module in `odoo/requirements.txt`
 * Add the module as a dependency of the customer module
-* Commit, push your branch and create a pull request against `master`
+* Commit, push your branch and create a pull request against `20.0`
 
 ### For new public modules
 
 * In Github, fork the repo in the `ursais` organization
 * Add the repo as a submodule under `odoo/src/public-submodules/` (or `odoo/src/gml-submodules/` for GML):
 ```shell
-git submodule add --name repo -b 19.0 https://github.com/ursais/repo.git \
+git submodule add --name repo -b 20.0 https://github.com/ursais/repo.git \
   odoo/src/public-submodules/repo
 ```
 * Create a new branch in the submodule and add your module
@@ -80,7 +80,7 @@ gitaggregate -c repos.yml -p -j 10
 * Add your module as a dependency of the customer module
 * Add your module path to `odoo/src/addons.manifest.yml` (`public:` or `gml:`)
 * Run `odoo/src/sync-addons.sh`
-* Commit, push your branch and create a pull request against `master`
+* Commit, push your branch and create a pull request against `20.0`
 
 ## Deploy
 

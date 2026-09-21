@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - "19.0"
+      - "20.0"
       - main
       - master
       - production
@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Get Python version cache key
         run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> "$GITHUB_ENV"
       - uses: actions/cache@v4

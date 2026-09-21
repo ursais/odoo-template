@@ -10,7 +10,7 @@ on:
         type: boolean
   push:
     branches:
-      - "19.0"
+      - "20.0"
       - main
       - master
 

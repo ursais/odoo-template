@@ -8,7 +8,7 @@ manifest-required-authors=Open Source Integrators,Gray Matter Logic
 manifest-required-keys=license
 manifest-deprecated-keys=description,active
 license-allowed=AGPL-3,GPL-2,GPL-2 or any later version,GPL-3,GPL-3 or any later version,LGPL-3,OPL-1,OEEL-1
-valid-odoo-versions=19.0
+valid-odoo-versions=20.0
 
 [MESSAGES CONTROL]
 disable=all
