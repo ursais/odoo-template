@@ -9,17 +9,24 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
-          token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: 'Build'
         uses: sudo-bot/action-docker-compose@latest
         with:
           cli-args: "build"
 
+      - name: Collect private addon test tags
+        id: addons
+        run: |
+          tags=$(basename -a odoo/src/private-addons/*/ | sed 's|^|/|' | paste -sd,)
+          echo "tags=${tags}" >> "$GITHUB_OUTPUT"
+
       - name: "Run tests"
         uses: sudo-bot/action-docker-compose@latest
         with:
-          cli-args: "run app --test-enable --workers=0 --stop-after-init -d test -i customer"
+          # customer is the dependency anchor for every private module, and the
+          # tags limit testing to this repository's addons.
+          cli-args: "run app --test-enable --test-tags=${{ steps.addons.outputs.tags }} --workers=0 --stop-after-init -d test -i customer"
