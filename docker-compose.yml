@@ -27,6 +27,7 @@ services:
       - MIGRATE=False
       - MARABUNTA_MODE=base
       - MARABUNTA_ALLOW_SERIE=True
+      - ODOO_HTTP_INTERFACE=0.0.0.0
       #- MARABUNTA_FORCE_VERSION=setup
       - PLATFORM=local
       - RUNNING_ENV=dev
