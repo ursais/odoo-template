@@ -1,0 +1,26 @@
+name: Helm
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "20.0"
+      - main
+      - master
+      - production
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+      - name: Lint chart
+        run: |
+          helm dependency update helm/odoo
+          helm lint helm/odoo
+          helm lint helm/odoo -f helm/odoo/values.test.yaml
+          helm lint helm/odoo -f helm/odoo/values.qa.yaml
+          helm lint helm/odoo -f helm/odoo/values.production.yaml
