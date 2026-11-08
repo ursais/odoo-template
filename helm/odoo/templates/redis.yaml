@@ -1,0 +1,111 @@
+{{- if .Values.redis.enabled }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "odoo.redis.fullname" . }}
+  labels:
+    app: redis
+    release: {{ .Release.Name | quote }}
+type: Opaque
+data:
+  redis-password: {{ include "odoo.existingOrRandom" (dict "root" . "name" (include "odoo.redis.fullname" .) "key" "redis-password") | quote }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "odoo.redis.fullname" . }}
+  labels:
+    app: redis
+    release: {{ .Release.Name | quote }}
+spec:
+  ports:
+    - name: redis
+      port: {{ .Values.redis.port }}
+      targetPort: redis
+  selector:
+    app: redis
+    release: {{ .Release.Name | quote }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "odoo.redis.fullname" . }}
+  labels:
+    app: redis
+    release: {{ .Release.Name | quote }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: redis
+        release: {{ .Release.Name | quote }}
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: redis
+          image: {{ .Values.redis.image | default "redis:7" | quote }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - redis-server
+            - --appendonly
+            - "yes"
+            - --requirepass
+            - $(REDIS_PASSWORD)
+          ports:
+            - name: redis
+              containerPort: {{ .Values.redis.port }}
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "odoo.redis.fullname" . }}
+                  key: redis-password
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "odoo.redis.fullname" . }}
+                  key: redis-password
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          {{- if .Values.redis.master.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "odoo.redis.fullname" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+{{- if .Values.redis.master.persistence.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "odoo.redis.fullname" . }}
+  labels:
+    app: redis
+    release: {{ .Release.Name | quote }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.redis.master.persistence.storageClass }}
+  storageClassName: {{ .Values.redis.master.persistence.storageClass | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.redis.master.persistence.size | default "2Gi" | quote }}
+{{- end }}
+{{- end }}

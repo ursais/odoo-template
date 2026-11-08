@@ -145,12 +145,39 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for deployment.
+PostgreSQL service hostname. In-cluster Postgres uses the chart service name.
 */}}
-{{- define "odoo.deployment.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
+{{- define "odoo.pghost" -}}
+{{- if .Values.postgresql.enabled -}}
+{{- include "odoo.postgresql.fullname" . -}}
 {{- else -}}
-{{- print "apps/v1" -}}
+{{- .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Redis service hostname. An explicit host overrides the in-cluster service.
+The historical Bitnami name odoo-redis-master follows the in-cluster service.
+*/}}
+{{- define "odoo.redishost" -}}
+{{- if or (not .Values.redis.host) (eq .Values.redis.host "odoo-redis-master") -}}
+{{- include "odoo.redis.fullname" . -}}
+{{- else -}}
+{{- .Values.redis.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Reuse a Secret data key when it already exists. Otherwise generate one.
+Lookup is empty during lint and client-side renders.
+*/}}
+{{- define "odoo.existingOrRandom" -}}
+{{- $secret := lookup "v1" "Secret" .root.Release.Namespace .name | default dict -}}
+{{- $data := index $secret "data" | default dict -}}
+{{- $existing := index $data .key | default "" -}}
+{{- if $existing -}}
+{{- $existing -}}
+{{- else -}}
+{{- randAlphaNum 16 | b64enc -}}
 {{- end -}}
 {{- end -}}

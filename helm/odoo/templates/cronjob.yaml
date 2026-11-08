@@ -1,6 +1,6 @@
-{{- if eq .Values.environment "production" }}
+{{- if and (eq .Values.environment "production") .Values.backup.enabled }}
 kind: CronJob
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 metadata:
   name: {{ print .Values.name "-backup" | quote }}
   annotations:
@@ -27,7 +27,7 @@ spec:
                 - name: RUNNING_ENV
                   value: {{ .Values.environment }}
                 - name: PGHOST
-                  value: {{ ternary "odoo-postgresql" .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+                  value: {{ include "odoo.pghost" . | quote }}
                 - name: PGPORT
                   value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
                 - name: PGDATABASE
@@ -128,9 +128,9 @@ spec:
                 {{- end }}
 {{- end }}
 ---
-{{- if or (eq .Values.environment "qa") (eq .Values.environment "test") }}
+{{- if and (or (eq .Values.environment "qa") (eq .Values.environment "test")) .Values.backup.enabled }}
 kind: CronJob
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 metadata:
   name: {{ print .Values.name "-restore" | quote }}
   annotations:
@@ -157,7 +157,7 @@ spec:
                 - name: RUNNING_ENV
                   value: {{ .Values.environment }}
                 - name: PGHOST
-                  value: {{ ternary "odoo-postgresql" .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+                  value: {{ include "odoo.pghost" . | quote }}
                 - name: PGPORT
                   value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
                 - name: PGDATABASE

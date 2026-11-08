@@ -17,7 +17,11 @@ postgresql:
 #    size: 2Gi
 
 ingress:
-  class: alb
+  enabled: true
+  class: nginx
+  tls:
+    enabled: false
+    secretName: ""
   cert: arn:aws:acm:us-east-2:123456789:certificate/abc123
   subnets: subnet-abc123,subnet-abc123
 
@@ -71,7 +75,7 @@ redis:
     enabled: false
   master:
     persistence:
-      storageClass: gp2
+      enabled: false
       size: 2Gi
 
 mailhog:
@@ -99,6 +103,7 @@ resources:
 
 livenessProbe:
   enabled: true
+  path: /web/health
   initialDelaySeconds: 600
   periodSeconds: 30
   timeoutSeconds: 5
@@ -107,6 +112,7 @@ livenessProbe:
 
 readinessProbe:
   enabled: true
+  path: /web/health?db_server_status=1
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -123,9 +129,9 @@ platform: aws
 distribution: kubernetes
 application_domain: qa-odoo.apps.cluster.example.com
 timezone: America/Phoenix
-image: docker.pkg.github.com/ursais/odoo-template/odoo-template:latest
+image: ghcr.io/ursais/odoo-template:20.0
 odooUsername: admin
 odooEmail: support@example.com
-odooServerWideModules: web,monitoring_status,session_redis
+odooServerWideModules: web,session_redis
 odooListDB: true
 odooDBFilter: "^.*[^backup].*$"

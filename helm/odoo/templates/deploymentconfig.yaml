@@ -47,7 +47,7 @@ spec:
         image: " "
         env:
           - name: PGHOST
-            value: {{ ternary "odoo-postgresql" .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+            value: {{ include "odoo.pghost" . | quote }}
           - name: PGPORT
             value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
           - name: PGUSER
@@ -98,9 +98,9 @@ spec:
             value: {{ printf "%s-%s" .Values.name "mailhog" | quote }}
           {{- else }}
           - name: ODOO_SMTP_PORT
-            value: {{ .Values.smtp.port | quote }}
+            value: {{ .Values.smtp.port | default 25 | quote }}
           - name: ODOO_SMTP_SERVER
-            value: {{ .Values.smtp.server | quote }}
+            value: {{ .Values.smtp.server | default "localhost" | quote }}
           {{- end }}
           - name: ODOO_SMTP_SSL
             value: {{ .Values.smtp.ssl | quote }}
@@ -128,7 +128,7 @@ spec:
           - name: ODOO_SESSION_REDIS
             value: {{ .Values.redis.enabled | quote }}
           - name: ODOO_SESSION_REDIS_HOST
-            value: {{ .Values.redis.host }}
+            value: {{ include "odoo.redishost" . | quote }}
           - name: ODOO_SESSION_REDIS_PORT
             value: {{ .Values.redis.port | quote }}
           - name: ODOO_SESSION_REDIS_PASSWORD
@@ -155,7 +155,7 @@ spec:
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
-            path: /monitoring/status
+            path: {{ .Values.livenessProbe.path | default "/web/health" | quote }}
             port: tcp-odoo-http
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -166,7 +166,7 @@ spec:
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
-            path: /monitoring/status
+            path: {{ .Values.readinessProbe.path | default "/web/health?db_server_status=1" | quote }}
             port: tcp-odoo-http
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
@@ -174,17 +174,11 @@ spec:
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
         {{- end }}
+        volumeMounts:
+          - name: odoo-data
+            mountPath: /odoo/data
         resources:
 {{ toYaml .Values.resources | indent 10 }}
-      {{- if .Values.persistence.enabled }}
-        volumeMounts:
-        - name: odoo-data
-          mountPath: /odoo/data
-      volumes:
-      - name: odoo-data
-        persistentVolumeClaim:
-          claimName: {{ .Values.persistence.existingClaim | default (include "odoo.fullname" .) }}
-      {{- end }}
       {{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}

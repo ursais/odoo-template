@@ -1,49 +1,63 @@
-{{ if eq .Values.distribution "kubernetes" }}
+{{ if and (eq .Values.distribution "kubernetes") .Values.ingress.enabled }}
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
   name: {{ .Values.name | quote }}
   annotations:
-    kubernetes.io/ingress.class: {{ .Values.ingress.class }}
-    {{ if eq .Values.ingress.class "alb" }}
-    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
-      { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
-    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.cert }}
+    {{- if eq .Values.ingress.class "alb" }}
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.cert | quote }}
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/subnets: {{ .Values.ingress.subnets }}
+    alb.ingress.kubernetes.io/subnets: {{ .Values.ingress.subnets | quote }}
     alb.ingress.kubernetes.io/target-type: instance
-    external-dns.alpha.kubernetes.io/hostname: {{ .Values.application_domain }}
-    {{ end }}
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.application_domain | quote }}
+    {{- else }}
+    nginx.ingress.kubernetes.io/proxy-body-size: "256m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/ssl-redirect: {{ .Values.ingress.tls.enabled | default false | quote }}
+    {{- end }}
 spec:
+  ingressClassName: {{ .Values.ingress.class | quote }}
+  {{- if and .Values.ingress.tls .Values.ingress.tls.enabled }}
   tls:
-  - hosts:
-    - {{ .Values.application_domain | quote }}
-    secretName: aks-ingress-tls
+    - hosts:
+        - {{ .Values.application_domain | quote }}
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
+  {{- end }}
   rules:
-  - host: {{ .Values.application_domain | quote }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: ssl-redirect
-            port:
-              name: use-annotation
-      - path: /longpolling
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ .Values.name | quote }}
-            port:
-              number: 8072
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ .Values.name | quote }}
-            port:
-              number: 8069
+    - host: {{ .Values.application_domain | quote }}
+      http:
+        paths:
+          {{- if eq .Values.ingress.class "alb" }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation
+          {{- end }}
+          - path: /longpolling
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "odoo.fullname" . | quote }}
+                port:
+                  number: 8072
+          - path: /websocket
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "odoo.fullname" . | quote }}
+                port:
+                  number: 8072
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "odoo.fullname" . | quote }}
+                port:
+                  number: 8069
 {{- end }}
