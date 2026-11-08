@@ -1,6 +1,6 @@
 {{- if or (eq .Values.environment "qa") (eq .Values.environment "production") }}
 kind: HorizontalPodAutoscaler
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 metadata:
   name: {{ .Values.name | quote }}
 spec:

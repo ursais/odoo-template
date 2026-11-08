@@ -1,0 +1,102 @@
+{{- if .Values.postgresql.enabled }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "odoo.postgresql.fullname" . }}
+  labels:
+    app: postgresql
+    release: {{ .Release.Name | quote }}
+type: Opaque
+data:
+  postgresql-password: {{ include "odoo.existingOrRandom" (dict "root" . "name" (include "odoo.postgresql.fullname" .) "key" "postgresql-password") | quote }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "odoo.postgresql.fullname" . }}
+  labels:
+    app: postgresql
+    release: {{ .Release.Name | quote }}
+spec:
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: postgresql
+  selector:
+    app: postgresql
+    release: {{ .Release.Name | quote }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "odoo.postgresql.fullname" . }}
+  labels:
+    app: postgresql
+    release: {{ .Release.Name | quote }}
+spec:
+  serviceName: {{ include "odoo.postgresql.fullname" . }}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: postgresql
+        release: {{ .Release.Name | quote }}
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: postgresql
+          image: {{ .Values.postgresql.image | default "postgres:16" | quote }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: postgresql
+              containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresql.postgresqlUsername | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.defaultdb | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "odoo.postgresql.fullname" . }}
+                  key: postgresql-password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - {{ .Values.postgresql.postgresqlUsername | quote }}
+                - -d
+                - {{ .Values.postgresql.defaultdb | quote }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+      {{- if not .Values.postgresql.persistence.enabled }}
+      volumes:
+        - name: data
+          emptyDir: {}
+      {{- end }}
+  {{- if .Values.postgresql.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - {{ .Values.postgresql.persistence.accessMode | default "ReadWriteOnce" | quote }}
+        {{- if .Values.postgresql.persistence.storageClass }}
+        storageClassName: {{ .Values.postgresql.persistence.storageClass | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.postgresql.persistence.size | default "2Gi" | quote }}
+  {{- end }}
+{{- end }}

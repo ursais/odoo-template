@@ -18,13 +18,15 @@ Create the project:
 kubectl create namespace odoo-dev
 ```
 
-Edit the variables in helm/odoo/values.yaml
+Edit the variables in helm/odoo/values.yaml. The default release runs PostgreSQL 16
+and Redis 7 in the cluster. Set `image` to the project image pushed to GHCR, and
+set `imagePullSecrets` when that image is private.
 
 Run
 
 ```shell script
 helm dependency update helm/odoo
-helm upgrade --install odoo helm/odoo
+helm upgrade --install odoo helm/odoo --namespace odoo-dev
 ```
 
 ## Test environment
@@ -40,7 +42,7 @@ Edit the variables in helm/odoo/values.test.yaml
 Run
 
 ```shell script
-helm upgrade --install odoo -f helm/odoo/values.test.yaml helm/odoo
+helm upgrade --install odoo -f helm/odoo/values.test.yaml helm/odoo --namespace odoo-test
 ```
 
 ## QA environment
@@ -56,7 +58,7 @@ Edit the variables in helm/odoo/values.qa.yaml
 Run
 
 ```shell script
-helm upgrade --install odoo -f helm/odoo/values.qa.yaml helm/odoo
+helm upgrade --install odoo -f helm/odoo/values.qa.yaml helm/odoo --namespace odoo-qa
 ```
 
 ## Production environment
@@ -72,7 +74,7 @@ Edit the variables in helm/odoo/values.production.yaml
 Run
 
 ```shell script
-helm upgrade --install odoo -f helm/odoo/values.production.yaml helm/odoo
+helm upgrade --install odoo -f helm/odoo/values.production.yaml helm/odoo --namespace odoo
 ```
 
 ## Secrets
@@ -110,7 +112,7 @@ Update the deployment:
 TAG=20210527
 NAMESPACE=odoo-test
 kubectl set image deploy odoo \
-    odoo=docker.pkg.github.com/ursais/odoo-template/odoo-template:$TAG \
+    odoo=ghcr.io/ursais/odoo-template:$TAG \
     --namespace $NAMESPACE
 ```
 

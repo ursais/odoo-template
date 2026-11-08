@@ -149,7 +149,7 @@ These environment variables can be altered to directly impact configurations of 
 | `ODOO_REPORTGZ`               | Value set in odoo.conf for: reportgz               | `False`                               |
 | `ODOO_SCREENCASTS`            | Value set in odoo.conf for: screencasts            | `False`                               |
 | `ODOO_SCREENSHOTS`            | Value set in odoo.conf for: screenshots            | `/tmp/odoo_tests`                     |
-| `ODOO_SERVER_WIDE_MODULES`    | Value set in odoo.conf for: server_wide_modules    | `web,monitoring_status`               |
+| `ODOO_SERVER_WIDE_MODULES`    | Value set in odoo.conf for: server_wide_modules    | `web`                                 |
 | `ODOO_SMTP_PASSWORD`          | Value set in odoo.conf for: smtp_password          | `False`                               |
 | `ODOO_SMTP_PORT`              | Value set in odoo.conf for: smtp_port              | `25`                                  |
 | `ODOO_SMTP_SERVER`            | Value set in odoo.conf for: smtp_server            | `localhost`                           |
