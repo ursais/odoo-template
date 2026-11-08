@@ -26,6 +26,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+          token: ${{ secrets.ACCESS_TOKEN }}
       - name: Build application image
         run: docker build odoo
       - name: Reset PGDATABASE
